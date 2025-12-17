@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ramesh Jewellers | Handcrafted Gold Jewellery</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm"> 
+        <div class="container">
+             
+             <img src="images/PNGLOGO1.png" alt="Ramesh Jewellers Logo" height="40">
+            <a class="navbar-brand custom-logo-font" href="index.html">RAMESH JEWELLERS</a> 
+             
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">HOME</a></li>
+                    <li class="nav-item"><a class="nav-link" href="collection.html">COLLECTION</a></li>
+                    <li class="nav-item"><a class="nav-link" href="wishlist.html">WISHLIST </a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">CONTACT</a></li>
+                </ul>
+                
+                <ul class="navbar-nav d-flex align-items-center ms-auto">
+                    <li class="nav-item me-2">
+                        <form class="d-flex">
+                            <input class="form-control form-control-sm me-2" type="search" placeholder="Search Products" aria-label="Search" id="productSearch">
+                        </form>
+                    </li>
+                    <li class="nav-item me-2">
+                     <a class="nav-link" href="#" onclick="handleLogout()"><i class="bi bi-box-arrow-right"></i> LOGOUT</a>
+                   </li>
+                   
+                    <li class="nav-item"><a class="nav-link" href="cart.html"><i class="bi bi-cart"></i> CART</a></li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+</header>
+
+
+
+
+    <main>
+   
+        <section id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active" style="background-image: url('images/carousel-11.png');">
+                    <div class="carousel-caption d-none d-md-block">
+                        <!-- <h1>Time. Elegance. Perfected.</h1>
+                        <p>Explore our handcrafted gold collections.</p> -->
+                        <a href="collection.html" class="btn btn-warning btn-lg">Shop Now</a>
+                    </div>
+                </div>
+                <div class="carousel-item" style="background-image: url('images/carousel-8.png');">
+                    <div class="carousel-caption d-none d-md-block">
+                        <!-- <h2>The Bangles Collection</h2>
+                        <p>Classic designs for the modern woman.</p> -->
+                    </div>
+                </div>
+                <div class="carousel-item" style="background-image: url('images/carousel-9.png');">
+                    <div class="carousel-caption d-none d-md-block">
+                        <!-- <h2>Limited Time Offer!</h2>
+                        <p>20% off on selected items.</p> -->
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </section>
+
+    
+
+        <section class="container my-5 text-center">
+            <h2 class="mb-4 display-5">✨ Limited Time Offer ✨</h2>
+            <p class="lead text-muted">A curated selection of our best-selling jewellery.</p>
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                <div class="col">
+                    <div class="card product-card">
+                        <img src="assets/product-1.jpg" class="card-img-top" alt="Gold Bangle">
+                        <div class="card-body">
+                            <h5 class="card-title">Kundan Bangle</h5>
+                            <p class="card-text fw-bold text-danger">Rs. 85,000</p>
+                            <a href="#" class="btn btn-dark">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card product-card">
+                        <img src="images/bangle-01.jpg" class="card-img-top" alt="Gold Chain">
+                        <div class="card-body">
+                            <h5 class="card-title">Classic Gold Chain</h5>
+                            <p class="card-text fw-bold text-danger">Rs. 45,000</p>
+                            <a href="#" class="btn btn-dark">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                 <div class="col">
+                    <div class="card product-card">
+                        <img src="assets/product-3.jpg" class="card-img-top" alt="Diamond Ring">
+                        <div class="card-body">
+                            <h5 class="card-title">Solitaire Ring</h5>
+                            <p class="card-text fw-bold text-danger">Rs. 1,20,000</p>
+                            <a href="#" class="btn btn-dark">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
+
+ <section id="new-arrivals" class="container my-5 py-4">
+        <div class="text-center mb-5">
+            <h2 class="display-4 fw-bold">🔥 Just Launched: New Arrivals</h2>
+            <p class="lead text-muted">Explore the latest trends in gold and diamond jewellery.</p>
+        </div>
+        
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+            <div class="col">
+                <div class="card h-100 shadow-sm border-0 text-center">
+                    <img src="images/product-placeholder-1.jpg" class="card-img-top" alt="New Gold Pendant">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Royal Filigree Pendant</h5>
+                        <p class="card-text text-danger fs-5">₹ 45,000</p>
+                        <a href="#" class="btn btn-outline-warning btn-sm">View Details</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col">
+                <div class="card h-100 shadow-sm border-0 text-center">
+                    <img src="images/product-placeholder-2.jpg" class="card-img-top" alt="Diamond Ring">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Solitaire Diamond Ring</h5>
+                        <p class="card-text text-danger fs-5">₹ 1,20,000</p>
+                        <a href="#" class="btn btn-outline-warning btn-sm">View Details</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100 shadow-sm border-0 text-center">
+                    <img src="images/product-placeholder-3.jpg" class="card-img-top" alt="Polki Earrings">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Jaipur Polki Earrings</h5>
+                        <p class="card-text text-danger fs-5">₹ 88,500</p>
+                        <a href="#" class="btn btn-outline-warning btn-sm">View Details</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100 shadow-sm border-0 text-center">
+                    <img src="images/product-placeholder-4.jpg" class="card-img-top" alt="Platinum Chain">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Classic Platinum Chain</h5>
+                        <p class="card-text text-danger fs-5">₹ 62,000</p>
+                        <a href="#" class="btn btn-outline-warning btn-sm">View Details</a>
+                    </div>
+                </div>
+            </div>
+            </div>
+    </section>
+
+
+
+        <section class="bg-light py-5">
+            <div class="container">
+                <h2 class="text-center mb-5 display-6">Hear From Our Happy Customers</h2>
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <blockquote class="blockquote p-4 border-start border-warning border-4 bg-white shadow-sm h-100">
+                            <p>"The craftsmanship on the necklace is exquisite. Truly a perfect piece for my wedding."</p>
+                            <footer class="blockquote-footer">Priya S. from Mumbai</footer>
+                        </blockquote>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <blockquote class="blockquote p-4 border-start border-warning border-4 bg-white shadow-sm h-100">
+                            <p>"Easy checkout process and the staff, especially Mr. Nitesh, was very helpful with the design."</p>
+                            <footer class="blockquote-footer">Arjun M. from Delhi</footer>
+                        </blockquote>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <blockquote class="blockquote p-4 border-start border-warning border-4 bg-white shadow-sm h-100">
+                            <p>"Highly recommend Ramesh Jewellers for pure, quality gold. Fast shipping and beautiful packaging."</p>
+                            <footer class="blockquote-footer">Shalini R. from Pune</footer>
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+        </section>
+       
+    <section class="py-5 bg-light position-relative" style="background: url('images/') no-repeat center center/cover; min-height: 70vh;">
+        <div class="container text-center text-white p-5 rounded-3" style="background-color: rgba(0, 0, 0, 0.45);">
+            <p class="h4 text-warning mb-2">Since 1950 | Handcrafted in India</p>
+            <h1 class="display-1 fw-bold mb-3 text-uppercase">Generations of Brilliance</h1>
+            <p class="lead fs-4 mb-4">Discover **Ramesh Jewellers**: Where **Timeless Craftsmanship** meets **Certified Purity**. We don't just sell jewellery; we forge heirlooms.</p>
+            <a href="collection.html" class="btn btn-warning btn-lg fw-bold px-5 me-3 shadow-lg">Explore The Heritage Collection</a>
+            <a href="#new-arrivals" class="btn btn-outline-light btn-lg px-4 shadow-lg">Shop New Arrivals</a>
+        </div>
+    </section>
+
+    <section class="container my-5 py-3">
+        <div class="row text-center g-4">
+            <div class="col-lg-3 col-sm-6">
+                <i class="bi bi-patch-check-fill text-success" style="font-size: 2rem;"></i>
+                <h6 class="mt-2 fw-bold">BIS Hallmarked Purity</h6>
+                <p class="small text-muted">Guaranteed purity with BIS certification.</p>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <i class="bi bi-gem text-info" style="font-size: 2rem;"></i>
+                <h6 class="mt-2 fw-bold">GIA/IGI Certified Diamonds</h6>
+                <p class="small text-muted">Transparent quality documentation for every gem.</p>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <i class="bi bi-truck text-primary" style="font-size: 2rem;"></i>
+                <h6 class="mt-2 fw-bold">Insured Free Shipping</h6>
+                <p class="small text-muted">Nationwide, fully insured delivery service.</p>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <i class="bi bi-arrow-repeat text-dark" style="font-size: 2rem;"></i>
+                <h6 class="mt-2 fw-bold">Lifetime Exchange</h6>
+                <p class="small text-muted">Investment value protected for generations.</p>
+            </div>
+        </div>
+    </section>
+
+
+    </main>
+
+    <footer class="bg-dark text-white pt-5 pb-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h5 class="mb-3">Contact Us</h5>
+                    <p><strong>Office Address:</strong><br>19/A Patwa Chawl, 1st Floor, Mahajangali,<br>Zaveri Bazar, Mumbai, Pincode 400 002</p>
+                    <p><strong>Email:</strong> www.rameshjewellers7.co.in (Placeholder for actual email)</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5 class="mb-3">Our Leadership</h5>
+                    <p><strong>Founder:</strong> Ramesh Mehta</p>
+                    <p><strong>Chain Making:</strong> Nitesh Mehta (Tel: <a href="tel:9323992724" class="text-warning">9323992724</a>)</p>
+                    <p><strong>Bangles:</strong> Nilesh Mehta (Tel: <a href="tel:9987320607" class="text-warning">9987320607</a>)</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5 class="mb-3">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="collection.html" class="text-white-50 text-decoration-none">Our Collection</a></li>
+                        <li><a href="login.html" class="text-white-50 text-decoration-none">Account</a></li>
+                        <li><a href="cart.html" class="text-white-50 text-decoration-none">Shopping Cart</a></li>
+                        <li><a href="contact.html" class="text-white-50 text-decoration-none">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center pt-3 mt-3 border-top border-secondary">
+                <p class="mb-0">&copy; 2025 Ramesh Jewellers. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js"></script>                                                                                                                                                                                                                                                   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+<script>
+    // Isse Home Page secure ho jayega.
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
+        window.location.href = 'login.html';
+    }
+</script>
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title" id="logoutModalLabel">👋 Confirm Logout</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to end your session and log out from Ramesh Jewellers?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmLogoutBtn">Log Out</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

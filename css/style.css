@@ -1,0 +1,167 @@
+/* Custom Logo Font */
+.custom-logo-font {
+    font-family: 'Cinzel', serif; /* Use the custom Google Font */
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #a0845a !important; /* Gold/Earthy tone */
+    letter-spacing: 2px;
+}
+
+/* Header & Nav */
+.navbar-brand:hover {
+    color: #d4af37 !important; /* Brighter gold hover effect */
+}
+
+.nav-link {
+    font-weight: 500;
+    text-transform: uppercase;
+    margin-right: 15px;
+    padding: 10px 0;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #a0845a !important; 
+}
+
+/* Carousel Styling (for full-screen images) */
+.carousel-item {
+    height: 90vh; /* Viewport height for large screen */
+    min-height: 350px;
+    background: no-repeat center center scroll;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    position: relative;
+    filter: brightness(0.8); /* Dim the image slightly for text readability */
+}
+
+/* Carousel Text */
+.carousel-caption {
+    bottom: 50%;
+    transform: translateY(50%);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+}
+
+.carousel-caption h1 {
+    font-size: 3rem;
+    font-family: 'Cinzel', serif;
+}
+
+/* Product Card Hover Effect */
+.product-card {
+    border: none;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-5px); /* Lift effect */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15); /* Shadow effect */
+}
+
+.product-card img {
+    transition: transform 0.5s ease;
+}
+
+.product-card:hover img {
+    transform: scale(1.05); /* Zoom effect on image */
+}
+
+/* Responsive Adjustments (Phone Screen) */
+@media (max-width: 768px) {
+    .custom-logo-font {
+        font-size: 1.5rem;
+    }
+    
+    .carousel-item {
+        height: 50vh; /* Smaller height on mobile */
+    }
+    
+    .carousel-caption {
+        bottom: 30%;
+    }
+
+    .carousel-caption h1 {
+        font-size: 2rem;
+    }
+    
+    /* Make the search bar full width on small screens */
+    .navbar-collapse .form-control-sm {
+        width: 100%; 
+        margin-bottom: 10px;
+    }
+}
+
+/* ============================== */
+/* ADVANCED REALISTIC SCROLLING TICKER */
+/* ============================== */
+
+/* Main bar container (Puri width) */
+.live-price-bar {
+    overflow: hidden; 
+    white-space: nowrap;
+    font-size: 1.1rem;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1); /* Thoda realistic effect */
+}
+
+/* Text jisko move karna hai */
+.scrolling-text {
+    display: inline-block;
+    /* Animation: naam | speed | timing-function | repeat */
+    animation: moveTicker 30s linear infinite; 
+    /* Speed ko 20s se badha kar 30s kiya (thoda slow aur realistic) */
+}
+
+/* 🛑 PAUSE ON HOVER EFFECT 🛑 */
+/* Jab mouse live-price-bar par aayega, toh animation ruk jaayega */
+.live-price-bar:hover .scrolling-text {
+    animation-play-state: paused;
+    cursor: pointer; /* Cursor change hoga rukne par */
+}
+
+/* Animation definition */
+@keyframes moveTicker {
+    0% {
+        /* 100% ka matlab hai ki content screen ke bahar (right side) se shuru hoga */
+        transform: translateX(100%);
+    }
+    100% {
+        /* -100% ka matlab hai ki content screen ke left side se pura bahar nikal jaayega */
+        transform: translateX(-100%);
+    }
+}
+
+
+
+.product-card {
+    height: 100%; 
+
+}
+
+
+.product-card .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+.product-card .button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    height: 250px;
+    margin-top: 10px;
+}
+
+.product-card img {
+    height: 250px; 
+    object-fit: cover;
+    width: 100%;
+    transition: transform 0.5s ease;
+}

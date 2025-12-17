@@ -1,0 +1,220 @@
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Collection | Gold Bangles - Ramesh Jewellers</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="sticky-top">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+            <div class="container">
+
+                <img src="images/PNGLOGO1.png" alt="Ramesh Jewellers Logo" height="40">
+                <a class="navbar-brand custom-logo-font" href="index.html">Ramesh Jewellers</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="collection.html">Collection</a></li>
+                        <li class="nav-item"><a class="nav-link" href="wishlist.html">Wishlist</a></li>
+                        <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                    </ul>
+                    <ul class="navbar-nav d-flex flex-row">
+                        <li class="nav-item me-2">
+                            <form class="d-flex">
+                                <input class="form-control form-control-sm me-2" type="search" placeholder="Search Products" aria-label="Search" id="productSearch">
+                            </form>
+                        </li>
+                         <a class="nav-link" href="#" onclick="handleLogout()"><i class="bi bi-box-arrow-right"></i> LOGOUT</a>
+                        <!-- <li class="nav-item"><a class="nav-link" href="cart.html"><i class="bi bi-cart"></i> Cart</a></li> -->
+                         <li class="nav-item position-relative">
+                                    <a class="nav-link" href="cart.html">
+                                      <i class="bi bi-cart"></i> Cart
+                                         <span id="cartItemCount" class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle d-none" style="font-size: 0.65em;">0</span>
+                                    </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container my-5">
+        <h1 class="text-center mb-5 display-4 custom-logo-font">The Gold Bangle Collection</h1>
+        
+        <div class="row">
+            
+            <aside class="col-lg-3">
+                <div id="filterSidebar" class="bg-light p-4 rounded mb-4 sticky-top" style="top: 80px;">
+                    <h5 class="mb-3">Filter By</h5>
+                    
+                    <div class="mb-4">
+                        <label for="priceRange" class="form-label">Price Range (Lakhs)</label>
+                        <input type="range" class="form-range" min="0.5" max="5" value="5" step="0.5" id="priceRange">
+                        <small class="text-muted">Max: <span id="priceValue">₹5 Lakhs</span></small>
+                    </div>
+
+                    <div class="mb-4">
+                        <h6>Design Type</h6>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="Simple" id="designSimple" checked>
+                            <label class="form-check-label" for="designSimple">Classic & Simple</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="Mid" id="designMid" checked>
+                            <label class="form-check-label" for="designMid">Antique & Filigree</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="Heavy" id="designHeavy" checked>
+                            <label class="form-check-label" for="designHeavy">Bridal & Heavy Work</label>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-dark w-100" onclick="applyFilters()">Apply Filters</button>
+                </div>
+            </aside>
+
+             <section class="col-lg-9">
+                <div id="productGrid" class="row row-cols-2 row-cols-md-3 g-4">
+                    </div>
+            </section>
+          <!-- <section class="col-lg-9">
+            <div id="productGrid" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+            </div>
+        </section>> -->
+
+        </div>
+    </main>
+
+    <footer class="bg-dark text-white pt-5 pb-3">
+        </footer>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="cartToast" class="toast text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+            <div class="d-flex">
+                <div class="toast-body" id="toastBody">
+                    </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+
+
+   <footer class="bg-dark text-white pt-5 pb-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h5 class="mb-3">Contact Us</h5>
+                    <p><strong>Office Address:</strong><br>19/A Patwa Chawl, 1st Floor, Mahajangali,<br>Zaveri Bazar, Mumbai, Pincode 400 002</p>
+                    <p><strong>Email:</strong> www.rameshjewellers7.co.in (Placeholder for actual email)</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5 class="mb-3">Our Leadership</h5>
+                    <p><strong>Founder:</strong> Ramesh Mehta</p>
+                    <p><strong>Chain Making:</strong> Nitesh Mehta (Tel: <a href="tel:9323992724" class="text-warning">9323992724</a>)</p>
+                    <p><strong>Bangles:</strong> Nilesh Mehta (Tel: <a href="tel:9987320607" class="text-warning">9987320607</a>)</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5 class="mb-3">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="collection.html" class="text-white-50 text-decoration-none">Our Collection</a></li>
+                        <li><a href="login.html" class="text-white-50 text-decoration-none">Account</a></li>
+                        <li><a href="cart.html" class="text-white-50 text-decoration-none">Shopping Cart</a></li>
+                        <li><a href="contact.html" class="text-white-50 text-decoration-none">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center pt-3 mt-3 border-top border-secondary">
+                <p class="mb-0">&copy; 2025 Ramesh Jewellers. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/products.js"></script>
+
+
+
+<script>
+    // Isse Home Page secure ho jayega.
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
+        window.location.href = 'login.html';
+    }
+</script>
+
+<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="productModalLabel">Quick View</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-6 text-center">
+                        <img id="modalProductImage" src="" alt="Product Image" class="img-fluid rounded shadow-sm" style="max-height: 500px;">
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <h2 id="modalProductName" class="display-6 fw-bold mb-3"></h2>
+                        <h3 class="text-danger mb-4">Price: <span id="modalProductPrice"></span></h3>
+                        
+                        <p class="lead"><strong>Product ID:</strong> <span id="modalProductId"></span></p>
+                        <p class="lead"><strong>Weight (gm):</strong> <span id="modalProductWeight"></span></p>
+                        <p class="lead"><strong>Design Type:</strong> <span id="modalProductDesign"></span></p>
+                        
+                        <hr>
+                        
+                        <button class="btn btn-warning btn-lg me-2" id="modalAddToCartBtn">
+                            <i class="bi bi-cart-plus-fill"></i> Add to Cart
+                        </button>
+                        <button class="btn btn-dark btn-lg">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title" id="logoutModalLabel">👋 Confirm Logout</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to end your session and log out from Ramesh Jewellers?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmLogoutBtn">Log Out</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+</body>
+</html>
+
+
+
+
