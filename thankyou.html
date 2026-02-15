@@ -6,14 +6,24 @@
     <title>Thank You! | Ramesh Jewellers</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="cs/style.css"> 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="csS/style.css"> 
+   <script async src="https://www.googletagmanager.com/gtag/js?id=G-WNBQJ38PWN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-WNBQJ38PWN');
+    </script>
+    
+    <title>Ramesh Jewellers</title>
 </head>
 <body>
 
-     <header class="sticky-top">
+    <header class="sticky-top">
         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
             <div class="container">
-
                 <img src="images/PNGLOGO1.png" alt="Ramesh Jewellers Logo" height="40">
                 <a class="navbar-brand custom-logo-font" href="index.html">Ramesh Jewellers</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,10 +31,7 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav d-flex flex-row">
-                        <li class="nav-item me-2">
-                           
-                        </li>
-                       
+                        <li class="nav-item me-2"></li>
                     </ul>
                 </div>
             </div>
@@ -34,54 +41,150 @@
     <main class="container my-5 text-center">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <div class="card shadow-lg p-5">
+                <div class="card shadow-lg p-5 border-0 rounded-4">
                     <i class="bi bi-patch-check-fill text-success" style="font-size: 4rem;"></i>
-                    <h1 class="mt-4 mb-3 text-success">Order Placed Successfully!</h1>
-                    <p class="lead">
-                        **Thank you for shopping with Ramesh Jewellers.** Your order has been confirmed and is being processed.
+                    <h1 class="mt-4 mb-3 text-success fw-bold">Order Placed Successfully!</h1>
+                    <!-- <p class="lead">
+                        <strong>Thank you for shopping with Ramesh Jewellers.</strong> Your order has been confirmed and is being processed.
+                    </p> -->
+                    <p class="lead mb-4 text-secondary">
+                     <span class="text-dark fw-bold" style="font-size: 1.4rem; display: block; margin-bottom: 10px;">Your sparkle is on its way! ✨</span>
+                         We are carefully preparing your exquisite pieces to ensure they reach you in perfect condition. Your trust in **Ramesh Jewellers** means the world to us.
                     </p>
                     
-                    <div class="p-3 bg-light border rounded mb-4 mx-auto" style="max-width: 400px;">
-                        <p class="mb-1 text-muted small">Your unique Order ID:</p>
-                        <h4 id="orderIdDisplay" class="fw-bold text-dark">#LOADING...</h4>
+                    <div class="p-4 bg-light border rounded-3 mb-4 mx-auto" style="max-width: 450px;">
+                        <p class="mb-1 text-muted small text-uppercase fw-semibold">Your Order ID:</p>
+                        <h4 id="orderIdDisplay" class="fw-bold text-dark tracking-wider mb-0">#LOADING...</h4>
                     </div>
                     <p class="text-muted">
                         A confirmation email with your order details will be sent shortly.
                     </p>
                     <hr class="my-4">
-                    <a href="collection.html" class="btn btn-dark btn-lg me-2">
-                        <i class="bi bi-arrow-left"></i> Continue Shopping
-                    </a>
-                    <a href="index.html" class="btn btn-outline-secondary btn-lg">
-                        Go to Homepage
-                    </a>
+                    <div class="d-grid d-sm-flex justify-content-sm-center gap-3">
+                        <a href="collection.html" class="btn btn-dark btn-lg px-4">
+                            <i class="bi bi-arrow-left me-2"></i> Continue Shopping
+                        </a>
+                        <a href="index.html" class="btn btn-outline-secondary btn-lg px-4">
+                            Go to Homepage
+                        </a>
+                        <button id="whatsappBtn" class="btn btn-success px-4" style="background-color: #25D366; border: none;">
+                           <i class="bi bi-whatsapp me-2"></i> Send to WhatsApp
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
 
     <footer class="text-center py-3 bg-dark text-white-50 mt-5">
-        <p>&copy; 2025 Ramesh Jewellers. All Rights Reserved.</p>
+        <p class="mb-0">&copy; 2026 Ramesh Jewellers. All Rights Reserved.</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    
+    <script src="js/common.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/collection.js"></script>
+
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const params = new URLSearchParams(window.location.search);
-            const orderId = params.get('orderId');
-            const displayElement = document.getElementById('orderIdDisplay');
+        
+        (() => {
+            "use strict";
 
-            if (orderId && displayElement) {
-                // Order ID ko display karein
-                displayElement.textContent = `#${orderId}`;
-            } else if(displayElement) {
-                // Agar ID nahi mili
-                displayElement.textContent = "Error: ID Not Found";
-                displayElement.classList.replace('text-dark', 'text-danger');
+
+            const initOrderDisplay = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const rawId = urlParams.get('orderId'); // URL se seedha 8-digit ID milegi
+    const displayElement = document.getElementById('orderIdDisplay');
+
+    if (rawId && displayElement) {
+        displayElement.textContent = `#RJ${rawId}`;
+        // Success Toast
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            });
+            Toast.fire({
+                icon: 'success',
+                title: 'Order Confirmed!'
+            });
+
+    } else if (displayElement) {
+                displayElement.textContent = "ID Not Found";
+                displayElement.classList.add('text-danger');
             }
-        });
-    </script>
+};
 
+           document.getElementById('whatsappBtn').addEventListener('click', () => {
+    // Check karein ki data hai ya nahi
+    const rawData = localStorage.getItem('lastOrderDetails');
+    const displayId = document.getElementById('orderIdDisplay').textContent;
+
+    if (!rawData) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Details Missing',
+            text: 'Please wait a moment or refresh the page.'
+        });
+        return;
+    }
+
+    const orderData = JSON.parse(rawData);
+    const myNumber = "919321837665"; // Apna number dalo
+    const hallmarkRate = 53.10;
+    
+    let itemsList = "";
+    let pureGoldTotal = 0;
+    let totalMakingServices = 0;
+
+    orderData.items.forEach((item, index) => {
+        const qty = Number(item.quantity || 1);
+        const weight = parseFloat(item.weight_gm || 0);
+        const makingRate = parseFloat(item.making_charge || 0);
+        
+        const itemGold = Math.round(item.price) * qty;
+        const itemMakingWithHallmark = (Math.round(weight * makingRate) + Math.round(hallmarkRate)) * qty;
+
+        pureGoldTotal += itemGold;
+        totalMakingServices += itemMakingWithHallmark;
+
+        itemsList += `${index + 1}. *${item.name}* (x${qty})\n` +
+                     `   Size: ${item.customerSize || 'N/A'} | ${weight}g\n`+
+                     `   Current Price: ₹${itemGold.toLocaleString('en-IN')}\n\n`;
+    });
+
+    const subtotal = pureGoldTotal + totalMakingServices;
+    const gstAmount = Math.round(subtotal * 0.03);
+    const finalGrandTotal = subtotal + gstAmount;
+
+    const waMessage = `✨ *RAMESH JEWELLERY - ORDER DETAILS* ✨\n` +
+                      `--------------------------------\n` +
+                      `🆔 *Order ID:* ${displayId}\n` +
+                      `👤 *Customer:* ${orderData.customer_name}\n` +
+                      `📍 *Address:* ${orderData.address}\n` +
+                      `--------------------------------\n` +
+                      `📦 *ITEMS LIST:*\n\n${itemsList}` +
+                      `--------------------------------\n` +
+                      `💰 *BILL SUMMARY*\n` +
+                      `• Gold Total: ₹${pureGoldTotal.toLocaleString('en-IN')}\n` +
+                      `• Making & Services ₹${totalMakingServices.toLocaleString('en-IN')}\n` +
+                      `• GST (3%): ₹${gstAmount.toLocaleString('en-IN')}\n` +
+                      `--------------------------------\n` +
+                      `⭐ *GRAND TOTAL: ₹${finalGrandTotal.toLocaleString('en-IN')}*\n` +
+                      `--------------------------------\n\n` +
+                      `I have placed this order. Please confirm!`;
+
+    window.open(`https://wa.me/${myNumber}?text=${encodeURIComponent(waMessage)}`, '_blank');
+});
+
+            // Run logic immediately or on load
+            document.readyState === 'loading' 
+                ? document.addEventListener('DOMContentLoaded', initOrderDisplay) 
+                : initOrderDisplay();
+        })();
+    </script>
 </body>
 </html>

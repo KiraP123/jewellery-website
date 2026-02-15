@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RJ Admin - Master Control Center</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <style>
+        :root { 
+            --sidebar-width: 280px; 
+            --gold-primary: #a0845a; 
+            --gold-dark: #866d48;
+            --dark-blue: #0f172a; 
+            --sidebar-bg: #1e293b;
+        }
+        
+        body { 
+            background-color: #f1f5f9; 
+            font-family: 'Inter', sans-serif; 
+            overflow-x: hidden; 
+        }
+
+        /* Sidebar Styling */
+        .sidebar { 
+            width: var(--sidebar-width); 
+            height: 100vh; 
+            position: fixed; 
+            left: 0;
+            top: 0;
+            background: var(--sidebar-bg); 
+            color: white; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            z-index: 1050; 
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar-brand { 
+            padding: 25px; 
+            border-bottom: 1px solid rgba(255,255,255,0.1); 
+            font-weight: 700; 
+            font-size: 1.5rem; 
+            color: var(--gold-primary); 
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-link { 
+            color: #94a3b8; 
+            padding: 14px 25px; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            transition: 0.2s; 
+            text-decoration: none; 
+            border-left: 4px solid transparent;
+        }
+        
+        .nav-link:hover, .nav-link.active { 
+            color: white; 
+            background: rgba(255,255,255,0.08); 
+            border-left: 4px solid var(--gold-primary); 
+        }
+
+        /* Main Content Styling */
+        .content-area { 
+            margin-left: var(--sidebar-width); 
+            padding: 30px; 
+            transition: all 0.3s; 
+            min-height: 100vh;
+        }
+
+        .page-header { 
+            background: white; 
+            padding: 20px 25px; 
+            border-radius: 16px; 
+            border: 1px solid #e2e8f0; 
+            margin-bottom: 25px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .admin-page { display: none; }
+        .admin-page.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* UI Components */
+        .stat-card { 
+            background: white; 
+            border-radius: 20px; 
+            padding: 25px; 
+            border: 1px solid #e2e8f0; 
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            height: 100%;
+        }
+        
+        .order-table-card { background: white; border-radius: 20px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .product-img { width: 50px; height: 50px; object-fit: cover; border-radius: 10px; border: 1px solid #eee; }
+        .gold-rate-box { background: var(--dark-blue); border-radius: 24px; padding: 30px; color: white; }
+        .rate-label { color: #fbbf24 !important; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.5px; margin-bottom: 8px; display: block; }
+
+        /* Custom Inputs */
+        .custom-focus { border: 1px solid #e2e8f0; background: #f8fafc; padding: 12px 15px; border-radius: 12px; }
+        .custom-focus:focus { border-color: var(--gold-primary); box-shadow: 0 0 0 4px rgba(160, 132, 90, 0.1); background: white; }
+
+        /* Mobile Hamburger & Overlay */
+        .mobile-toggle { 
+            display: none; 
+            position: fixed; 
+            top: 15px; 
+            left: 15px; 
+            z-index: 1100; 
+            background: var(--gold-primary); 
+            color: white; 
+            border: none; 
+            width: 45px;
+            height: 45px;
+            border-radius: 12px; 
+            box-shadow: 0 4px 12px rgba(160, 132, 90, 0.3);
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1040;
+        }
+
+        /* Responsive Tweaks */
+        @media (max-width: 992px) {
+            .sidebar { left: -100%; }
+            .sidebar.show { left: 0; }
+            .sidebar-overlay.show { display: block; }
+            .content-area { margin-left: 0; padding: 20px; padding-top: 80px; }
+            .mobile-toggle { display: flex; align-items: center; justify-content: center; }
+            .page-header { flex-direction: column; gap: 15px; align-items: flex-start !important; }
+        }
+
+        /* Carousel Mgmt Styles */
+        .upload-zone { border: 2px dashed #cbd5e1; border-radius: 16px; padding: 40px; text-align: center; cursor: pointer; transition: 0.3s; background: #f8fafc; }
+        .upload-zone:hover { border-color: var(--gold-primary); background: #fff9f0; }
+        .btn-premium-gold { background: var(--gold-primary); color: white; border: none; font-weight: 700; border-radius: 12px; padding: 15px; transition: 0.3s; }
+        .btn-premium-gold:hover { background: var(--gold-dark); transform: translateY(-2px); box-shadow: 0 8px 15px rgba(160, 132, 90, 0.2); color: white; }
+    
+
+
+
+
+
+
+/* Status Container Layout */
+.status-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px; /* Select aur Input ke beech ki jagah */
+    width: 100%;
+}
+
+/* Dropdown styling */
+.status-container select {
+    min-width: 140px !important; /* Ensure readable text */
+    font-size: 0.85rem !important;
+    padding: 5px !important;
+}
+
+/* Mobile specific fixes */
+@media (max-width: 768px) {
+    /* Status column ko thodi extra jagah dena */
+    td:has(.status-container) {
+        min-width: 160px !important;
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+    }
+
+    /* Input group ko aur compact banana */
+    .status-container .input-group-text {
+        padding: 0 5px !important;
+    }
+
+    .status-container input {
+        padding: 4px 5px !important;
+        font-size: 0.75rem !important;
+    }
+}
+
+/* Border color highlight */
+.border-gold-subtle {
+    border: 1px solid #e5c06d !important;
+}
+
+
+
+
+
+
+
+/* WhatsApp button aur baaki action buttons ko ek dum barabar karne ke liye */
+.table td .btn, 
+.table td a.btn {
+    display: inline-flex !important;
+    align-items: center !important;    /* Vertical center */
+    justify-content: center !important;  /* Horizontal center */
+    vertical-align: middle !important;
+    height: 34px !important;            /* Sabki height ek jaisi */
+    width: auto;                        /* Content ke hisab se width */
+    min-width: 34px;                    /* Square base for icons */
+    padding: 0 8px !important;          /* Side padding balanced */
+    line-height: 0 !important;          /* Extra space khatam karne ke liye */
+}
+
+/* Specifically WhatsApp Icon ka size aur position */
+.table td a.btn i.bi-whatsapp {
+    font-size: 1.1rem !important;
+    display: block !important;
+    line-height: 1 !important;
+}
+
+/* Action column ke saare buttons ko ek line mein laane ke liye */
+.table td .d-flex {
+    align-items: center !important;
+    gap: 5px !important;
+}
+    </style>
+</head>
+<body>
+
+<button class="mobile-toggle shadow" onclick="toggleSidebar()">
+    <i class="bi bi-list fs-3" id="menuIcon"></i>
+</button>
+
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+        <i class="bi bi-gem me-2"></i>RJ ADMIN
+    </div>
+    <div class="nav flex-column mt-3">
+        <a href="javascript:void(0)" class="nav-link active" onclick="showPage('dashboard', this); closeSidebarOnMobile()">
+            <i class="bi bi-speedometer2"></i> Dashboard
+        </a>
+        <a href="javascript:void(0)" class="nav-link" onclick="showPage('inventory', this); closeSidebarOnMobile()">
+            <i class="bi bi-box-seam"></i> Inventory
+        </a>
+        <a href="javascript:void(0)" class="nav-link" onclick="showPage('orders', this); closeSidebarOnMobile()">
+            <i class="bi bi-cart-check"></i> Orders
+        </a>
+        <a href="javascript:void(0)" class="nav-link" onclick="showPage('rates', this); closeSidebarOnMobile()">
+            <i class="bi bi-graph-up-arrow"></i> Gold Rates
+        </a>
+        <a href="javascript:void(0)" class="nav-link" onclick="showPage('settings', this); closeSidebarOnMobile()">
+            <i class="bi bi-gear"></i> Settings
+        </a>
+        <a href="javascript:void(0)" class="nav-link" onclick="showPage('enquiries', this); closeSidebarOnMobile()">
+            <i class="bi bi-chat-dots"></i> Enquiries
+            <span class="badge bg-warning text-dark ms-auto rounded-pill" id="enquiryBadge">0</span>
+        </a>
+        <a href="javascript:void(0)" class="nav-link" onclick="showPage('carousel-mgmt', this); closeSidebarOnMobile()">
+            <i class="bi bi-images"></i> Carousel
+        </a>
+        <a href="javascript:void(0)" class="nav-link" onclick="showPage('reports', this); closeSidebarOnMobile()">
+            <i class="bi bi-graph-up"></i> Sales Report
+        </a>
+        <hr class="mx-3 opacity-10">
+        <a href="index.html" class="nav-link"><i class="bi bi-house"></i> View Website</a>
+    </div>
+</div>
+
+<div class="content-area">
+    
+    <div id="dashboard" class="admin-page active">
+        <div class="page-header d-flex justify-content-between align-items-center">
+            <h3 class="mb-0 fw-bold">Dashboard Summary</h3>
+            <span id="currentTime" class="text-muted fw-medium"></span>
+        </div>
+        <div class="row g-4 mb-4 text-center">
+            <div class="col-6 col-lg-3">
+                <div class="stat-card">
+                    <h6 class="text-muted small text-uppercase fw-bold">Total Orders</h6>
+                    <h2 id="totalOrders" class="text-primary fw-bold mb-0">0</h2>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="stat-card">
+                    <h6 class="text-muted small text-uppercase fw-bold">In Stock</h6>
+                    <h2 id="totalProducts" class="text-success fw-bold mb-0">0</h2>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="stat-card">
+                    <h6 class="text-muted small text-uppercase fw-bold">Gross Sales</h6>
+                    <h2 id="totalSales" class="text-danger fw-bold mb-0">₹ 0</h2>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="stat-card">
+                    <h6 class="text-muted small text-uppercase fw-bold">Cancelled</h6>
+                    <h2 id="cancelledOrdersCount" class="text-secondary fw-bold mb-0">0</h2>
+                </div>
+            </div>
+        </div>
+        <div class="alert alert-info border-0 shadow-sm rounded-4 p-3">
+            <i class="bi bi-lightning-charge-fill me-2 text-warning"></i> 
+            Welcome back, <strong>Ramesh Ji</strong>. Everything looks great today!
+        </div>
+    </div>    
+
+    <div id="inventory" class="admin-page">
+        <div class="page-header d-flex justify-content-between align-items-center">
+            <h3 class="mb-0 fw-bold">Product Inventory</h3>
+            <button class="btn btn-primary px-4 py-2 fw-bold shadow-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#addProdModal">
+                <i class="bi bi-plus-lg me-1"></i> Add New
+            </button>
+        </div>
+        <div class="order-table-card">
+            <div class="p-3 bg-light border-bottom">
+                <div class="input-group search-box shadow-sm">
+                    <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                    <input type="text" id="prodSearch" class="form-control border-start-0" placeholder="Search product..." onkeyup="filterTable('productTableBody', this.value)">
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table align-middle mb-0" style="min-width: 900px;">
+                    <thead class="bg-light">
+                        <tr class="small text-uppercase text-muted">
+                            <th class="ps-4">Img</th>
+                            <th>Name</th>
+                            <th>Purity</th>
+                            <th>Weight</th>
+                            <th>Stock</th>
+                            <th>Size</th>
+                            <th>Making</th>
+                            <th>Live Price</th>
+                            <th>Offer</th>
+                            <th class="text-center pe-4">Action</th> 
+                        </tr>
+                    </thead>
+                    <tbody id="productTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="carousel-mgmt" class="admin-page">
+        <div class="page-header mb-4">
+            <h3 class="fw-bold text-dark mb-1">Banner Management</h3>
+            <p class="text-muted small mb-0"><i class="bi bi-info-circle"></i> High-resolution images (1920x800) recommended.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-xl-7">
+                <div class="card border-0 shadow-sm rounded-4">
+                    <div class="card-body p-4">
+                        <form id="uploadCarouselForm">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-muted">TARGET SLIDE</label>
+                                    <select name="slide_num" class="form-select custom-focus">
+                                        <option value="1">Slide 01 - Primary Hero</option>
+                                        <option value="2">Slide 02 - Promotional</option>
+                                        <option value="3">Slide 03 - Seasonal</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-muted">SHORT TAG</label>
+                                    <input type="text" name="tag" class="form-control custom-focus" placeholder="e.g. NEW ARRIVALS">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label small fw-bold text-muted">MAIN HEADLINE</label>
+                                    <input type="text" name="title" class="form-control custom-focus" placeholder="Enter bold heading here...">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label small fw-bold text-muted">SUB-TEXT / DESCRIPTION</label>
+                                    <textarea name="description" class="form-control custom-focus" rows="2" placeholder="Tell your customers more..."></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <div class="upload-zone" onclick="document.getElementById('carouselFileInput').click()">
+                                        <i class="bi bi-cloud-arrow-up display-6 text-muted"></i>
+                                        <p class="mb-0 mt-2 small text-muted">Click to browse or drag image here</p>
+                                        <input type="file" id="carouselFileInput" name="image" hidden accept="image/*" onchange="previewCarouselImage(this)">
+                                    </div>
+                                </div>
+                                <div class="col-12 pt-3">
+                                    <button type="submit" class="btn btn-premium-gold w-100 shadow-sm">
+                                        UPDATE HOMEPAGE BANNER
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-5">
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden sticky-top" style="top: 20px;">
+                    <div class="card-header bg-white py-3 border-0">
+                        <h6 class="mb-0 fw-bold"><i class="bi bi-eye me-2 text-primary"></i>Live Preview</h6>
+                    </div>
+                    <div class="position-relative bg-dark" style="height: 250px;">
+                        <img id="carouselPreviewImg" src="" class="w-100 h-100 object-fit-cover opacity-50">
+                        <div class="preview-overlay p-4 position-absolute bottom-0 w-100 text-white">
+                            <span id="prevTag" class="badge bg-warning text-dark mb-2">TAG PREVIEW</span>
+                            <h4 id="prevTitle" class="fw-bold mb-1">Headline Preview</h4>
+                            <p id="prevDesc" class="small mb-0">Description text will appear here...</p>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white p-4 border-0">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="small fw-bold">Status:</span>
+                            <span class="badge bg-success text-white px-3 py-2 rounded-pill">Live Now</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="settings" class="admin-page">
+        <div class="page-header d-flex justify-content-between align-items-center">
+            <h3 class="mb-0 fw-bold text-dark"><i class="bi bi-shield-lock-fill me-2 text-primary"></i>Security</h3>
+        </div>
+        <div class="row justify-content-center mt-2">
+            <div class="col-md-8 col-lg-6">
+                <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                    <div style="height: 6px; background: var(--gold-primary);"></div>
+                    <div class="card-body p-4 p-md-5">
+                        <div class="text-center mb-4">
+                            <div class="d-inline-flex align-items-center justify-content-center bg-light rounded-circle mb-3" style="width: 70px; height: 70px;">
+                                <i class="bi bi-person-gear fs-2 text-primary"></i>
+                            </div>
+                            <h4 class="fw-bold">Master Credentials</h4>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-muted">VERIFICATION</label>
+                            <input type="password" id="oldPass" class="form-control custom-focus" placeholder="Current Password">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">NEW USERNAME</label>
+                            <input type="text" id="newAdminUser" class="form-control custom-focus" placeholder="New Username">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-muted">NEW PASSWORD</label>
+                            <input type="password" id="newAdminPass" class="form-control custom-focus" placeholder="New Password">
+                        </div>
+                        <button class="btn btn-primary w-100 py-3 fw-bold rounded-3 shadow" onclick="updateAdminPass()">Sync Credentials</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div id="reports" class="admin-page">
+    <div class="page-header d-flex justify-content-between align-items-center shadow-sm p-3 bg-white mb-3" style="border-radius: 15px;">
+        <div>
+            <h3 class="mb-0 fw-bold text-dark"><i class="bi bi-shield-check text-success me-2"></i>Sales & Customer Records</h3>
+            <p class="text-muted small mb-0">Search customers for exchange, bills, or history.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-success btn-sm px-3" onclick="downloadExcel()">
+                <i class="bi bi-file-earmark-spreadsheet me-1"></i> Export Excel
+            </button>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-12 col-md-4">
+            <div class="card border-0 shadow-sm p-4 text-white" style="background: linear-gradient(135deg, #0f172a, #1e293b); border-radius: 20px;">
+                <h6 class="text-uppercase small opacity-75 fw-bold">Total Net Revenue</h6>
+                <h2 class="fw-bold mb-0" id="totalRevenue">₹0</h2>
+                <div class="small mt-2 opacity-50"><i class="bi bi-info-circle me-1"></i>Based on delivered orders</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4">
+            <div class="card border-0 shadow-sm p-4 bg-white text-dark" style="border-radius: 20px; border-left: 6px solid #a0845a !important;">
+                <h6 class="text-uppercase small text-muted fw-bold">Successful Sales</h6>
+                <h2 class="fw-bold mb-0" id="totalOrderCount">0</h2>
+                <div class="small mt-2 text-muted"><i class="bi bi-cart-check me-1"></i>Total Transactions</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4">
+            <div class="card border-0 shadow-sm p-4 bg-white text-dark" style="border-radius: 20px; border-left: 6px solid #10b981 !important;">
+                <h6 class="text-uppercase small text-muted fw-bold">Average Bill Value</h6>
+                <h2 class="fw-bold mb-0" id="avgOrderVal">₹0</h2>
+                <div class="small mt-2 text-muted"><i class="bi bi-graph-up me-1"></i>Avg. per customer</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mt-4 p-3" style="border-radius: 15px; background: #f8fafc;">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <div class="input-group input-group-lg shadow-sm">
+                    <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                    <input type="text" class="form-control border-start-0 fs-6" 
+                           placeholder="Enter Name, Phone, or Order ID to search..."
+                           onkeyup="searchCustomer(this.value)">
+                </div>
+            </div>
+            <div class="col-md-4 text-md-end mt-2 mt-md-0">
+                <span class="badge bg-dark px-3 py-2 text-uppercase" style="letter-spacing: 1px;">Live Customer Database</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mt-3" style="border-radius: 20px; overflow: hidden;">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0" style="min-width: 900px;">
+                <thead style="background-color: #f1f5f9;">
+                    <tr class="text-muted small text-uppercase">
+                        <th class="ps-4 py-3">Order ID</th>
+                        <th class="py-3">Customer Details</th>
+                        <th class="py-3">Purchased Items</th>
+                        <th class="py-3 text-center">Date</th>
+                        <th class="py-3">Total Amount</th>
+                        <th class="pe-4 py-3 text-end">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="salesTableBody" class="border-top-0">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+       <div id="orders" class="admin-page">
+        <div class="page-header"><h3 class="mb-0 fw-bold">Order Management</h3></div>
+        <div class="order-table-card shadow-sm">
+            <div class="p-3 bg-light">
+                <input type="text" id="orderSearch" class="form-control search-box" placeholder="Search orders..." onkeyup="filterTable('adminOrderTable', this.value)">
+            </div>
+            <div class="table-responsive">
+                <table class="table align-middle mb-0" style="min-width: 600px;">
+
+                    <thead>
+    <tr>
+        <th>Order ID</th>
+        <th>Date</th>
+        <th>Customer</th>
+        <th>Amount</th>
+        <th>order status</th>
+        <th>Status update</th>
+        <th class="text-center">Delivery Date</th> <th class="text-center">Action</th>
+    </tr>
+</thead>
+                    <tbody id="adminOrderTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="rates" class="admin-page">
+        <div class="page-header"><h3 class="mb-0 fw-bold">Market Rates</h3></div>
+        <div class="gold-rate-box shadow-lg">
+            <div class="row g-4">
+                <div class="col-12 col-md-3">
+                    <label class="rate-label">24K RATE (995)</label>
+                    <input type="number" id="r995" class="form-control form-control-lg bg-dark text-white border-secondary">
+                </div>
+                <div class="col-6 col-md-3">
+                    <label class="rate-label">22K RATE (916)</label>
+                    <input type="number" id="r916" class="form-control form-control-lg bg-dark text-white border-secondary" readonly>
+                </div>
+                <div class="col-6 col-md-3">
+                    <label class="rate-label">18K RATE (750)</label>
+                    <input type="number" id="r750" class="form-control form-control-lg bg-dark text-white border-secondary" readonly>
+                </div>
+                <div class="col-12 col-md-3 d-flex align-items-end">
+                    <button class="btn btn-warning btn-lg w-100 fw-bold shadow text-dark" onclick="updateRates()">Update Market</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="enquiries" class="admin-page">
+        <div class="page-header d-flex justify-content-between align-items-center">
+            <h3 class="mb-0 fw-bold">Customer Enquiries</h3>
+            <button class="btn btn-dark px-3 rounded-pill" onclick="fetchEnquiries()">
+                <i class="bi bi-arrow-clockwise me-1"></i> Refresh
+            </button>
+        </div>
+        <div class="order-table-card">
+            <div class="table-responsive">
+                <table class="table align-middle mb-0" style="min-width: 800px;">
+                    <thead class="bg-light text-muted small uppercase">
+                        <tr>
+                            <th class="ps-4">Date</th>
+                            <th>Customer</th>
+                            <th>Purpose</th>
+                            <th>Message</th>
+                            <th>Status</th>
+                            <th class="text-center pe-4">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="enquiryTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade" id="orderViewModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+            <div class="modal-header border-0 bg-primary text-white p-4">
+                <div>
+                    <h4 class="fw-bold mb-0">Order Summary</h4>
+                    <span id="modalOrderID" class="small opacity-75"></span> | <span id="modalOrderDate" class="small opacity-75"></span>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4 bg-light">
+                <div class="row g-4">
+                    <div class="col-md-5">
+                        <div class="p-4 bg-white rounded-4 shadow-sm h-100">
+                            <h6 class="text-primary fw-bold mb-3 border-bottom pb-2">Customer Details</h6>
+                            <div class="mb-3"><label class="text-muted small d-block">Full Name</label><span id="custName" class="fw-bold"></span></div>
+                            <div class="mb-3"><label class="text-muted small d-block">Contact Phone</label><span id="custPhone"></span></div>
+                            <div class="mb-3"><label class="text-muted small d-block">Delivery Address</label><span id="custAddress" class="small"></span></div>
+                            <div class="mb-3"><label class="text-muted small d-block">Pincode</label><span id="custPin" class="fw-bold"></span></div>
+                            <div class="mb-0"><label class="text-muted small d-block">Email Address</label><span id="custGmail">N/A</span></div>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="p-4 bg-white rounded-4 shadow-sm">
+                            <h6 class="text-primary fw-bold mb-3 border-bottom pb-2">Item Details</h6>
+                            <div id="modalItemList"></div>
+                            <div class="pt-3 border-top mt-4 d-flex justify-content-between align-items-center">
+                                <span class="h5 fw-bold mb-0">Total Amount</span>
+                                <span id="modalTotal" class="h3 fw-bold text-danger mb-0"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0 p-3 bg-white d-flex justify-content-between">
+                <button class="btn btn-outline-dark px-4 rounded-pill fw-bold" onclick="window.print()"><i class="bi bi-printer me-2"></i>Print Invoice</button>
+                <button class="btn btn-primary px-4 rounded-pill fw-bold" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="addProdModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <form id="addProdForm" class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-0 bg-light p-4">
+                <h5 class="fw-bold mb-0">Add New Jewelry Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Product Name</label>
+                    <input type="text" name="name" class="form-control custom-focus" placeholder="e.g. Gold Temple Necklace" required>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col">
+                        <label class="form-label small fw-bold">Weight (gms)</label>
+                        <input type="number" step="0.001" name="weight_gm" class="form-control custom-focus" placeholder="0.000" required>
+                    </div>
+                    <div class="col">
+                        <label class="form-label small fw-bold">Making Charge</label>
+                        <input type="number" name="making_charge" class="form-control custom-focus" placeholder="₹" required>
+                    </div>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col">
+                        <label class="form-label small fw-bold">Purity</label>
+                        <select name="purity" class="form-select custom-focus">
+                            <option value="916">22K (916)</option>
+                            <option value="995">24K (995)</option>
+                            <option value="750">18K (750)</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label class="form-label small fw-bold">Size (optional)</label>
+                        <input type="text" name="size" class="form-control custom-focus" placeholder="e.g. 12, 18 inch">
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold text-primary">Current Stock</label>
+                        <input type="number" name="stock_qty" class="form-control custom-focus" placeholder="Kitne piece hain?" min="0" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label small fw-bold">If Out of Stock?</label>
+                        <select name="stock_logic" class="form-select custom-focus">
+                            <option value="order">Bana kar milega</option>
+                            <option value="hide">Website se chhupao</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-1">
+                    <label class="form-label small fw-bold">Product Image</label>
+                    <input type="file" name="productImage" class="form-control custom-focus" accept="image/*" required>
+                </div>
+            </div>
+            <div class="modal-footer border-0 p-4">
+                <button type="submit" class="btn btn-primary w-100 py-3 fw-bold rounded-3 shadow-sm">UPLOAD PRODUCT</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="js/admin.js"></script>
+
+</body>
+</html>

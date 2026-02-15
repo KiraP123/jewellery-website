@@ -1,0 +1,103 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Settings | Ramesh Jewellers</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root { --gold: #a0845a; --dark-bg: #0f172a; }
+        body { background: var(--dark-bg); color: white; min-height: 100vh; display: flex; align-items: center; font-family: 'Inter', sans-serif; }
+        .settings-card {
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px);
+            padding: 40px; border-radius: 25px; border: 1px solid rgba(160, 132, 90, 0.3);
+            width: 100%; max-width: 450px; margin: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+        }
+        .form-label { color: #94a3b8; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; }
+        .form-control { background: rgba(255,255,255,0.07); border: 1px solid #334155; color: white; padding: 12px; border-radius: 10px; }
+        .form-control:focus { background: rgba(255,255,255,0.1); color: white; border-color: var(--gold); box-shadow: none; }
+        .btn-update { background: linear-gradient(45deg, #a0845a, #d4af37); border: none; color: white; font-weight: 700; padding: 12px; border-radius: 10px; width: 100%; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="settings-card">
+        <h3 class="fw-bold mb-1">Account Settings</h3>
+        <p class="text-muted small mb-4">Update Master Admin Credentials</p>
+
+        <form id="updateAccountForm">
+            <div class="mb-3 text-start">
+                <label class="form-label">New Username</label>
+                <input type="text" id="newUser" class="form-control" placeholder="Update Username" required>
+            </div>
+            <hr class="my-4" style="opacity: 0.1;">
+            <div class="mb-3 text-start">
+                <label class="form-label">Current Password</label>
+                <input type="password" id="currPass" class="form-control" placeholder="Current Password" required>
+            </div>
+            <div class="mb-3 text-start">
+                <label class="form-label">New Password</label>
+                <input type="password" id="newPass" class="form-control" placeholder="New Password" required>
+            </div>
+            <div class="mb-4 text-start">
+                <label class="form-label">Confirm New Password</label>
+                <input type="password" id="confPass" class="form-control" placeholder="Confirm Password" required>
+            </div>
+            <button type="submit" class="btn btn-update">UPDATE DATABASE</button>
+        </form>
+
+        <div class="mt-4 text-center">
+            <a href="admin.html" class="text-muted text-decoration-none small"><i class="bi bi-arrow-left"></i> Back to Dashboard</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        if(localStorage.getItem('role') !== 'admin') { window.location.href = "admin-login.html"; }
+
+        document.getElementById('updateAccountForm').onsubmit = async function(e) {
+            e.preventDefault();
+            
+            const newUser = document.getElementById('newUser').value;
+            const cp = document.getElementById('currPass').value;
+            const np = document.getElementById('newPass').value;
+            const conf = document.getElementById('confPass').value;
+
+            if(np !== conf) {
+                Swal.fire({ icon: 'error', title: 'Mismatch', text: 'New passwords do not match!', background: '#1e293b', color: '#fff' });
+                return;
+            }
+
+            try {
+                // Sending data to the server API
+                const response = await fetch('/api/admin/update-settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        username: newUser, 
+                        oldPassword: cp, 
+                        newPassword: np 
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    Swal.fire({
+                        icon: 'success', title: 'Updated', text: 'Database updated! Please login again.',
+                        background: '#1e293b', color: '#fff'
+                    }).then(() => {
+                        localStorage.clear();
+                        window.location.href = "admin-login.html";
+                    });
+                } else {
+                    Swal.fire({ icon: 'error', title: 'Failed', text: result.message, background: '#1e293b', color: '#fff' });
+                }
+            } catch (error) {
+                Swal.fire({ icon: 'error', title: 'Server Error', text: 'Database connection failed!', background: '#1e293b', color: '#fff' });
+            }
+        };
+    </script>
+</body>
+</html> -->

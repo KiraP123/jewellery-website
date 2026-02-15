@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Enquiries</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', sans-serif; }
+        .admin-header { background: #1a1a1a; color: white; padding: 20px 0; margin-bottom: 30px; }
+        .custom-logo-font { font-family: 'Cinzel', serif; letter-spacing: 2px; }
+        .card { border: none; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .status-badge { padding: 5px 12px; border-radius: 50px; font-size: 12px; font-weight: bold; }
+        .table thead { background-color: #f1f1f1; }
+        .btn-whatsapp { background-color: #25D366; color: white; border-radius: 50px; font-size: 13px; }
+        .btn-whatsapp:hover { background-color: #128C7E; color: white; }
+    </style>
+</head>
+<body>
+
+    <header class="admin-header shadow">
+        <div class="container d-flex justify-content-between align-items-center">
+            <h4 class="mb-0 custom-logo-font">RAMESH JEWELLERS <small class="ms-2 fs-6 text-warning">Admin Panel</small></h4>
+            <a href="admin-dashboard.html" class="btn btn-outline-light btn-sm">Back to Dashboard</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h2 class="fw-bold">Meeting & Product Enquiries</h2>
+                <p class="text-muted">Manage all customer requests and fix meetings here.</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <button class="btn btn-dark rounded-pill px-4" onclick="fetchEnquiries()">
+                    <i class="bi bi-arrow-clockwise me-2"></i> Refresh Data
+                </button>
+            </div>
+        </div>
+
+        <div class="card p-4">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Customer Name</th>
+                            <th>Purpose</th>
+                            <th>Message</th>
+                            <th>Status</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="enquiryTableBody">
+                        <tr>
+                            <td colspan="6" class="text-center py-5">
+                                <div class="spinner-border text-warning" role="status"></div>
+                                <p class="mt-2">Fetching enquiries...</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. Database se Enquiries lekar Table mein dikhana
+        async function fetchEnquiries() {
+            try {
+                const response = await fetch('/api/admin/enquiries'); // Ye API humne server.js mein banayi hai
+                const data = await response.json();
+                
+                const tableBody = document.getElementById('enquiryTableBody');
+                
+                if (data.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="6" class="text-center">No enquiries found.</td></tr>';
+                    return;
+                }
+
+                tableBody.innerHTML = data.map(item => `
+                    <tr>
+                        <td>${new Date(item.created_at).toLocaleDateString('en-IN')}</td>
+                        <td>
+                            <div class="fw-bold">${item.name}</div>
+                            <small class="text-muted"><i class="bi bi-phone"></i> ${item.phone}</small>
+                        </td>
+                        <td><span class="badge bg-light text-dark border">${item.subject}</span></td>
+                        <td><p class="mb-0 small text-truncate" style="max-width: 200px;" title="${item.message}">${item.message}</p></td>
+                        <td>
+                            <select class="form-select form-select-sm" onchange="updateStatus(${item.id}, this.value)">
+                                <option value="Pending" ${item.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                                <option value="Meeting Fixed" ${item.status === 'Meeting Fixed' ? 'selected' : ''}>Meeting Fixed</option>
+                                <option value="Completed" ${item.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                            </select>
+                        </td>
+                        <td class="text-center">
+                            <a href="https://wa.me/91${item.phone}?text=Hi ${item.name}, this is Ramesh Jewellers. We received your enquiry for ${item.subject}. When can we talk?" 
+                               target="_blank" class="btn btn-whatsapp btn-sm px-3 shadow-sm">
+                                <i class="bi bi-whatsapp me-1"></i> WhatsApp
+                            </a>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                document.getElementById('enquiryTableBody').innerHTML = '<tr><td colspan="6" class="text-center text-danger">Error loading data. Check server connection.</td></tr>';
+            }
+        }
+
+        // 2. Status Update karne ki function
+        async function updateStatus(id, newStatus) {
+            try {
+                const response = await fetch('/api/admin/update-enquiry-status', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id, status: newStatus })
+                });
+                
+                if (response.ok) {
+                    // Chhota sa toast ya alert dikha sakte hain
+                    console.log("Status updated to " + newStatus);
+                }
+            } catch (error) {
+                alert("Failed to update status");
+            }
+        }
+
+        // Initial Load
+        window.onload = fetchEnquiries;
+    </script>
+</body>
+</html>

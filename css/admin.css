@@ -1,0 +1,75 @@
+/* --- Sales History Line-by-Line Layout --- */
+
+/* 1. Customer Info Box ko stack karna */
+.row.g-3 > div {
+    width: 100% !important;     /* Har column ab poori width lega */
+    text-align: left !important; /* Sab kuch left aligned */
+    margin-bottom: 12px !important;
+    border-bottom: 1px solid #f0f0f0; /* Halki line separation ke liye */
+    padding-bottom: 5px;
+}
+
+/* Last item se border hatana */
+.row.g-3 > div:last-child {
+    border-bottom: none;
+}
+
+/* 2. Email aur Text ko wrap hone se rokna */
+.row div span {
+    display: block !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important; /* Agar email screen se badi ho toh ... dikhega */
+}
+
+/* 3. Table ko scrollable aur readable banana */
+.table-responsive {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid #dee2e6 !important;
+    margin-bottom: 20px !important;
+}
+
+.table-responsive table {
+    min-width: 600px !important; /* Table ke columns ko dabne se rokega */
+}
+
+/* 4. Total Amount Box - Price ko Right hi rakhenge standard look ke liye */
+.p-3.bg-dark {
+    display: flex !important;
+    flex-direction: row !important; /* Label left, Price right */
+    justify-content: space-between !important;
+    align-items: center !important;
+    border-radius: 10px !important;
+}
+
+/* Mobile par agar amount bada hai toh text size adjust karein */
+@media (max-width: 480px) {
+    .p-3.bg-dark span.text-uppercase {
+        font-size: 10px !important;
+    }
+    .p-3.bg-dark span.h4 {
+        font-size: 1.1rem !important;
+    }
+}
+
+
+
+@media (max-width: 600px) {
+    /* Table ke headers ko chota karein */
+    .table th { font-size: 11px !important; padding: 8px 4px !important; }
+    .table td { padding: 8px 4px !important; }
+
+    /* Button sizes choti karein */
+    .btn-sm { padding: 2px 5px !important; font-size: 12px !important; }
+    
+    /* WhatsApp aur Delete buttons ko side-by-side rakhein */
+    .d-flex.gap-1 { display: flex !important; flex-direction: row !important; }
+    
+    /* Agar message button chipak raha ho toh */
+    .btn-outline-warning { border-color: #c5a059 !important; color: #c5a059 !important; }
+}
+
+/* Modal styling (Jab message khulega) */
+.modal-content { border-radius: 15px; border: none; }
+.modal-header { background: #fdfaf5; border-bottom: 1px solid #eee; }

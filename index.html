@@ -8,130 +8,237 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/index.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="google-signin-client_id" content="1074517545758-4ijdnhe0tkbjoervpd1810q2hkva3pkp.apps.googleusercontent.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WNBQJ38PWN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-WNBQJ38PWN');
+    </script>
+    
+    <title>Ramesh Jewellers</title>
 </head>
 <body>
 
-    <header class="sticky-top">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm"> 
-        <div class="container">
-             
-             <img src="images/PNGLOGO1.png" alt="Ramesh Jewellers Logo" height="40">
-            <a class="navbar-brand custom-logo-font" href="index.html">RAMESH JEWELLERS</a> 
-             
-            
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="navbarNav">
-                
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link active" href="index.html">HOME</a></li>
-                    <li class="nav-item"><a class="nav-link" href="collection.html">COLLECTION</a></li>
-                    <li class="nav-item"><a class="nav-link" href="wishlist.html">WISHLIST </a></li>
-                    <li class="nav-item"><a class="nav-link" href="contact.html">CONTACT</a></li>
-                </ul>
-                
-                <ul class="navbar-nav d-flex align-items-center ms-auto">
-                    <li class="nav-item me-2">
-                        <form class="d-flex">
-                            <input class="form-control form-control-sm me-2" type="search" placeholder="Search Products" aria-label="Search" id="productSearch">
-                        </form>
-                    </li>
-                    <li class="nav-item me-2">
-                     <a class="nav-link" href="#" onclick="handleLogout()"><i class="bi bi-box-arrow-right"></i> LOGOUT</a>
-                   </li>
-                   
-                    <li class="nav-item"><a class="nav-link" href="cart.html"><i class="bi bi-cart"></i> CART</a></li>
-                </ul>
+ <style>
+     /* --- General Styling --- */
+    .custom-logo-font { 
+        font-family: 'Cinzel', serif; 
+        font-weight: 700; 
+        color: #4a1d1f; 
+        letter-spacing: 1px; 
+    }
+    .border-gold { border: 1px solid #a0845a !important; }
 
-            </div>
+    /* --- Laptop (Desktop) View --- */
+    @media (min-width: 992px) {
+        .navbar-brand img { height: 35px !important; }
+        .mobile-only-icons { display: none !important; } 
+        
+        .navbar-collapse {
+            display: flex !important;
+            position: relative !important;
+            height: auto !important;
+            width: auto !important;
+        }
+        .nav-link { padding: 0 12px !important; font-size: 14px; font-weight: 600; }
+    }
+
+    /* --- Mobile (Phone) Stylish View --- */
+    @media (max-width: 991px) {
+        .navbar-brand {
+            position: absolute !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+        }
+        .navbar-brand img { height: 26px !important; }
+        .custom-logo-font { font-size: 13px !important; margin-left: 5px; }
+
+        /* Icons on Right (Mobile Only) */
+        .mobile-only-icons {
+            display: flex !important;
+            gap: 15px;
+            order: 3;
+        }
+        .mobile-only-icons i { color: #4a1d1f; font-size: 18px; }
+
+        /* Stylish Drawer */
+        .navbar-collapse {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            height: 100vh;
+            width: 280px;
+            background: #fff;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 9999;
+            display: block !important;
+            padding: 0 !important;
+            box-shadow: 10px 0 20px rgba(0,0,0,0.1);
+        }
+        .navbar-collapse.show { left: 0; }
+
+        .drawer-header {
+            padding: 25px 20px;
+            background: #fdf8f2;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-item { border-bottom: 1px solid #f9f9f9; width: 100%; }
+        .nav-link { 
+            padding: 15px 20px !important; 
+            color: #4a1d1f !important; 
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        .nav-link i { margin-right: 12px; color: #a0845a; width: 20px; text-align: center; }
+    
+    }
+</style>
+ <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top p-0">
+    <div class="container d-flex justify-content-between align-items-center py-2">
+        
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <i class="fa-solid fa-bars-staggered" style="color: #4a1d1f;"></i>
+        </button>
+
+        <a class="navbar-brand d-flex align-items-center" href="index.html">
+            <img src="images/PNGLOGO1.png" alt="Logo">
+            <span class="custom-logo-font">Ramesh Jewellers</span>
+        </a>
+
+
+        <div class="d-none d-lg-block mx-3" style="flex-grow: 1; max-width: 400px;">
+    <form class="classic-search" action="collection.html" method="GET">
+        <div class="input-group">
+            <span class="input-group-text bg-transparent border-end-0 border-gold">
+                <i class="bi bi-search" style="color: #a0845a;"></i>
+            </span>
+            <input class="form-control border-start-0 border-gold" type="search" placeholder="Search jewellery..." id="laptopSearch" name="search">
         </div>
-    </nav>
-</header>
+    </form>
+</div>
 
+        <div class="mobile-only-icons d-lg-none">
+            <a href="index.html"><i class="fa-solid fa-house"></i></a>
+            <a href="wishlist.html"><i class="fa-regular fa-heart"></i><span id="wishlist-count-mobile" class="badge-count">0</span></a>
+            <a href="cart.html" class="position-relative"><i class="fa-solid fa-bag-shopping"></i><span id="cart-count-mobile" class="badge-count">0</span></a>
+        </div>
 
+        <div class="collapse navbar-collapse flex-grow-0" id="navbarNav">
+            <div class="drawer-header d-lg-none">
+                <span class="fw-bold" style="color: #a0845a;">EXPLORE</span>
+                <button class="btn-close" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"></button>
+            </div>
+            
+            <ul class="navbar-nav align-items-center">
+                <li class="nav-item"><a class="nav-link" href="index.html"><i class="fa-solid fa-house d-lg-none"></i> Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="collection.html"><i class="fa-solid fa-gem d-lg-none"></i> Collection</a></li>
+                <li class="nav-item"><a class="nav-link" href="wishlist.html"><i class="fa-solid fa-heart d-lg-none"></i> Wishlist</a></li>
+                <li class="nav-item"><a class="nav-link" href="contact.html"><i class="fa-solid fa-envelope d-lg-none"></i> Contact</a></li>
+                 <li class="nav-item dropdown cart-hover-dropdown">
+    <a class="nav-link d-flex align-items-center gap-2" href="cart.html" id="cartDropdown">
+        <span class="position-relative d-inline-block">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <!-- <span id="cart-count-desktop" class="badge-count">0</span> -->
+        </span>
+        <span class="fw-bold">CART</span>
+    </a>
+    
+    <ul class="dropdown-menu dropdown-menu-end shadow border-gold shadow-sm">
+        <li>
+            <a class="dropdown-item py-2" href="orders.html">
+                <i class="fa-solid fa-clock-rotate-left me-2 text-gold"></i> My Orders
+            </a>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+        <li>
+            <a class="dropdown-item py-2" href="cart.html">
+                <i class="fa-solid fa-cart-shopping me-2 text-gold"></i> View Full Cart
+            </a>
+        </li>
+    </ul>
+</li>
+
+<li class="nav-item d-lg-none">
+    <a class="nav-link" href="orders.html">
+        <i class="fa-solid fa-clock-rotate-left"></i> My Orders
+    </a>
+</li>
+                <li class="nav-item" id="authBtnContainer"></li>
+            </ul>
+        </div>
+    </div>
+
+       <div class="container d-lg-none pb-3 px-3">
+    <form class="classic-search w-100" action="collection.html" method="GET">
+        <div class="input-group">
+            <span class="input-group-text bg-transparent border-end-0 border-gold">
+                <i class="bi bi-search" style="color: #a0845a;"></i>
+            </span>
+            <input class="form-control border-start-0 border-gold" type="search" placeholder="Search Jewellery..." id="mobileSearch" name="search">
+        </div>
+    </form>
+</div>
+
+</nav>
+
+<script>
+    // Search Trigger (Enter key)
+    document.querySelectorAll('.search-input').forEach(input => {
+        input.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter' && this.value.trim()) {
+                window.location.href = `collection.html?search=${encodeURIComponent(this.value.trim())}`;
+            }
+        });
+    });
+</script>
 
 
     <main>
-   
-        <section id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
-                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
-                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
-            </div>
-            <div class="carousel-inner">
-                <div class="carousel-item active" style="background-image: url('images/carousel-11.png');">
-                    <div class="carousel-caption d-none d-md-block">
-                        <!-- <h1>Time. Elegance. Perfected.</h1>
-                        <p>Explore our handcrafted gold collections.</p> -->
-                        <a href="collection.html" class="btn btn-warning btn-lg">Shop Now</a>
-                    </div>
-                </div>
-                <div class="carousel-item" style="background-image: url('images/carousel-8.png');">
-                    <div class="carousel-caption d-none d-md-block">
-                        <!-- <h2>The Bangles Collection</h2>
-                        <p>Classic designs for the modern woman.</p> -->
-                    </div>
-                </div>
-                <div class="carousel-item" style="background-image: url('images/carousel-9.png');">
-                    <div class="carousel-caption d-none d-md-block">
-                        <!-- <h2>Limited Time Offer!</h2>
-                        <p>20% off on selected items.</p> -->
-                    </div>
-                </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </section>
-
-    
-
-        <section class="container my-5 text-center">
-            <h2 class="mb-4 display-5">✨ Limited Time Offer ✨</h2>
-            <p class="lead text-muted">A curated selection of our best-selling jewellery.</p>
-            <div class="row row-cols-1 row-cols-md-3 g-4">
-                <div class="col">
-                    <div class="card product-card">
-                        <img src="assets/product-1.jpg" class="card-img-top" alt="Gold Bangle">
-                        <div class="card-body">
-                            <h5 class="card-title">Kundan Bangle</h5>
-                            <p class="card-text fw-bold text-danger">Rs. 85,000</p>
-                            <a href="#" class="btn btn-dark">View Details</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card product-card">
-                        <img src="images/bangle-01.jpg" class="card-img-top" alt="Gold Chain">
-                        <div class="card-body">
-                            <h5 class="card-title">Classic Gold Chain</h5>
-                            <p class="card-text fw-bold text-danger">Rs. 45,000</p>
-                            <a href="#" class="btn btn-dark">View Details</a>
-                        </div>
-                    </div>
-                </div>
-                 <div class="col">
-                    <div class="card product-card">
-                        <img src="assets/product-3.jpg" class="card-img-top" alt="Diamond Ring">
-                        <div class="card-body">
-                            <h5 class="card-title">Solitaire Ring</h5>
-                            <p class="card-text fw-bold text-danger">Rs. 1,20,000</p>
-                            <a href="#" class="btn btn-dark">View Details</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
 
+
+
+        <div id="mainHeroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+    <div class="carousel-indicators luxury-indicators" id="carousel-indicators">
+        </div>
+
+    <div class="carousel-inner" id="main-carousel-content">
+        </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#mainHeroCarousel" data-bs-slide="prev">
+        <div class="control-circle"><i class="bi bi-chevron-left"></i></div>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#mainHeroCarousel" data-bs-slide="next">
+        <div class="control-circle"><i class="bi bi-chevron-right"></i></div>
+    </button>
+</div>
+
+       
+
+          <section id="limited-offers" class="py-5 bg-white">
+    <div class="container">
+        <div class="text-center mb-5">
+             <h2 class="fw-bold" style="letter-spacing: 2px;">LIMITED TIME OFFER</h2>
+            <div style="width: 50px; height: 3px; background: #c5a059; margin: 10px auto;"></div>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-3 g-5 justify-content-center" id="offerContainer">
+       </div>
+    </div>
+</section>
 
 
 
@@ -140,52 +247,8 @@
             <h2 class="display-4 fw-bold">🔥 Just Launched: New Arrivals</h2>
             <p class="lead text-muted">Explore the latest trends in gold and diamond jewellery.</p>
         </div>
-        
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-            <div class="col">
-                <div class="card h-100 shadow-sm border-0 text-center">
-                    <img src="images/product-placeholder-1.jpg" class="card-img-top" alt="New Gold Pendant">
-                    <div class="card-body">
-                        <h5 class="card-title fw-bold">Royal Filigree Pendant</h5>
-                        <p class="card-text text-danger fs-5">₹ 45,000</p>
-                        <a href="#" class="btn btn-outline-warning btn-sm">View Details</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col">
-                <div class="card h-100 shadow-sm border-0 text-center">
-                    <img src="images/product-placeholder-2.jpg" class="card-img-top" alt="Diamond Ring">
-                    <div class="card-body">
-                        <h5 class="card-title fw-bold">Solitaire Diamond Ring</h5>
-                        <p class="card-text text-danger fs-5">₹ 1,20,000</p>
-                        <a href="#" class="btn btn-outline-warning btn-sm">View Details</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card h-100 shadow-sm border-0 text-center">
-                    <img src="images/product-placeholder-3.jpg" class="card-img-top" alt="Polki Earrings">
-                    <div class="card-body">
-                        <h5 class="card-title fw-bold">Jaipur Polki Earrings</h5>
-                        <p class="card-text text-danger fs-5">₹ 88,500</p>
-                        <a href="#" class="btn btn-outline-warning btn-sm">View Details</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card h-100 shadow-sm border-0 text-center">
-                    <img src="images/product-placeholder-4.jpg" class="card-img-top" alt="Platinum Chain">
-                    <div class="card-body">
-                        <h5 class="card-title fw-bold">Classic Platinum Chain</h5>
-                        <p class="card-text text-danger fs-5">₹ 62,000</p>
-                        <a href="#" class="btn btn-outline-warning btn-sm">View Details</a>
-                    </div>
-                </div>
-            </div>
-            </div>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4" id="newArrivalsContainer">
+        </div>
     </section>
 
 
@@ -226,6 +289,14 @@
         </div>
     </section>
 
+
+
+
+                    
+
+
+
+
     <section class="container my-5 py-3">
         <div class="row text-center g-4">
             <div class="col-lg-3 col-sm-6">
@@ -254,45 +325,93 @@
 
     </main>
 
+
+
+
+
+
+
     <footer class="bg-dark text-white pt-5 pb-3">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <h5 class="mb-3">Contact Us</h5>
-                    <p><strong>Office Address:</strong><br>19/A Patwa Chawl, 1st Floor, Mahajangali,<br>Zaveri Bazar, Mumbai, Pincode 400 002</p>
-                    <p><strong>Email:</strong> www.rameshjewellers7.co.in (Placeholder for actual email)</p>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <h5 class="mb-3">Our Leadership</h5>
-                    <p><strong>Founder:</strong> Ramesh Mehta</p>
-                    <p><strong>Chain Making:</strong> Nitesh Mehta (Tel: <a href="tel:9323992724" class="text-warning">9323992724</a>)</p>
-                    <p><strong>Bangles:</strong> Nilesh Mehta (Tel: <a href="tel:9987320607" class="text-warning">9987320607</a>)</p>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <h5 class="mb-3">Quick Links</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="collection.html" class="text-white-50 text-decoration-none">Our Collection</a></li>
-                        <li><a href="login.html" class="text-white-50 text-decoration-none">Account</a></li>
-                        <li><a href="cart.html" class="text-white-50 text-decoration-none">Shopping Cart</a></li>
-                        <li><a href="contact.html" class="text-white-50 text-decoration-none">Contact Us</a></li>
-                    </ul>
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <h5 class="custom-logo-font text-warning mb-4">Contact Us</h5>
+                <p class="small text-white-50">
+                    <i class="bi bi-geo-alt-fill text-warning me-2"></i>
+                    <strong>Office Address:</strong><br>
+                    19/A Patwa Chawl, 1st Floor, Mahajangali,<br>
+                    Zaveri Bazar, Mumbai, 400 002
+                </p>
+                <p class="small text-white-50">
+                    <i class="bi bi-envelope-at-fill text-warning me-2"></i>
+                    <strong>Email:</strong> info@rameshjewellers7.com.in
+                </p>
+                <div class="mt-4">
+                    <a href="https://instagram.com/your-id" class="text-white me-3 fs-4 social-hover"><i class="bi bi-instagram"></i></a>
+                    <a href="https://wa.me/919323992724" class="text-white me-3 fs-4 social-hover"><i class="bi bi-whatsapp"></i></a>
+                    <a href="#" class="text-white me-3 fs-4 social-hover"><i class="bi bi-facebook"></i></a>
+                    <a href="https://goo.gl/maps/your-link" class="text-white fs-4 social-hover"><i class="bi bi-google"></i></a>
                 </div>
             </div>
-            <div class="text-center pt-3 mt-3 border-top border-secondary">
-                <p class="mb-0">&copy; 2025 Ramesh Jewellers. All Rights Reserved.</p>
+
+            <div class="col-md-4">
+                <h5 class="custom-logo-font text-warning mb-4">Our Leadership</h5>
+                <div class="mb-3">
+                    <p class="mb-1 fw-bold text-uppercase small">Founder</p>
+                    <p class="text-white-50 small">Ramesh Mehta</p>
+                </div>
+                <div class="mb-3">
+                    <p class="mb-1 fw-bold text-uppercase small">Chain Making Division</p>
+                    <a href="tel:9323992724" class="text-warning text-decoration-none small">
+                        <i class="bi bi-telephone-fill me-2"></i>Nitesh Mehta: 9323992724
+                    </a>
+                </div>
+                <div>
+                    <p class="mb-1 fw-bold text-uppercase small">Bangles Division</p>
+                    <a href="tel:9987320607" class="text-warning text-decoration-none small">
+                        <i class="bi bi-telephone-fill me-2"></i>Nilesh Mehta: 9987320607
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <h5 class="custom-logo-font text-warning mb-4">Quick Links</h5>
+                <div class="row">
+                    <div class="col-6">
+                        <ul class="list-unstyled small">
+                            <li class="mb-2"><a href="collection.html" class="text-white-50 text-decoration-none link-hover">Collection</a></li>
+                            <li class="mb-2"><a href="login.html" class="text-white-50 text-decoration-none link-hover">Account</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-6">
+                        <ul class="list-unstyled small">
+                            <li class="mb-2"><a href="cart.html" class="text-white-50 text-decoration-none link-hover">Shopping Cart</a></li>
+                            <li class="mb-2"><a href="contact.html" class="text-white-50 text-decoration-none link-hover">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h6 class="text-warning small fw-bold">Business Hours:</h6>
+                    <p class="small text-white-50 mb-0">Mon - Sat: 11:00 AM - 8:00 PM</p>
+                    <p class="small text-white-50">Sunday: Closed</p>
+                </div>
             </div>
         </div>
-    </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/script.js"></script>                                                                                                                                                                                                                                                   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+        <div class="text-center pt-4 mt-5 border-top border-secondary">
+            <p class="mb-0 small text-white-50">&copy; 2026 <strong>Ramesh Jewellers</strong>. Crafted with Precision.</p>
+        </div>
+    </div>
+</footer>
+   
 
-<script>
-    // Isse Home Page secure ho jayega.
-    if (localStorage.getItem('isLoggedIn') !== 'true') {
-        window.location.href = 'login.html';
-    }
-</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/common.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/collection.js"></script>   
+<script src="js/auth.js"></script>                                                                                                                                                                                                                                          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"> -->
+
+
 <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -312,3 +431,71 @@
 </div>
 </body>
 </html>
+
+
+<script>
+
+// // 1. Modal kholne ka function
+// function openReviewModal() {
+//     const modalElement = document.getElementById('reviewModal');
+//     const instance = new bootstrap.Modal(modalElement);
+//     instance.show();
+// }
+
+// // 2. Stars interaction (Modal ke andar)
+// document.querySelectorAll('#indexStarRating i').forEach(star => {
+//     star.addEventListener('click', function() {
+//         let val = this.getAttribute('data-value');
+//         document.getElementById('indexRatingValue').value = val;
+        
+//         document.querySelectorAll('#indexStarRating i').forEach(s => {
+//             s.classList.toggle('bi-star-fill', s.getAttribute('data-value') <= val);
+//             s.classList.toggle('bi-star', s.getAttribute('data-value') > val);
+//         });
+//     });
+// });
+
+// 3. Form Submit Logic
+// document.getElementById('indexReviewForm')?.addEventListener('submit', async (e) => {
+//     e.preventDefault();
+//     const btn = document.getElementById('revSubmitBtn');
+    
+//     const rating = document.getElementById('indexRatingValue').value;
+//     if(rating == "0") {
+//         return Swal.fire('Wait!', 'Please select at least 1 star.', 'warning');
+//     }
+
+//     const formData = {
+//         name: document.getElementById('revName').value,
+//         phone: document.getElementById('revPhone').value,
+//         email: 'customer@rameshjewellers.com', // Placeholder
+//         subject: 'Customer Review',
+//         message: document.getElementById('revMsg').value,
+//         rating: rating
+//     };
+
+//     btn.disabled = true;
+//     btn.innerHTML = 'Posting...';
+
+//     try {
+//         const response = await fetch('http://localhost:3000/api/enquiries', { 
+//             method: 'POST',
+//             headers: { 'Content-Type': 'application/json' },
+//             body: JSON.stringify(formData)
+//         });
+
+//         if (response.ok) {
+//             Swal.fire('Thank You!', 'Your review has been posted successfully.', 'success');
+//             bootstrap.Modal.getInstance(document.getElementById('reviewModal')).hide();
+//             e.target.reset();
+//             loadHomeReviews(); // List ko refresh karne ke liye
+//         }
+//     } catch (err) {
+//         Swal.fire('Error', 'Could not post review.', 'error');
+//     } finally {
+//         btn.disabled = false;
+//         btn.innerHTML = 'POST REVIEW';
+//     }
+// });
+
+</script>

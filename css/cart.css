@@ -1,0 +1,77 @@
+/* Table ko pichakne se rokne ke liye */
+.table {
+    min-width: 600px; /* Isse columns ek line mein rahenge */
+    white-space: nowrap; /* Text ko wrap hone se rokega */
+}
+
+/* Scrollbar ko clean dikhane ke liye */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+}
+
+/* Mobile par images thodi aur choti kar dein takki space bache */
+@media (max-width: 576px) {
+    .table img {
+        width: 40px !important;
+    }
+    .table td, .table th {
+        padding: 8px 10px !important;
+        font-size: 14px;
+    }
+    /* Quantity box ko chota karein */
+    .input-group-sm {
+        width: 80px !important;
+    }
+}
+
+
+
+
+
+/* --- Mobile Overlap Fix --- */
+@media (max-width: 991px) {
+    /* Jab Sidebar (.show) khule, toh body ka scroll band kar do */
+    body:has(.navbar-collapse.show) {
+        overflow: hidden;
+    }
+
+    /* Cart Summary Card ko mobile pe peeche bhejo */
+    .col-lg-4 .card.sticky-top {
+        z-index: 1 !important; /* Sidebar 9999 hai, isliye ise 1 kiya */
+        position: relative !important; /* Mobile pe sticky hata kar relative kar diya */
+        top: 0 !important;
+        margin-top: 20px;
+    }
+
+    /* Navbar Drawer (Sidebar) hamesha sabse upar rahe */
+    .navbar-collapse {
+        z-index: 10000 !important; /* Cart Summary se zyada */
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.cart-item-checkbox {
+    width: 1.2rem;
+    height: 1.2rem;
+    cursor: pointer;
+    border: 2px solid #b8860b; /* Gold border for checkbox */
+}
+.cart-item-checkbox:checked {
+    background-color: #b8860b;
+    border-color: #b8860b;
+}
+
+

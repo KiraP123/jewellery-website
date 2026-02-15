@@ -1,0 +1,56 @@
+/* Container adjustments */
+.table-responsive {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid #eee;
+    border-radius: 10px;
+}
+
+.wishlist-table {
+    min-width: 600px !important; /* Size chota karne ke liye width adjust ki */
+    table-layout: fixed;
+    width: 100%;
+    background: #fff;
+}
+
+/* Columns width for compact look */
+.wishlist-table th:nth-child(1), .wishlist-table td:nth-child(1) { width: 50%; }
+.wishlist-table th:nth-child(2), .wishlist-table td:nth-child(2) { width: 25%; }
+.wishlist-table th:nth-child(3), .wishlist-table td:nth-child(3) { width: 25%; }
+
+/* Compact Cells */
+.wishlist-table td {
+    padding: 8px 10px !important; /* Padding kam ki size chota karne ke liye */
+    vertical-align: middle;
+    font-size: 0.9rem; /* Text thoda chota */
+}
+
+/* Choti Images (Jaisi Cart mein hain) */
+.wishlist-table img {
+    width: 50px !important; /* 70px se 50px kiya */
+    height: 50px !important;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-right: 10px;
+}
+
+/* Action Buttons Chote aur Round */
+.wishlist-table .btn-sm {
+    padding: 4px 8px !important;
+    font-size: 0.8rem !important;
+    border-radius: 6px;
+}
+
+.wishlist-table .action-btns {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* Product Name styling */
+.product-name {
+    font-weight: 600;
+    color: #333;
+    display: inline-block;
+    vertical-align: middle;
+}

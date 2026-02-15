@@ -1,0 +1,343 @@
+.main-img-container {
+    min-height: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#mainImg {
+    max-height: 450px;
+    object-fit: contain;
+}
+
+.btn-outline-gold {
+    color: #8B4513;
+    border: 1px solid #8B4513;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-outline-gold:hover {
+    background-color: #8B4513;
+    color: white;
+}
+
+.breakdown-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.breakdown-total {
+    border-top: 2px solid #8B4513;
+    margin-top: 8px;
+    padding-top: 8px;
+    font-weight: bold;
+    color: #8B4513;
+}
+
+.btn-dark-luxury {
+    background: #1a1a1a;
+    color: white;
+    border-radius: 0;
+    padding: 15px;
+    letter-spacing: 1px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 991px) {
+    .main-img-container { min-height: 250px; }
+    #mainImg { max-height: 300px; }
+}
+
+
+
+
+
+
+
+/* Premium Badges */
+.badge-premium {
+    background: linear-gradient(45deg, #d4af37, #f9f295);
+    color: #4a3b0a;
+    padding: 5px 12px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 800;
+    box-shadow: 0 2px 5px rgba(212, 175, 55, 0.3);
+}
+
+.badge-huid {
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    color: #333;
+    padding: 5px 12px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* Spec Cards */
+.spec-card {
+    background: #fff;
+    padding: 10px 5px;
+    border-radius: 12px;
+    text-align: center;
+}
+.spec-card small {
+    display: block;
+    font-size: 9px;
+    color: #888;
+    letter-spacing: 1px;
+}
+.spec-card span {
+    font-weight: 700;
+    font-size: 13px;
+    color: #222;
+}
+
+/* Animation */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.6; }
+    100% { opacity: 1; }
+}
+.animate-pulse {
+    animation: pulse 2s infinite;
+}
+
+
+
+
+
+
+/* --- LUXURY PRODUCT PAGE STYLING --- */
+
+/* 1. Price Styling (As per your request: Clean & Balanced) */
+#mainProductPrice {
+    font-size: 1.8rem !important;
+    color: #1a1a1a;
+    font-weight: 800 !important;
+    letter-spacing: -0.5px;
+}
+
+.text-decoration-line-through {
+    font-size: 1.1rem !important;
+    color: #999 !important;
+    margin-left: 5px;
+}
+
+/* 2. Specs Grid - Admin Real Size Box Highlight */
+.spec-card {
+    background: #ffffff;
+    border: 1.5px solid #eee !important;
+    border-radius: 12px !important;
+    transition: all 0.3s ease;
+}
+
+.spec-card.bg-light {
+    background: #fdfaf0 !important; /* Light Gold Tint for Admin Size */
+    border-color: #a0845a !important;
+}
+
+.spec-card span {
+    color: #1a1a1a;
+    letter-spacing: 0.5px;
+}
+
+/* 3. Size Selection Circles */
+.size-btn {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    border: 1.5px solid #ddd !important;
+    background: white;
+    font-weight: 700;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.size-btn:hover {
+    border-color: #4a1d1f !important;
+    color: #4a1d1f;
+}
+
+.size-btn.btn-dark {
+    background-color: #4a1d1f !important;
+    border-color: #4a1d1f !important;
+    transform: scale(1.1);
+    box-shadow: 0 4px 10px rgba(74, 29, 31, 0.2);
+}
+
+/* 4. Action Buttons (Buy Now & Cart) */
+.btn-dark.buy-now-btn, 
+button[onclick*="buyNowLink"] {
+    background: linear-gradient(135deg, #4a1d1f 0%, #6d2a2d 100%) !important;
+    border: none !important;
+    border-radius: 50px !important;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 0.2s ease;
+}
+
+.btn-dark.buy-now-btn:active {
+    transform: scale(0.96);
+}
+
+.btn-outline-dark {
+    border: 2px solid #4a1d1f !important;
+    color: #4a1d1f !important;
+    border-radius: 50px !important;
+    text-transform: uppercase;
+    background: transparent;
+}
+
+.btn-outline-dark:hover {
+    background: #4a1d1f !important;
+    color: white !important;
+}
+
+/* 5. Icons (Heart & Share) */
+.btn-light.rounded-circle {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: white !important;
+    border: 1px solid #eee !important;
+}
+
+.bi-heart-fill {
+    animation: heartBeat 0.3s ease-in-out;
+}
+
+@keyframes heartBeat {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+/* 6. Mobile Responsiveness */
+@media (max-width: 576px) {
+    #mainProductPrice {
+        font-size: 1.6rem !important;
+    }
+    
+    .h2.fw-bold { /* Product Title */
+        font-size: 1.4rem !important;
+    }
+
+    .spec-card {
+        padding: 8px 4px !important;
+    }
+}
+
+
+
+.pulse-icon {
+    width: 7px;
+    height: 7px;
+    background-color: #22c55e;
+    border-radius: 50%;
+    display: inline-block;
+    animation: livePulse 1.5s infinite;
+}
+
+@keyframes livePulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+.calculation-details span {
+    font-family: 'Inter', sans-serif;
+}
+
+
+
+
+
+
+
+
+
+/* --- Price Breakdown Professional CSS --- */
+
+/* Main Container Fix */
+#breakdownDetails .rounded-4 {
+    padding: 15px !important;
+}
+
+/* Header Alignment */
+#breakdownDetails h6 {
+    font-size: 12px !important;
+}
+
+/* Flex Row Stability - Sab kuch ek line mein rakhne ke liye */
+#breakdownDetails .d-flex.justify-content-between {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px;
+    width: 100%;
+}
+
+/* Icon aur Text Container */
+#breakdownDetails .icon-box {
+    flex-shrink: 0 !important; /* Icon ko chota hone se rokega */
+    width: 32px !important;
+    height: 32px !important;
+    background-color: #f8f9fa !important;
+}
+
+/* Label aur Value Alignment */
+#breakdownDetails .fw-bold.small.text-dark {
+    font-size: 11px !important;
+    line-height: 1.2;
+}
+
+/* Right Side Price Values */
+#breakdownDetails span.fw-bold.text-dark, 
+#breakdownDetails span.text-success {
+    font-size: 13px !important;
+    white-space: nowrap !important; /* Price kabhi break nahi hoga */
+    text-align: right;
+}
+
+/* Special Offer Box Fix */
+#breakdownDetails .p-2.rounded-3 {
+    margin: 10px 0 !important;
+    padding: 10px !important;
+}
+
+/* Total Payable Box (Bottom Card) */
+#breakdownDetails .p-3.rounded-4.shadow-sm {
+    padding: 12px 15px !important;
+    margin-top: 15px !important;
+}
+
+#breakdownDetails span.fw-bolder {
+    font-size: 1.4rem !important; /* Mobile par font thoda chota taaki price na kate */
+}
+
+/* --- Mobile Specific Fixes --- */
+@media (max-width: 400px) {
+    #breakdownDetails span.fw-bolder {
+        font-size: 1.2rem !important;
+    }
+    
+    #breakdownDetails .icon-box {
+        margin-right: 8px !important;
+    }
+
+    /* Agar text bada ho toh font chota kar dega */
+    #breakdownDetails .text-muted {
+        font-size: 9px !important;
+    }
+}

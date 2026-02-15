@@ -1,0 +1,345 @@
+/* Hero Container */
+.modern-hero {
+    overflow: hidden;
+    background: #000;
+}
+
+.hero-img {
+    height: 90vh; /* Laptop height */
+    object-fit: cover;
+    transition: transform 5s ease; /* Slow zoom effect */
+}
+
+.carousel-item-next.carousel-item-start .hero-img,
+.carousel-item-prev.carousel-item-end .hero-img,
+.carousel-item.active .hero-img {
+    transform: scale(1.1); /* Zoom effect on active slide */
+}
+
+/* Dark Overlay for Text Clarity */
+.hero-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 60%);
+    z-index: 1;
+}
+
+/* Content Styling */
+.hero-content {
+    z-index: 2;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 8% !important;
+    right: auto !important;
+    max-width: 600px;
+}
+
+.category-tag {
+    color: #c5a059;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.gold-text {
+    font-family: 'Cinzel', serif;
+    color: #fff;
+    line-height: 1.1;
+}
+
+.gold-text strong {
+    color: #c5a059; /* Signature Gold Color */
+}
+
+.hero-desc {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.8);
+    margin: 20px 0 35px;
+}
+
+/* Luxury Button */
+.btn-gold-luxury {
+    background: #c5a059;
+    color: #000;
+    padding: 15px 35px;
+    border-radius: 0;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: 0.3s;
+    border: 1px solid #c5a059;
+}
+
+.btn-gold-luxury:hover {
+    background: transparent;
+    color: #c5a059;
+}
+
+/* Custom Navigation */
+.nav-circle {
+    width: 50px;
+    height: 50px;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+.nav-circle:hover {
+    background: #c5a059;
+    border-color: #c5a059;
+}
+
+/* MOBILE FIX (Phone Friendly) */
+@media (max-width: 768px) {
+    .hero-img {
+        height: 60vh; /* Adjust height for phone */
+    }
+    
+    .hero-overlay {
+        background: rgba(0,0,0,0.5); /* Uniform dark overlay on mobile */
+    }
+
+    .hero-content {
+        left: 5% !important;
+        text-align: center !important;
+        width: 90%;
+    }
+
+    .gold-text {
+        font-size: 2.2rem !important;
+    }
+    
+    .hero-btns {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .ms-3 { margin-left: 0 !important; }
+}
+@media (max-width: 991px) {
+    /* Menu khulne par links center align ho jayein */
+    .navbar-collapse .navbar-nav {
+        text-align: center;
+        padding: 15px 0;
+    }
+
+    /* Logout aur Cart ko mobile menu mein vertical karne ke liye */
+    .navbar-nav.flex-row {
+        flex-direction: column !important;
+        gap: 10px;
+    }
+    
+    /* Search bar focus effect */
+    .classic-search .form-control:focus {
+        border-color: #d4af37 !important;
+        background-color: #fffdf5;
+    }
+}
+
+
+
+/* Advanced Arrival Cards Styling */
+.arrival-card {
+    background: #ffffff;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(197, 160, 89, 0.1);
+    position: relative;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.arrival-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(197, 160, 89, 0.15);
+}
+
+.arrival-img-container {
+    background: #fcfaf7;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.arrival-img-container img {
+    transition: transform 0.6s ease;
+    max-height: 80%;
+}
+
+.arrival-card:hover .arrival-img-container img {
+    transform: scale(1.1) rotate(2deg);
+}
+
+/* Glassmorphism Details Section */
+.arrival-details {
+    padding: 20px;
+    background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 20%);
+}
+
+.purity-tag {
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #c5a059;
+    font-weight: 700;
+}
+
+.price-tag {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    color: #1a1a1a;
+    margin: 10px 0;
+}
+
+/* Floating Action Buttons */
+.arrival-actions {
+    position: absolute;
+    top: 15px;
+    right: -50px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: 0.3s ease;
+}
+
+.arrival-card:hover .arrival-actions {
+    right: 15px;
+}
+
+.action-btn {
+    width: 40px;
+    height: 40px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    cursor: pointer;
+    border: none;
+    transition: 0.3s;
+}
+
+.action-btn:hover {
+    background: #c5a059;
+    color: white;
+}
+
+
+
+
+
+
+
+
+/* No Offers Box Styling */
+.no-offers-box {
+    border: 2px dashed #d4af37;
+    background: #fffaf0;
+    border-radius: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* LTO Card Hover Effect */
+.lto-card {
+    border: 1px solid #f1f1f1;
+    transition: all 0.3s ease;
+    border-radius: 15px;
+}
+.lto-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2) !important;
+    border-color: #d4af37;
+}
+
+.offer-tag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #e74c3c;
+    color: white;
+    padding: 2px 10px;
+    font-weight: bold;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.savings-bar {
+    background: #e9f7ef;
+    color: #27ae60;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+
+
+
+
+/* Ken Burns Zoom Effect */
+.carousel-item.active .hero-img {
+    animation: kenburns 15s ease-out both;
+}
+
+@keyframes kenburns {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.1); }
+}
+
+/* Text Animation */
+.carousel-caption h1 {
+    font-family: 'Playfair Display', serif;
+    animation: fadeInUp 1s ease-out 0.5s both;
+}
+
+.carousel-caption p {
+    animation: fadeInUp 1s ease-out 0.8s both;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Premium Indicators */
+.luxury-indicators [data-bs-target] {
+    width: 40px;
+    height: 4px;
+    border-radius: 2px;
+    background-color: rgba(160, 132, 90, 0.4);
+}
+
+.luxury-indicators .active {
+    background-color: #a0845a !important;
+    width: 60px;
+}
+
+/* Control Circles */
+.control-circle {
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+.control-circle:hover {
+    background: #a0845a;
+    border-color: #a0845a;
+}

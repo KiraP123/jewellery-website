@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,90 +8,371 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-WNBQJ38PWN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-WNBQJ38PWN');
+    </script>
+    
+    <title>Ramesh Jewellers</title>
 </head>
 <body>
-    <header class="sticky-top">
-        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-            <div class="container">
+<style>
+    /* --- General Styling --- */
+    .custom-logo-font { 
+        font-family: 'Cinzel', serif; 
+        font-weight: 700; 
+        color: #4a1d1f; 
+        letter-spacing: 1px; 
+    }
+    .border-gold { border: 1px solid #a0845a !important; }
 
-                <img src="images/PNGLOGO1.png" alt="Ramesh Jewellers Logo" height="40">
-                <a class="navbar-brand custom-logo-font" href="index.html">Ramesh Jewellers</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav mx-auto">
-                        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                        <li class="nav-item"><a class="nav-link active" href="collection.html">Collection</a></li>
-                        <li class="nav-item"><a class="nav-link" href="wishlist.html">Wishlist</a></li>
-                        <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-                    </ul>
-                    <ul class="navbar-nav d-flex flex-row">
-                        <li class="nav-item me-2">
-                            <form class="d-flex">
-                                <input class="form-control form-control-sm me-2" type="search" placeholder="Search Products" aria-label="Search" id="productSearch">
-                            </form>
-                        </li>
-                         <a class="nav-link" href="#" onclick="handleLogout()"><i class="bi bi-box-arrow-right"></i> LOGOUT</a>
-                        <!-- <li class="nav-item"><a class="nav-link" href="cart.html"><i class="bi bi-cart"></i> Cart</a></li> -->
-                         <li class="nav-item position-relative">
-                                    <a class="nav-link" href="cart.html">
-                                      <i class="bi bi-cart"></i> Cart
-                                         <span id="cartItemCount" class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle d-none" style="font-size: 0.65em;">0</span>
-                                    </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    <main class="container my-5">
-        <h1 class="text-center mb-5 display-4 custom-logo-font">The Gold Bangle Collection</h1>
+    /* --- Laptop (Desktop) View --- */
+    @media (min-width: 992px) {
+        .navbar-brand img { height: 35px !important; }
+        .mobile-only-icons { display: none !important; } /* Laptop pe icons hidden */
         
-        <div class="row">
+        .navbar-collapse {
+            display: flex !important;
+            position: relative !important;
+            height: auto !important;
+            width: auto !important;
+        }
+        .nav-link { padding: 0 12px !important; font-size: 14px; font-weight: 600; }
+    }
+
+    /* --- Mobile (Phone) Stylish View --- */
+    @media (max-width: 991px) {
+        .navbar-brand {
+            position: absolute !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+        }
+        .navbar-brand img { height: 26px !important; }
+        .custom-logo-font { font-size: 13px !important; margin-left: 5px; }
+
+        /* Icons on Right (Mobile Only) */
+        .mobile-only-icons {
+            display: flex !important;
+            gap: 15px;
+            order: 3;
+        }
+        .mobile-only-icons i { color: #4a1d1f; font-size: 18px; }
+
+        /* Stylish Drawer */
+        .navbar-collapse {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            height: 100vh;
+            width: 280px;
+            background: #fff;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 9999;
+            display: block !important;
+            padding: 0 !important;
+            box-shadow: 10px 0 20px rgba(0,0,0,0.1);
+        }
+        .navbar-collapse.show { left: 0; }
+
+        .drawer-header {
+            padding: 25px 20px;
+            background: #fdf8f2;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-item { border-bottom: 1px solid #f9f9f9; width: 100%; }
+        .nav-link { 
+            padding: 15px 20px !important; 
+            color: #4a1d1f !important; 
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        .nav-link i { margin-right: 12px; color: #a0845a; width: 20px; text-align: center; }
+    }
+
+
+
+
+
+    @media (max-width: 991px) {
+        /* Drawer (Hamburger Menu) ko sabse upar laane ke liye */
+        .navbar-collapse {
+            position: fixed !important;
+            top: 0;
+            left: -100%;
+            height: 100vh;
+            width: 280px;
+            background: white !important;
+            transition: 0.4s ease-in-out;
             
-            <aside class="col-lg-3">
-                <div id="filterSidebar" class="bg-light p-4 rounded mb-4 sticky-top" style="top: 80px;">
-                    <h5 class="mb-3">Filter By</h5>
-                    
-                    <div class="mb-4">
-                        <label for="priceRange" class="form-label">Price Range (Lakhs)</label>
-                        <input type="range" class="form-range" min="0.5" max="5" value="5" step="0.5" id="priceRange">
-                        <small class="text-muted">Max: <span id="priceValue">₹5 Lakhs</span></small>
-                    </div>
+            /* Ye line sabse zaroori hai */
+            z-index: 99999 !important; 
+            
+            display: block !important;
+            box-shadow: 20px 0 40px rgba(0,0,0,0.3);
+        }
 
-                    <div class="mb-4">
-                        <h6>Design Type</h6>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Simple" id="designSimple" checked>
-                            <label class="form-check-label" for="designSimple">Classic & Simple</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Mid" id="designMid" checked>
-                            <label class="form-check-label" for="designMid">Antique & Filigree</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Heavy" id="designHeavy" checked>
-                            <label class="form-check-label" for="designHeavy">Bridal & Heavy Work</label>
-                        </div>
-                    </div>
-                    
-                    <button class="btn btn-dark w-100" onclick="applyFilters()">Apply Filters</button>
-                </div>
-            </aside>
+        .navbar-collapse.show {
+            left: 0;
+        }
 
-             <section class="col-lg-9">
-                <div id="productGrid" class="row row-cols-2 row-cols-md-3 g-4">
-                    </div>
-            </section>
-          <!-- <section class="col-lg-9">
-            <div id="productGrid" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-            </div>
-        </section>> -->
+        /* Taki filter piche dhundhla (blur) ho jaye jab menu khule */
+        .navbar-collapse.show ~ .main-content, 
+        .navbar-collapse.show ~ div {
+            pointer-events: none; /* Menu khulne par piche click nahi hoga */
+        }
+        
+        /* Drawer ke andar ka content styling */
+        .drawer-body {
+            position: relative;
+            z-index: 100000 !important;
+            background: white;
+        }
+    }
 
+
+
+    /* Main container jo Filter aur Scroll ko ek line mein layega */
+    .category-wrapper-main {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: #fff;
+        padding: 10px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    /* Filter Button Styling */
+    .btn-modern-filter {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 15px;
+        background: #fdf8f2;
+        border: 1px solid #a0845a;
+        color: #a0845a;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+
+    /* Scrollable Categories */
+    .category-scroll-container {
+        display: flex;
+        overflow-x: auto;
+        gap: 8px;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE/Edge */
+    }
+    .category-scroll-container::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
+    .cat-pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 16px;
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 50px;
+        cursor: pointer;
+        font-size: 14px;
+        white-space: nowrap;
+        transition: 0.3s;
+    }
+
+    .cat-pill.active {
+        background: #4a1d1f;
+        color: #fff;
+        border-color: #4a1d1f;
+    }
+
+    .cat-pill i { margin-right: 6px; }
+
+    /* Laptop par thoda bada gap */
+    @media (min-width: 992px) {
+        .category-wrapper-main { gap: 20px; }
+    }
+
+
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top p-0">
+    <div class="container d-flex justify-content-between align-items-center py-2">
+        
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <i class="fa-solid fa-bars-staggered" style="color: #4a1d1f;"></i>
+        </button>
+
+        <a class="navbar-brand d-flex align-items-center" href="index.html">
+            <img src="images/PNGLOGO1.png" alt="Logo">
+            <span class="custom-logo-font">Ramesh Jewellers</span>
+        </a>
+
+
+        <div class="d-none d-lg-block mx-3" style="flex-grow: 1; max-width: 400px;">
+    <form class="classic-search" action="collection.html" method="GET">
+        <div class="input-group">
+            <span class="input-group-text bg-transparent border-end-0 border-gold">
+                <i class="bi bi-search" style="color: #a0845a;"></i>
+            </span>
+            <input class="form-control border-start-0 border-gold" type="search" placeholder="Search jewellery..." id="laptopSearch" name="search">
         </div>
-    </main>
+    </form>
+</div>
+
+        <div class="mobile-only-icons d-lg-none">
+            <a href="index.html"><i class="fa-solid fa-house"></i></a>
+          <a href="wishlist.html"><i class="fa-regular fa-heart"></i><span id="wishlist-count-mobile" class="badge-count">0</span></a>
+          <a href="cart.html"><i class="fa-solid fa-bag-shopping"></i><span id="cart-count-mobile" class="badge-count">0</span></a>
+        </div>
+
+        <div class="collapse navbar-collapse flex-grow-0" id="navbarNav">
+            <div class="drawer-header d-lg-none">
+                <span class="fw-bold" style="color: #a0845a;">EXPLORE</span>
+                <button class="btn-close" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"></button>
+            </div>
+            
+            <ul class="navbar-nav align-items-center">
+                <li class="nav-item"><a class="nav-link" href="index.html"><i class="fa-solid fa-house d-lg-none"></i> Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="collection.html"><i class="fa-solid fa-gem d-lg-none"></i> Collection</a></li>
+                <li class="nav-item"><a class="nav-link" href="wishlist.html"><i class="fa-solid fa-heart d-lg-none"></i> Wishlist</a></li>
+                <li class="nav-item"><a class="nav-link" href="contact.html"><i class="fa-solid fa-envelope d-lg-none"></i> Contact</a></li>
+                  <li class="nav-item dropdown cart-hover-dropdown">
+    <a class="nav-link d-flex align-items-center gap-2" href="cart.html" id="cartDropdown">
+        <span class="position-relative d-inline-block">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <!-- <span id="cart-count-desktop" class="badge-count">0</span> -->
+        </span>
+        <span class="fw-bold">CART</span>
+    </a>
+    
+    <ul class="dropdown-menu dropdown-menu-end shadow border-gold shadow-sm">
+        <li>
+            <a class="dropdown-item py-2" href="orders.html">
+                <i class="fa-solid fa-clock-rotate-left me-2 text-gold"></i> My Orders
+            </a>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+        <li>
+            <a class="dropdown-item py-2" href="cart.html">
+                <i class="fa-solid fa-cart-shopping me-2 text-gold"></i> View Full Cart
+            </a>
+        </li>
+    </ul>
+</li>
+
+<li class="nav-item d-lg-none">
+    <a class="nav-link" href="orders.html">
+        <i class="fa-solid fa-clock-rotate-left"></i> My Orders
+    </a>
+</li>
+                <li class="nav-item" id="authBtnContainer"></li>
+            </ul>
+        </div>
+    </div>
+
+       <div class="container d-lg-none pb-3 px-3">
+    <form class="classic-search w-100" action="collection.html" method="GET">
+        <div class="input-group">
+            <span class="input-group-text bg-transparent border-end-0 border-gold">
+                <i class="bi bi-search" style="color: #a0845a;"></i>
+            </span>
+            <input class="form-control border-start-0 border-gold" type="search" placeholder="Search Jewellery..." id="mobileSearch" name="search">
+        </div>
+    </form>
+  </div>
+</nav> 
+
+
+
+
+<div class="container mt-4">
+    <div class="category-wrapper-main d-flex align-items-center">
+        <div class="me-2">
+            <button class="btn btn-outline-dark rounded-pill px-3 py-2 shadow-sm d-flex align-items-center" 
+                    type="button" data-bs-toggle="offcanvas" data-bs-target="#filterDrawer" 
+                    style="white-space: nowrap; font-size: 14px;">
+                <i class="fa-solid fa-sliders me-2"></i> FILTER
+            </button>
+        </div>
+
+        <div class="category-scroll-container d-flex flex-nowrap overflow-auto py-1" style="scrollbar-width: none; -ms-overflow-style: none;">
+            <div class="cat-pill active mx-1" onclick="filterByCategory('All', this)">
+                <i class="fa-solid fa-gem"></i> All
+            </div>
+            <div class="cat-pill mx-1" onclick="filterByCategory('Mina Kari', this)">
+                <i class="fa-solid fa-palette"></i> Mina Kari
+            </div>
+            <div class="cat-pill mx-1" onclick="filterByCategory('Dubai', this)">
+                <i class="fa-solid fa-city"></i> Dubai
+            </div>
+            <div class="cat-pill mx-1" onclick="filterByCategory('Fancy', this)">
+                <i class="fa-solid fa-star"></i> Fancy
+            </div>
+            <div class="cat-pill mx-1" onclick="filterByCategory('Temple', this)">
+                <i class="fa-solid fa-om"></i> Temple
+            </div>
+            <div class="cat-pill mx-1" onclick="filterByCategory('Bridal', this)">
+                <i class="fa-solid fa-ring"></i> Bridal
+            </div>
+            <div class="cat-pill mx-1" onclick="filterByCategory('Antique', this)">
+                <i class="fa-solid fa-clock-rotate-left"></i> Antique
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="filterDrawer" aria-labelledby="filterDrawerLabel" style="z-index: 10001;">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title fw-bold" id="filterDrawerLabel" style="color: #4a1d1f;">REFINE SEARCH</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="mb-4">
+            <label for="priceRange" class="form-label fw-bold">Price Range (Lakhs)</label>
+            <input type="range" class="form-range" min="0.5" max="5" value="5" step="0.5" id="priceRange">
+            <div class="d-flex justify-content-between">
+                <small class="text-muted">Min: ₹0.5L</small>
+                <small class="fw-bold" style="color: #a0845a;">Max: <span id="priceValue">₹5 Lakhs</span></small>
+            </div>
+        </div>
+        <div class="mb-4">
+            <h6 class="fw-bold mb-3">Design Type</h6>
+            <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" value="Simple" id="designSimple" checked>
+                <label class="form-check-label" for="designSimple">Classic & Simple</label>
+            </div>
+            <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" value="Mid" id="designMid" checked>
+                <label class="form-check-label" for="designMid">Antique & Filigree</label>
+            </div>
+            <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" value="Heavy" id="designHeavy" checked>
+                <label class="form-check-label" for="designHeavy">Bridal & Heavy Work</label>
+            </div>
+        </div>
+        <button class="btn btn-dark w-100 py-3 mt-3 shadow" onclick="applyFilters()" data-bs-dismiss="offcanvas" style="background: #4a1d1f; border: none;">
+            APPLY FILTERS
+        </button>
+    </div>
+</div>
+
+<main class="container my-5">
+    <h1 class="text-center mb-5 display-4 custom-logo-font">The Gold Bangle Collection</h1>
+    <div id="productGrid" class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4">
+        </div>
+</main>
+    
 
     <footer class="bg-dark text-white pt-5 pb-3">
         </footer>
@@ -108,49 +389,88 @@
 
 
 
-   <footer class="bg-dark text-white pt-5 pb-3">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <h5 class="mb-3">Contact Us</h5>
-                    <p><strong>Office Address:</strong><br>19/A Patwa Chawl, 1st Floor, Mahajangali,<br>Zaveri Bazar, Mumbai, Pincode 400 002</p>
-                    <p><strong>Email:</strong> www.rameshjewellers7.co.in (Placeholder for actual email)</p>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <h5 class="mb-3">Our Leadership</h5>
-                    <p><strong>Founder:</strong> Ramesh Mehta</p>
-                    <p><strong>Chain Making:</strong> Nitesh Mehta (Tel: <a href="tel:9323992724" class="text-warning">9323992724</a>)</p>
-                    <p><strong>Bangles:</strong> Nilesh Mehta (Tel: <a href="tel:9987320607" class="text-warning">9987320607</a>)</p>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <h5 class="mb-3">Quick Links</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="collection.html" class="text-white-50 text-decoration-none">Our Collection</a></li>
-                        <li><a href="login.html" class="text-white-50 text-decoration-none">Account</a></li>
-                        <li><a href="cart.html" class="text-white-50 text-decoration-none">Shopping Cart</a></li>
-                        <li><a href="contact.html" class="text-white-50 text-decoration-none">Contact Us</a></li>
-                    </ul>
+    <footer class="bg-dark text-white pt-5 pb-3">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <h5 class="custom-logo-font text-warning mb-4">Contact Us</h5>
+                <p class="small text-white-50">
+                    <i class="bi bi-geo-alt-fill text-warning me-2"></i>
+                    <strong>Office Address:</strong><br>
+                    19/A Patwa Chawl, 1st Floor, Mahajangali,<br>
+                    Zaveri Bazar, Mumbai, 400 002
+                </p>
+                <p class="small text-white-50">
+                    <i class="bi bi-envelope-at-fill text-warning me-2"></i>
+                    <strong>Email:</strong> info@rameshjewellers7.com.in
+                </p>
+                <div class="mt-4">
+                    <a href="https://instagram.com/your-id" class="text-white me-3 fs-4 social-hover"><i class="bi bi-instagram"></i></a>
+                    <a href="https://wa.me/919323992724" class="text-white me-3 fs-4 social-hover"><i class="bi bi-whatsapp"></i></a>
+                    <a href="#" class="text-white me-3 fs-4 social-hover"><i class="bi bi-facebook"></i></a>
+                    <a href="https://goo.gl/maps/your-link" class="text-white fs-4 social-hover"><i class="bi bi-google"></i></a>
                 </div>
             </div>
-            <div class="text-center pt-3 mt-3 border-top border-secondary">
-                <p class="mb-0">&copy; 2025 Ramesh Jewellers. All Rights Reserved.</p>
+
+            <div class="col-md-4">
+                <h5 class="custom-logo-font text-warning mb-4">Our Leadership</h5>
+                <div class="mb-3">
+                    <p class="mb-1 fw-bold text-uppercase small">Founder</p>
+                    <p class="text-white-50 small">Ramesh Mehta</p>
+                </div>
+                <div class="mb-3">
+                    <p class="mb-1 fw-bold text-uppercase small">Chain Making Division</p>
+                    <a href="tel:9323992724" class="text-warning text-decoration-none small">
+                        <i class="bi bi-telephone-fill me-2"></i>Nitesh Mehta: 9323992724
+                    </a>
+                </div>
+                <div>
+                    <p class="mb-1 fw-bold text-uppercase small">Bangles Division</p>
+                    <a href="tel:9987320607" class="text-warning text-decoration-none small">
+                        <i class="bi bi-telephone-fill me-2"></i>Nilesh Mehta: 9987320607
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <h5 class="custom-logo-font text-warning mb-4">Quick Links</h5>
+                <div class="row">
+                    <div class="col-6">
+                        <ul class="list-unstyled small">
+                            <li class="mb-2"><a href="collection.html" class="text-white-50 text-decoration-none link-hover">Collection</a></li>
+                            <li class="mb-2"><a href="login.html" class="text-white-50 text-decoration-none link-hover">Account</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-6">
+                        <ul class="list-unstyled small">
+                            <li class="mb-2"><a href="cart.html" class="text-white-50 text-decoration-none link-hover">Shopping Cart</a></li>
+                            <li class="mb-2"><a href="contact.html" class="text-white-50 text-decoration-none link-hover">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h6 class="text-warning small fw-bold">Business Hours:</h6>
+                    <p class="small text-white-50 mb-0">Mon - Sat: 11:00 AM - 8:00 PM</p>
+                    <p class="small text-white-50">Sunday: Closed</p>
+                </div>
             </div>
         </div>
-    </footer>
+
+        <div class="text-center pt-4 mt-5 border-top border-secondary">
+            <p class="mb-0 small text-white-50">&copy; 2026 <strong>Ramesh Jewellers</strong>. Crafted with Precision.</p>
+        </div>
+    </div>
+</footer>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/script.js"></script>
-    <script src="js/products.js"></script>
+<script src="js/common.js"></script>
+ <script src="js/cart.js"></script> 
+<script src="js/collection.js"></script>
+ <script src="js/wishlist.js"></script>
+<!-- <script src="js/script.js"></script> -->
+<script src="js/auth.js"></script>
 
-
-
-<script>
-    // Isse Home Page secure ho jayega.
-    if (localStorage.getItem('isLoggedIn') !== 'true') {
-        window.location.href = 'login.html';
-    }
-</script>
 
 <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
@@ -207,7 +527,6 @@
         </div>
     </div>
 </div>
-
 
 
 

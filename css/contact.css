@@ -1,0 +1,309 @@
+/* RAMESH JEWELLERS - ADVANCE CONTACT PAGE CSS (Excluding Navbar) */
+
+:root {
+    --gold-primary: #a0845a;
+    --gold-deep: #866d48;
+    --maroon-dark: #4a1d1f;
+    --glass-effect: rgba(255, 255, 255, 0.95);
+    --card-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* --- 1. MAIN SECTION TITLES --- */
+.contact-section {
+    padding: 80px 0;
+    background: linear-gradient(to bottom, #fdfbf7, #ffffff);
+}
+
+.contact-section h1.display-3 {
+    font-size: 4.2rem !important; /* Extremely Bold & Large */
+    font-weight: 800;
+    color: var(--maroon-dark);
+    font-family: 'Cinzel', serif;
+    letter-spacing: -1px;
+    margin-top: 15px;
+}
+
+.contact-section .text-muted.small {
+    font-size: 1.1rem !important;
+    letter-spacing: 4px !important;
+    color: var(--gold-primary) !important;
+}
+
+/* --- 2. LUXURY CARDS (Office & Consultation) --- */
+.luxury-card {
+    background: var(--glass-effect);
+    border-radius: 25px;
+    padding: 45px !important;
+    border: 1px solid rgba(160, 132, 90, 0.15);
+    box-shadow: var(--card-shadow);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.luxury-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 35px 70px rgba(74, 29, 31, 0.12);
+    border-color: var(--gold-primary);
+}
+
+.luxury-card h3, .luxury-card h4 {
+    font-size: 1.9rem !important;
+    font-weight: 700;
+    margin-bottom: 25px;
+    color: var(--maroon-dark);
+}
+
+/* --- 3. ADVANCE FORM STYLING --- */
+.form-floating {
+    margin-bottom: 20px;
+}
+
+.form-floating > .form-control, 
+.form-floating > .form-select {
+    height: 75px !important; /* Form inputs bade kar diye */
+    font-size: 1.15rem;
+    border: none;
+    border-bottom: 2.5px solid #eaeaea !important;
+    border-radius: 0;
+    padding-left: 10px;
+    background-color: transparent !important;
+    font-weight: 500;
+}
+
+.form-floating > .form-control:focus {
+    box-shadow: none;
+    border-bottom: 2.5px solid var(--gold-primary) !important;
+    background-color: rgba(160, 132, 90, 0.03) !important;
+}
+
+.form-floating > label {
+    font-weight: 700;
+    font-size: 1rem !important;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- 4. THE MASTER SUBMIT BUTTON --- */
+.btn-luxury {
+    background: linear-gradient(45deg, var(--maroon-dark), #7a2a2d) !important;
+    color: #fff !important;
+    font-size: 1.35rem !important; /* Button text bada kiya */
+    font-weight: 700;
+    padding: 22px !important;
+    border-radius: 12px !important;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    box-shadow: 0 12px 24px rgba(74, 29, 31, 0.25);
+}
+
+.btn-luxury:hover {
+    background: linear-gradient(45deg, var(--gold-primary), var(--gold-deep)) !important;
+    transform: scale(1.03);
+    letter-spacing: 4px;
+    box-shadow: 0 15px 35px rgba(160, 132, 90, 0.4);
+}
+
+/* --- 5. CONTACT INFO DETAILS --- */
+.icon-circle {
+    width: 75px;
+    height: 75px;
+    background: linear-gradient(135deg, rgba(160, 132, 90, 0.1), rgba(160, 132, 90, 0.05));
+    color: var(--gold-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 2rem;
+    margin-bottom: 25px;
+    border: 1px solid rgba(160, 132, 90, 0.2);
+}
+
+.hallmark-badge {
+    background: rgba(160, 132, 90, 0.08);
+    padding: 12px 20px;
+    border-radius: 50px;
+    border: 1px dashed var(--gold-primary);
+    display: inline-block;
+}
+
+/* --- 6. MAP STYLING --- */
+.map-wrapper {
+    border-radius: 30px;
+    overflow: hidden;
+    border: 10px solid #fff;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.12);
+    margin-top: 30px;
+}
+
+/* Mobile Fixes for Text Sizes */
+@media (max-width: 768px) {
+    .contact-section h1.display-3 { font-size: 2.8rem !important; }
+    .luxury-card { padding: 30px !important; }
+    .form-floating > .form-control { height: 65px !important; }
+}
+
+
+
+
+
+
+/* --- Trust Items Styling --- */
+.trust-item {
+    padding: 30px;
+    background: #fff;
+    border-radius: 20px;
+    transition: all 0.4s ease;
+    border: 1px solid rgba(160, 132, 90, 0.1);
+}
+
+.trust-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(160, 132, 90, 0.1);
+}
+
+.trust-icon-box {
+    font-size: 2.5rem;
+    color: var(--gold-primary); /* #a0845a */
+    margin-bottom: 20px;
+}
+
+.trust-item h5 {
+    font-size: 1.5rem !important;
+    font-weight: 700;
+    color: var(--maroon-dark); /* #4a1d1f */
+}
+
+/* --- Luxury Quote Box --- */
+.luxury-quote-box {
+    background: linear-gradient(135deg, #fffcf7 0%, #ffffff 100%);
+    border-radius: 35px;
+    border: 1px solid rgba(160, 132, 90, 0.2);
+    margin-bottom: 60px;
+}
+
+.luxury-quote-box h2 {
+    font-size: 2.8rem !important;
+    color: var(--maroon-dark);
+}
+
+.luxury-quote-box p {
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.8;
+}
+
+/* --- Floating Social Icons --- */
+.social-links a {
+    width: 60px;
+    height: 60px;
+    background: white;
+    border: 1.5px solid #eee;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--maroon-dark);
+    font-size: 1.4rem;
+    transition: all 0.4s ease;
+    text-decoration: none;
+}
+
+.social-links a:hover {
+    background: var(--gold-primary);
+    color: white;
+    border-color: var(--gold-primary);
+    transform: scale(1.1) rotate(10deg);
+}
+
+/* --- WhatsApp Floating Button (Extra Advance) --- */
+.whatsapp-float {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #25d366;
+    color: white;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 35px;
+    box-shadow: 2px 5px 15px rgba(0,0,0,0.2);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.15);
+    color: white;
+}
+
+
+
+
+
+/* RAMESH JEWELLERS - TIMING & TRUST POLISH */
+
+/* Timing Box Styling */
+.timing-box {
+    background: rgba(160, 132, 90, 0.03);
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(160, 132, 90, 0.1);
+}
+
+.timing-box span {
+    font-size: 1.1rem !important;
+    letter-spacing: 0.5px;
+}
+
+/* Trust Mini Badges */
+.trust-mini i {
+    font-size: 1.8rem;
+    color: #a0845a;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.trust-mini p {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.7rem !important;
+    letter-spacing: 1px;
+    color: #4a1d1f;
+}
+
+/* Gold Glow Effect for Special Cards */
+.border-gold-glow {
+    border: 1px solid rgba(160, 132, 90, 0.3) !important;
+    box-shadow: 0 10px 30px rgba(160, 132, 90, 0.05) !important;
+}
+
+.border-gold-glow:hover {
+    border-color: #a0845a !important;
+    box-shadow: 0 15px 40px rgba(160, 132, 90, 0.15) !important;
+}
+
+/* Pulse animation for 'Open Now' feel */
+.text-success {
+    color: #28a745 !important;
+    position: relative;
+}
+
+/* Extra Bold Text for Numbers */
+.fw-bold {
+    font-weight: 700 !important;
+}
+
+/* Layout spacing fix */
+.mt-5.pt-5.border-top {
+    margin-top: 4rem !important;
+    border-top: 1px solid rgba(160, 132, 90, 0.2) !important;
+}
+

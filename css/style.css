@@ -165,3 +165,444 @@
     width: 100%;
     transition: transform 0.5s ease;
 }
+
+
+
+
+/* --- Desktop & Mobile Perfect Badge --- */
+.nav-item, .mobile-only-icons a {
+    position: relative;
+    display: inline-flex !important; /* Items ko box ki tarah treat karne ke liye */
+    align-items: center;
+}
+
+/* Badge ka Main Look */
+    .badge-count {
+    position: absolute;
+    top: 2px; 
+    right: -2px;
+    transform: translate(50%, -50%);
+    
+    background: #4a1d1f; 
+    color: #ffffff !important;
+    font-size: 10px;
+    font-weight: 700;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    
+    border-radius: 50px;
+    display: flex  !important; 
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    z-index: 100;
+    pointer-events: none;
+}
+
+/* Laptop (Desktop) Specific Adjustment */
+@media (min-width: 992px) {
+    .navbar-nav .nav-link {
+        position: relative;
+        padding-right: 15px !important; /* Badge ke liye thodi jagah chhodi */
+    }
+    
+    /* Laptop par badge ko thoda aur accurate dikhane ke liye */
+    .navbar-nav .badge-count {
+        top: 5px; 
+        right: 5px;
+    }
+}
+
+/* Mobile Specific Adjustment */
+@media (max-width: 991px) {
+    .mobile-only-icons a {
+        margin-right: 5px;
+    }
+    .badge-count {
+        top: 0;
+        right: 0;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* --- Sidebar (Explore Menu) Badge Fix ONLY for Mobile --- */
+
+@media (max-width: 991px) {
+
+
+    
+    .navbar-collapse .nav-link {
+        position: relative !important;
+        display: flex !important;
+        align-items: center;
+        padding: 15px 20px !important;
+    }
+
+    /* 2. Sidebar ke andar badge ki position */
+    .navbar-collapse .badge-count {
+        position: absolute !important;
+        top: 10px !important;  
+        left: 32px !important; 
+        right: auto !important;
+        transform: none !important;
+        min-width: 16px !important;
+        height: 16px !important;
+        font-size: 9px !important;
+        display: flex !important;
+    }
+
+    /* 3. Icon aur text ke beech space sirf mobile pe */
+    .navbar-collapse .nav-link i {
+        margin-right: 12px !important;
+        width: 20px;
+        text-align: center;
+    }
+}
+
+/* --- Laptop View Reset (Taaki space na badhe) --- */
+@media (min-width: 992px) {
+    .navbar-collapse .nav-link {
+        display: inline-block !important; /* Laptop pe default inline rakhein */
+        width: auto !important;
+        padding: 0 12px !important;
+    }
+    
+    /* Laptop Navbar Badge position */
+    .navbar-nav .badge-count {
+        top: -5px !important;
+        right: -8px !important;
+        left: auto !important;
+    }
+}
+
+
+
+
+
+
+
+/* --- Luxury Advance Product Card --- */
+.product-card-advance {
+    background: #ffffff;
+    border-radius: 15px;
+    border: 1px solid #f1f1f1;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.product-card-advance:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+}
+
+/* Image & Badge Container */
+.img-wrapper {
+    position: relative;
+    height: 270px;
+    overflow: hidden;
+    background: #fdfdfd;
+}
+
+.img-main-zoom {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s ease;
+}
+
+.product-card-advance:hover .img-main-zoom {
+    transform: scale(1.1);
+}
+
+/* Floating Purity Badge (Top Left) */
+.purity-floating-tag {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: rgba(74, 29, 31, 0.9); /* Dark Royal Theme */
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 700;
+    z-index: 5;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Sidebar Hover Icons (Right Side Slide) */
+.sidebar-hover-actions {
+    position: absolute;
+    right: -55px; /* Shuru mein bahar */
+    top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: all 0.4s ease-in-out;
+    z-index: 6;
+}
+
+.product-card-advance:hover .sidebar-hover-actions {
+    right: 15px; /* Hover par andar */
+}
+
+.side-action-btn {
+    width: 42px;
+    height: 42px;
+    background: #ffffff;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    font-size: 18px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: 0.3s;
+}
+
+.side-action-btn:hover {
+    background: #c5a059; /* Gold color */
+    color: white;
+    transform: scale(1.1);
+}
+
+.side-action-btn.active i {
+    color: #e74c3c; /* Red heart */
+}
+
+/* Content & Details */
+.content-wrapper {
+    padding: 20px;
+    text-align: left;
+}
+
+.product-title-luxury {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #222;
+    margin-bottom: 8px;
+}
+
+.specs-bar-luxury {
+    display: flex;
+    gap: 15px;
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 15px;
+}
+
+.specs-bar-luxury i {
+    color: #c5a059;
+}
+
+/* Price Box */
+.price-display-box {
+    margin-bottom: 20px;
+}
+
+.price-title {
+    font-size: 10px;
+    text-transform: uppercase;
+    color: #aaa;
+    letter-spacing: 1px;
+    display: block;
+}
+
+.final-price-tag {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #4a1d1f;
+    line-height: 1;
+}
+
+.making-info-tag {
+    font-size: 11px;
+    color: #a0845a;
+    margin-top: 5px;
+    font-weight: 600;
+}
+
+/* Premium Button */
+.btn-bag-luxury {
+    width: 100%;
+    padding: 14px;
+    background: #222;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 1px;
+    transition: 0.3s;
+}
+
+.btn-bag-luxury:hover {
+    background: #c5a059;
+    box-shadow: 0 5px 20px rgba(197, 160, 89, 0.4);
+}
+
+
+
+/* Collection Mobile Fix */
+@media (max-width: 768px) {
+    .sidebar-hover-actions, .arrival-actions {
+        opacity: 1 !important;
+        visibility: visible !important;
+        right: 10px !important;
+        display: flex !important;
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .sidebar-hover-actions {
+        transform: translateX(0) !important; /* Agar pehle se koi transform tha toh */
+    }
+
+    .final-price-tag {
+        font-size: 1.1rem !important; /* Mobile pe price thodi badi dikhe */
+    }
+}
+
+ /* Desktop Navbar Hover Fix  */
+@media (min-width: 992px) {
+    
+    .cart-hover-dropdown {
+        position: relative;
+    }
+
+    
+    .cart-hover-dropdown:hover .dropdown-menu {
+        display: block;
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+    
+    .dropdown-menu {
+        display: block; 
+        opacity: 0;
+        visibility: hidden;
+        position: absolute;
+        top: 100%;    
+        right: 0;       
+        margin-top: 10px; 
+        min-width: 220px;
+        background: #fff;
+        border: 1.5px solid #251703; 
+        border-radius: 8px;
+        box-shadow: 0 10px 25px rgba(235, 200, 22, 0.15);
+        z-index: 9999 !important; 
+        transition: all 0.3s ease;
+        transform: translateY(10px);
+    }
+
+    
+    .dropdown-menu::before {
+        content: "";
+        position: absolute;
+        top: -8px;
+        right: 20px;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-bottom: 8px solid #2d1d05;
+    }
+} 
+
+
+
+
+
+@media (max-width: 991px) {
+    /* Drawer ke links ko thoda saaf dikhane ke liye */
+    .navbar-collapse .nav-link {
+        font-size: 16px !important;
+        padding: 15px 20px !important;
+        border-bottom: 1px solid #f8f9fa;
+    }
+
+    /* Icons ka color gold/brown theme mein */
+    .navbar-collapse .nav-link i {
+        color: #a0845a !important;
+        margin-right: 15px !important;
+        width: 25px;
+        text-align: center;
+    }
+}
+
+/* Laptop screen par My Orders link ko hide karne ke liye */
+@media (min-width: 992px) {
+    .nav-item.d-lg-none {
+        display: none !important;
+    }
+}
+
+
+
+/*  RATINGS 5 STAR*/
+.review-gold-card {
+    background: linear-gradient(135deg, #c5a059 0%, #8e6d31 100%);
+    color: white;
+    max-width: 500px;
+    border-radius: 15px;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.review-gold-card .stars i {
+    font-size: 1.5rem;
+    margin: 0 3px;
+}
+
+.btn-review-write {
+    background-color: #a57c7c; /* Dusty Rose color from your photo */
+    color: white;
+    font-weight: 600;
+    border: none;
+    transition: 0.3s;
+}
+
+.btn-review-write:hover {
+    background-color: #8e6363;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.review-item {
+    border-bottom: 1px solid #eee;
+    padding: 20px 0;
+}
+
+
+
+
+.social-hover {
+    transition: transform 0.3s ease, color 0.3s ease;
+    display: inline-block;
+}
+.social-hover:hover {
+    color: #ffc107 !important; /* Gold Color */
+    transform: translateY(-5px);
+}
+.link-hover:hover {
+    color: #fff !important;
+    padding-left: 5px;
+    transition: 0.3s;
+}
+.custom-logo-font {
+    letter-spacing: 1px;
+    font-weight: 600;
+}

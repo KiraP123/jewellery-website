@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Your Luxury | Ramesh Jewellers</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WNBQJ38PWN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-WNBQJ38PWN');
+    </script>
+    
+    <title>Ramesh Jewellers</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+
+        :root { 
+            --gold: #b89146; 
+            --gold-light: #f3e8d2;
+            --dark: #0f172a; 
+            --success: #22c55e;
+            --glass: rgba(255, 255, 255, 0.9);
+        }
+        
+        body { 
+            background: radial-gradient(circle at top right, #f8fafc, #cbd5e1);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        /* --- UI Elements --- */
+        .ultra-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-radius: 40px;
+            border: 1px solid white;
+            box-shadow: 0 40px 100px -20px rgba(0,0,0,0.15);
+            overflow: hidden;
+            margin-top: 40px;
+        }
+
+        .premium-header {
+            background: linear-gradient(135deg, #1e293b 0%, #020617 100%);
+            padding: 60px 20px;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .premium-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 40px;
+            background: linear-gradient(to top, var(--glass), transparent);
+        }
+
+        /* --- Smart Search --- */
+        .search-container {
+            max-width: 500px;
+            margin: -35px auto 0;
+            position: relative;
+            z-index: 10;
+        }
+        .search-container input {
+            height: 70px;
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 0 30px 0 65px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .search-container i {
+            position: absolute;
+            left: 25px; top: 22px;
+            font-size: 1.5rem;
+            color: var(--gold);
+        }
+        .btn-ultra {
+            position: absolute;
+            right: 10px; top: 10px;
+            height: 50px;
+            border-radius: 15px;
+            background: var(--gold);
+            color: white;
+            border: none;
+            padding: 0 25px;
+            font-weight: 800;
+            transition: 0.3s;
+        }
+        .btn-ultra:hover { transform: scale(1.05); background: #967535; }
+
+        /* --- Stepper System --- */
+        .stepper-box {
+            padding: 50px 30px;
+            position: relative;
+        }
+        .main-line {
+            position: absolute;
+            top: 75px; left: 10%; right: 10%;
+            height: 6px; background: #e2e8f0;
+            border-radius: 10px;
+        }
+        .filling-line {
+            height: 100%; background: linear-gradient(90deg, var(--gold), var(--success));
+            width: 0%; border-radius: 10px;
+            transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .step-node {
+            position: relative; z-index: 5;
+            text-align: center; flex: 1;
+        }
+        .node-circle {
+            width: 55px; height: 55px;
+            background: white; border: 4px solid #f1f5f9;
+            border-radius: 50%; margin: 0 auto 15px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; color: #94a3b8;
+            transition: 0.5s;
+        }
+
+        .completed .node-circle {
+            background: var(--success); border-color: #dcfce7; color: white;
+            transform: translateY(-5px);
+        }
+        .active .node-circle {
+            background: var(--gold); border-color: var(--gold-light); color: white;
+            box-shadow: 0 0 25px rgba(184, 145, 70, 0.5);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* --- Detail Journey --- */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 0 40px 40px;
+        }
+        .info-card {
+            background: white;
+            padding: 20px;
+            border-radius: 25px;
+            border: 1px solid #f1f5f9;
+            transition: 0.3s;
+        }
+        .info-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+
+        .tracking-status-label {
+            font-size: 0.75rem; text-transform: uppercase;
+            font-weight: 800; color: #64748b; letter-spacing: 1.5px;
+        }
+
+        /* --- Support Button --- */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px; right: 30px;
+            background: #25d366; color: white;
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 30px; box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+            text-decoration: none; z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="ultra-card mx-auto" style="max-width: 900px;">
+        <div class="premium-header">
+            <h1 class="fw-800 mb-2">RAMESH JEWELLERS</h1>
+            <p class="opacity-75">Your luxury is on its way. Track every movement.</p>
+        </div>
+
+        <div class="search-container">
+            <i class="bi bi-shield-check"></i>
+            <input type="text" id="orderIdInput" class="form-control" placeholder="Enter RJ Order ID...">
+            <button class="btn-ultra" onclick="handleTrack()">TRACK</button>
+        </div>
+
+        <div id="loading" class="text-center py-5 d-none">
+            <div class="spinner-border text-warning" role="status"></div>
+            <p class="mt-2 fw-bold">Connecting to Vault...</p>
+        </div>
+
+        <div id="errorMsg" class="alert alert-danger mx-5 mt-5 d-none"></div>
+
+        <div id="trackingContent" style="display: none;">
+            <div class="p-5 pb-0 d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 id="statusTitle" class="fw-800 mb-0 text-dark">Processing</h2>
+                    <p class="text-muted small mt-1"><i class="bi bi-clock me-1"></i> Last Update: <span id="lastUpdate">Just Now</span></p>
+                </div>
+                <div class="text-end bg-white p-3 rounded-4 shadow-sm">
+                    <span class="tracking-status-label">Order Reference</span>
+                    <h4 id="displayOrderId" class="fw-bold text-dark mb-0">#RJ52</h4>
+                </div>
+            </div>
+
+            <div class="stepper-box">
+    <div class="main-line">
+        <div id="stepProgress" class="filling-line"></div>
+    </div>
+    <div class="d-flex justify-content-between">
+        <div class="step-node" id="step1">
+            <div class="node-circle"><i class="bi bi-cart-check"></i></div>
+            <div class="small fw-800">Order Confirm</div>
+        </div>
+        <div class="step-node" id="step2">
+            <div class="node-circle"><i class="bi bi-shield-check"></i></div>
+            <div class="small fw-800">Quality Check</div>
+        </div>
+        <div class="step-node" id="step3">
+            <div class="node-circle"><i class="bi bi-patch-check"></i></div>
+            <div class="small fw-800">Insured Transit</div>
+        </div>
+        <div class="step-node" id="step4">
+            <div class="node-circle"><i class="bi bi-bicycle"></i></div>
+            <div class="small fw-800">Out for Delivery</div>
+        </div>
+        <div class="step-node" id="step5">
+            <div class="node-circle"><i class="bi bi-house-heart"></i></div>
+            <div class="small fw-800">Delivered</div>
+        </div>
+    </div>
+</div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <span class="tracking-status-label">Delivery To</span>
+                    <p id="addressText" class="mt-2 fw-600 mb-0 small text-dark">--</p>
+                </div>
+                <div class="info-card" id="courierBox" style="display:none;">
+                    <span class="tracking-status-label">Courier & Tracking</span>
+                    <div class="d-flex align-items-center mt-2">
+                        <div class="flex-grow-1">
+                            <p id="trackIdText" class="fw-bold mb-0 small">--</p>
+                            <a id="courierLink" href="#" target="_blank" class="text-primary x-small text-decoration-none" style="font-size: 10px;">OPEN TRACKING PAGE →</a>
+                        </div>
+                        <i class="bi bi-truck fs-3 text-warning"></i>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <span class="tracking-status-label">Expected Delivery</span>
+                    <p id="expectedDeliveryText" class="mt-2 fw-bold mb-0 text-success">
+                        <i class="bi bi-calendar-event me-2"></i>Calculating...
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<a href="https://wa.me/91XXXXXXXXXX" class="whatsapp-float" target="_blank">
+    <i class="bi bi-whatsapp"></i>
+</a>
+
+
+
+<script>
+
+
+const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const BASE_URL = isLocal ? "http://localhost:3000" : "https://your-backend-service.onrender.com";
+
+    function handleTrack() {
+        const input = document.getElementById('orderIdInput').value.trim();
+        const content = document.getElementById('trackingContent');
+        const loader = document.getElementById('loading');
+        const error = document.getElementById('errorMsg');
+
+        if(!input) return alert("Bhai, ID toh dalo!");
+
+        // Start Loading Animation
+        loader.classList.remove('d-none');
+        content.style.display = 'none';
+        error.classList.add('d-none');
+
+        let cleanId = input.toUpperCase().replace('RJ', '').replace('#', '').trim();
+
+       fetch(`${BASE_URL}/api/order-status/${cleanId}`)
+        .then(res => res.json())
+        .then(data => {
+            loader.classList.add('d-none');
+            if(data.success) {
+                content.style.display = 'block';
+                const order = data.order;
+
+                // Set Data
+                document.getElementById('displayOrderId').innerText = "#RJ" + (order.custom_order_id || order.id);
+                document.getElementById('statusTitle').innerText = order.status;
+                document.getElementById('addressText').innerText = order.address || "Address details in vault.";
+                document.getElementById('lastUpdate').innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+
+                          // 3. Expected Delivery Logic (Same as orders.html)
+                const oDate = new Date(order.created_at);
+                const userPin = String(order.pincode || "").trim();
+
+                const getDeliveryDate = (days) => {
+                    let d = !isNaN(oDate.getTime()) ? new Date(oDate) : new Date();
+                    d.setDate(d.getDate() + days);
+                    if(d.getDay() === 0) d.setDate(d.getDate() + 1); // Sunday Skip
+                    return d.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' });
+                };
+
+                let finalDeliveryDate = "";
+                if (["400067", "400064", "400091", "400092", "400097", "400095"].includes(userPin)) {
+                    finalDeliveryDate = getDeliveryDate(1); // Kandivali
+                } else if (userPin.startsWith('400') || userPin.startsWith('401')) {
+                    finalDeliveryDate = getDeliveryDate(2); // Mumbai
+                } else {
+                    finalDeliveryDate = getDeliveryDate(6); // Outside
+                }
+
+                // Update Expected Delivery Text
+                const deliveryElement = document.querySelector('.info-card p.text-success');
+                if (order.status === 'Cancelled') {
+                    deliveryElement.innerHTML = `<i class="bi bi-x-circle me-2"></i>Not Applicable`;
+                    deliveryElement.classList.replace('text-success', 'text-danger');
+                } else if (order.status === 'Delivered') {
+                    deliveryElement.innerHTML = `<i class="bi bi-check-all me-2"></i>Handed Over`;
+                } else {
+                    deliveryElement.innerHTML = `<i class="bi bi-calendar-event me-2"></i>${finalDeliveryDate}`;
+                    deliveryElement.classList.add('text-success');
+                }
+                        
+
+
+                updateTimeline(order.status);
+                
+                // Courier Info
+                if(order.tracking_id) {
+                    document.getElementById('courierBox').style.display = 'block';
+                    document.getElementById('trackIdText').innerText = order.tracking_id;
+                    document.getElementById('courierLink').href = `https://www.delhivery.com/track/package/${order.tracking_id}`;
+                }
+
+                // Super Advance: Celebration for Delivery
+                if(order.status === 'Delivered') {
+                    confetti({
+                        particleCount: 150,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                        colors: ['#b89146', '#22c55e', '#ffffff']
+                    });
+                }
+                
+                content.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                error.classList.remove('d-none');
+                error.innerText = "Order not found in our Luxury Vault. Re-check the ID.";
+            }
+        });
+    }
+
+  function updateTimeline(status) {
+    // IMPORTANT: Admin Panel ke dropdown mein yehi 5 words hone chahiye
+    const steps = [
+        'Order Confirm', 
+        'Quality Check', 
+        'Insured Transit', 
+        'Out for Delivery',
+        'Delivered'
+    ];
+    
+    let idx = steps.indexOf(status);
+
+    // Cancelled logic
+    if (status === 'Cancelled') {
+        document.getElementById('stepProgress').style.width = "0%";
+        document.getElementById('statusTitle').style.color = "#ef4444";
+        steps.forEach((_, i) => document.getElementById(`step${i+1}`).classList.remove('completed', 'active'));
+        return;
+    }
+
+    if (idx === -1) idx = 0; 
+
+    // Progress Line: Ab 5 steps hain toh gaps 4 honge (0%, 25%, 50%, 75%, 100%)
+    const progress = (idx / (steps.length - 1)) * 100;
+    document.getElementById('stepProgress').style.width = progress + "%";
+
+    // Update Nodes
+    steps.forEach((s, i) => {
+        const node = document.getElementById(`step${i + 1}`);
+        if (!node) return;
+
+        node.classList.remove('completed', 'active');
+
+        if (i < idx) {
+            node.classList.add('completed'); 
+        } else if (i === idx) {
+            node.classList.add('active'); 
+        }
+    });
+
+    // Delivered Celebration
+    if(status === 'Delivered') {
+        confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#b89146', '#22c55e', '#ffffff']
+        });
+    }
+}
+</script>
+
+</body>
+</html>

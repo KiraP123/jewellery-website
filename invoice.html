@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tax Invoice - Ramesh Jewellers</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #fdfbf7; font-family: 'Inter', sans-serif; color: #333; }
+        .invoice-box {
+            max-width: 850px; margin: 30px auto; padding: 50px;
+            background: #fff; border-radius: 4px; position: relative;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+        /* Top gold border for premium feel */
+        .invoice-box::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0;
+            height: 8px; background: #a0845a; border-radius: 4px 4px 0 0;
+        }
+        .brand-logo { color: #a0845a; font-weight: 900; font-size: 32px; letter-spacing: -1px; }
+        .table thead { background: #1a1a1a; color: #fff; }
+        .total-section { background: #fafafa; padding: 20px; border-radius: 8px; }
+        .text-gold { color: #a0845a; }
+        
+        @media print {
+            .no-print { display: none; }
+            .invoice-box { box-shadow: none; margin: 0; width: 100%; max-width: 100%; padding: 20px; }
+            body { background: #fff; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container no-print text-center mt-4">
+    <button class="btn btn-outline-dark btn-sm px-4" onclick="window.print()">
+        Download Invoice (PDF)
+    </button>
+</div>
+
+<div class="invoice-box" id="invoiceContent">
+    <div class="row border-bottom pb-4 mb-4">
+        <div class="col-6">
+            <div class="brand-logo text-uppercase">Ramesh Jewellers</div>
+            <p class="mb-0 small">Gold Bazaar, Zaveri Bazaar, Mumbai</p>
+            <p class="mb-0 small text-muted">GSTIN: 27AAAAA0000A1Z5 | PAN: ABCDE1234F</p>
+        </div>
+        <div class="col-6 text-end">
+            <h2 class="fw-light text-muted">TAX INVOICE</h2>
+            <p class="mb-0 fw-bold">Invoice: <span class="text-gold" id="invId">---</span></p>
+            <p class="small text-muted" id="invDate">Date: --/--/----</p>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-6">
+            <h6 class="text-gold text-uppercase small fw-bold mb-3">Customer Details</h6>
+            <h5 id="custName" class="mb-1">---</h5>
+            <p id="custAddr" class="text-muted small mb-1">---</p>
+            <p id="custPhone" class="small">Contact: ---</p>
+        </div>
+        <div class="col-6 text-end">
+            <h6 class="text-gold text-uppercase small fw-bold mb-3">Payment Info</h6>
+            <p class="mb-0 small">Mode: <strong>Online Transaction</strong></p>
+            <p class="mb-0 small">Status: <span class="badge bg-success">Settled</span></p>
+        </div>
+    </div>
+
+    <table class="table table-hover mb-5">
+        <thead>
+            <tr>
+                <th class="py-3">Description</th>
+                <th class="py-3 text-center">Purity</th>
+                <th class="py-3 text-end">Net Amount</th>
+            </tr>
+        </thead>
+        <tbody id="itemTable">
+            </tbody>
+    </table>
+
+    <div class="row">
+        <div class="col-md-7">
+            <p class="small text-muted fw-bold mb-1">Terms & Conditions:</p>
+            <ul class="text-muted" style="font-size: 11px;">
+                <li>Goods once sold will not be taken back without original invoice.</li>
+                <li>Weight and Purity are guaranteed as per hallmark standards.</li>
+                <li>Subject to Mumbai Jurisdiction.</li>
+            </ul>
+        </div>
+        <div class="col-md-5">
+            <div class="total-section">
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="small">Taxable Value (Gold + Making)</span>
+                    <span id="subTotal" class="fw-bold">₹0.00</span>
+                </div>
+                <div class="d-flex justify-content-between mb-3 text-muted">
+                    <span class="small">GST (3%)</span>
+                    <span id="gstAmount">₹0.00</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center border-top pt-3">
+                    <h5 class="fw-bold">Grand Total</h5>
+                    <h4 class="text-gold fw-bold" id="grandTotal">₹0</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-5 pt-5 border-top">
+        <p class="small text-muted mb-0">Authorized Signatory</p>
+        <div class="mt-2" style="font-family: 'Cursive', sans-serif; color: #a0845a; font-size: 1.2rem;">
+            Ramesh Jewellers
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+// --- LIVE CONFIGURATION ---
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const BASE_URL = isLocal ? "http://localhost:3000" : "https://your-backend-service.onrender.com";
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('id');
+        if (orderId) fetchOrderDetails(orderId);
+    });
+
+    async function fetchOrderDetails(id) {
+        try {
+          const response = await fetch(`${BASE_URL}/api/order-status/${id}`);
+            const data = await response.json();
+            const order = data.order || data;
+
+            // --- DATE FORMATTING ---
+            const options = { day: '2-digit', month: 'short', year: 'numeric' };
+            const formattedDate = new Date(order.order_date).toLocaleDateString('en-GB', options);
+
+            document.getElementById('invId').innerText = `#RJ${order.custom_order_id || order.id}`;
+            document.getElementById('invDate').innerText = `Date: ${formattedDate}`;
+            document.getElementById('custName').innerText = order.customer_name;
+            document.getElementById('custAddr').innerText = order.address;
+            document.getElementById('custPhone').innerText = order.phone;
+
+            const items = JSON.parse(order.items || "[]");
+            const table = document.getElementById('itemTable');
+            table.innerHTML = '';
+
+            items.forEach(item => {
+                table.innerHTML += `
+                    <tr>
+                        <td class="py-3 fw-bold">${item.name}</td>
+                        <td class="py-3 text-center">${item.purity || '22K'}</td>
+                        <td class="py-3 text-end">₹${parseFloat(item.price).toLocaleString('en-IN')}</td>
+                    </tr>
+                `;
+            });
+
+            // --- HISAB LOGIC (REVERSE TAX) ---
+            const grandTotalValue = parseFloat(order.total_amount);
+            
+            // Formula: Base Price = Total / 1.03 (Kyunki 3% GST included hai)
+            const taxableValue = grandTotalValue / 1.03;
+            const gstCalculated = grandTotalValue - taxableValue;
+
+            document.getElementById('subTotal').innerText = "₹" + taxableValue.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('gstAmount').innerText = "₹" + gstCalculated.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('grandTotal').innerText = "₹" + grandTotalValue.toLocaleString('en-IN');
+
+        } catch (err) {
+            console.error("Invoice Error:", err);
+            alert("Technical Error: Bill could not be loaded.");
+        }
+    }
+</script>
+</body>
+</html> 

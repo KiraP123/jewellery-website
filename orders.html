@@ -1,0 +1,491 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History | Ramesh Jewellers</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/order.css">
+    <style>
+        :root { 
+            --gold: #a0845a; 
+            --gold-light: #d4af37;
+            --dark: #4a1d1f;
+            --bg: #fdfbf7; 
+        }
+        body { background-color: var(--bg); font-family: 'Inter', sans-serif; color: #333; }
+        
+        .brand-title { font-family: 'Cinzel', serif; color: var(--dark); font-weight: 700; }
+        
+        /* Order Card Styling */
+        .order-card { 
+            border: none; border-radius: 20px; transition: all 0.3s ease; 
+            background: #fff; border: 1px solid rgba(160, 132, 90, 0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+        .order-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
+        
+        .product-img-container {
+            width: 80px; height: 80px; border-radius: 12px;
+            overflow: hidden; background: #f9f9f9; border: 1px solid #eee;
+        }
+        .product-img-container img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Status Badges */
+        .status-badge { padding: 6px 15px; border-radius: 50px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+        .status-placed { background: #fff4e5; color: #b45309; }
+        .status-processing { background: #fef9c3; color: #854d0e; }
+        .status-shipped { background: #e0f2fe; color: #0369a1; }
+        .status-delivered { background: #dcfce7; color: #15803d; }
+        .status-cancelled { background: #fee2e2; color: #b91c1c; }
+
+        /* Buttons */
+        .btn-gold-outline { border: 1px solid var(--gold); color: var(--gold); font-weight: 600; border-radius: 8px; transition: 0.3s; }
+        .btn-gold-outline:hover { background: var(--gold); color: white; }
+        .btn-invoice { background: var(--dark); color: white; border-radius: 8px; font-weight: 500; border: none; }
+        .btn-invoice:hover { background: #331415; color: white; }
+
+
+
+ /* Existing status styles ke niche ye add karein */
+
+/* Order Confirm - Cyan/Info */
+.status-order-confirm { background: #e0f7fa; color: #006064; }
+
+/* Quality Check - Yellow/Orange */
+.status-quality-check { background: #fff3cd; color: #856404; }
+
+/* Insured Transit - Blue */
+.status-insured-transit { background: #e7f1ff; color: #004085; }
+
+/* Out for Delivery - Dark */
+.status-out-for-delivery { background: #7adeef; color: #ffffff; }
+
+/* Delivered - Green */
+.status-delivered { background: #d4edda; color: #047a1f; }
+
+/* Cancelled - Red */
+.status-cancelled { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+ <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top p-0">
+    <div class="container d-flex justify-content-between align-items-center py-2">
+        
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <i class="fa-solid fa-bars-staggered" style="color: #4a1d1f;"></i>
+        </button>
+
+        <a class="navbar-brand d-flex align-items-center" href="index.html">
+            <img src="images/PNGLOGO1.png" alt="Logo" style="height: 35px;">
+            <span class="custom-logo-font ms-2">Ramesh Jewellers</span>
+        </a>
+
+         <div class="d-none d-lg-block mx-3" style="flex-grow: 1; max-width: 400px;">
+    <form class="classic-search" action="collection.html" method="GET">
+        <div class="input-group">
+            <span class="input-group-text bg-transparent border-end-0 border-gold">
+                <i class="bi bi-search" style="color: #a0845a;"></i>
+            </span>
+            <input class="form-control border-start-0 border-gold" type="search" placeholder="Search jewellery..." id="laptopSearch" name="search">
+        </div>
+    </form>
+</div>
+
+        <div class="mobile-only-icons d-lg-none">
+            <a href="index.html"><i class="fa-solid fa-house"></i></a>
+            <a href="wishlist.html" class="position-relative"><i class="fa-regular fa-heart"></i><span id="wishlist-count-mobile" class="badge-count">0</span></a>
+            <a href="cart.html" class="position-relative"><i class="fa-solid fa-bag-shopping"></i><span id="cart-count-mobile" class="badge-count">0</span></a>
+        </div>
+
+        <div class="collapse navbar-collapse flex-grow-0" id="navbarNav">
+            <div class="drawer-header d-lg-none">
+                <span class="fw-bold" style="color: #a0845a;">EXPLORE</span>
+                <button class="btn-close" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"></button>
+            </div>
+            
+            <ul class="navbar-nav align-items-center">
+                <li class="nav-item"><a class="nav-link" href="index.html"><i class="fa-solid fa-house d-lg-none"></i> Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="collection.html"><i class="fa-solid fa-gem d-lg-none"></i> Collection</a></li>
+                <li class="nav-item d-lg-none"><a class="nav-link active" href="orders.html"><i class="fa-solid fa-clock-rotate-left"></i> My Orders</a></li>
+                <li class="nav-item"><a class="nav-link" href="wishlist.html"><i class="fa-solid fa-heart d-lg-none"></i> Wishlist</a></li>
+                <li class="nav-item"><a class="nav-link" href="contact.html"><i class="fa-solid fa-envelope d-lg-none"></i> Contact</a></li>
+               
+             <li class="nav-item dropdown cart-hover-dropdown">
+    <a class="nav-link d-flex align-items-center" href="cart.html" id="cartDropdown">
+        <i class="fa-solid fa-bag-shopping"></i>
+        <i class="fa-solid fa-bag-shopping d-lg-none me-2"></i> <span>CART</span>
+    </a>
+    
+    <ul class="dropdown-menu dropdown-menu-end shadow border-gold shadow-sm d-none d-lg-block">
+        <li>
+            <a class="dropdown-item py-2" href="orders.html">
+                <i class="fa-solid fa-clock-rotate-left me-2 text-gold"></i> My Orders
+            </a>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+        <li>
+            <a class="dropdown-item py-2" href="cart.html">
+                <i class="fa-solid fa-cart-shopping me-2 text-gold"></i> View Cart
+            </a>
+        </li>
+    </ul>
+</li>
+
+<li class="nav-item d-lg-none">
+    <a class="nav-link" href="orders.html">
+        <i class="fa-solid fa-clock-rotate-left"></i> My Orders
+    </a>
+</li>
+<li class="nav-item" id="authBtnContainer"></li>
+            </ul>
+        </div>
+    </div>
+    <div class="container d-lg-none pb-3 px-3">
+        <form class="classic-search w-100" action="collection.html" method="GET">
+            <div class="input-group">
+                <span class="input-group-text bg-transparent border-end-0 border-gold">
+                    <i class="bi bi-search" style="color: #a0845a;"></i>
+                </span>
+                <input class="form-control border-start-0 border-gold" type="search" placeholder="Search Jewellery..." name="search">
+            </div>
+        </form>
+    </div>
+</nav>
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="brand-title h2">Your Orders</h1>
+        <p class="text-muted">Manage and track your premium jewellery purchases</p>
+    </div>
+
+    <div id="ordersList" class="row g-4 justify-content-center">
+        <div class="text-center py-5" id="loader">
+            <div class="spinner-border text-warning" style="width: 3rem; height: 3rem;" role="status"></div>
+            <p class="mt-3 text-muted">Fetching your orders...</p>
+        </div>
+    </div>
+</div>
+
+ <footer class="bg-dark text-white pt-5 pb-3">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <h5 class="custom-logo-font text-warning mb-4">Contact Us</h5>
+                <p class="small text-white-50">
+                    <i class="bi bi-geo-alt-fill text-warning me-2"></i>
+                    <strong>Office Address:</strong><br>
+                    19/A Patwa Chawl, 1st Floor, Mahajangali,<br>
+                    Zaveri Bazar, Mumbai, 400 002
+                </p>
+                <p class="small text-white-50">
+                    <i class="bi bi-envelope-at-fill text-warning me-2"></i>
+                    <strong>Email:</strong> info@rameshjewellers7.com.in
+                </p>
+                <div class="mt-4">
+                    <a href="https://instagram.com/your-id" class="text-white me-3 fs-4 social-hover"><i class="bi bi-instagram"></i></a>
+                    <a href="https://wa.me/919323992724" class="text-white me-3 fs-4 social-hover"><i class="bi bi-whatsapp"></i></a>
+                    <a href="#" class="text-white me-3 fs-4 social-hover"><i class="bi bi-facebook"></i></a>
+                    <a href="https://goo.gl/maps/your-link" class="text-white fs-4 social-hover"><i class="bi bi-google"></i></a>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <h5 class="custom-logo-font text-warning mb-4">Our Leadership</h5>
+                <div class="mb-3">
+                    <p class="mb-1 fw-bold text-uppercase small">Founder</p>
+                    <p class="text-white-50 small">Ramesh Mehta</p>
+                </div>
+                <div class="mb-3">
+                    <p class="mb-1 fw-bold text-uppercase small">Chain Making Division</p>
+                    <a href="tel:9323992724" class="text-warning text-decoration-none small">
+                        <i class="bi bi-telephone-fill me-2"></i>Nitesh Mehta: 9323992724
+                    </a>
+                </div>
+                <div>
+                    <p class="mb-1 fw-bold text-uppercase small">Bangles Division</p>
+                    <a href="tel:9987320607" class="text-warning text-decoration-none small">
+                        <i class="bi bi-telephone-fill me-2"></i>Nilesh Mehta: 9987320607
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <h5 class="custom-logo-font text-warning mb-4">Quick Links</h5>
+                <div class="row">
+                    <div class="col-6">
+                        <ul class="list-unstyled small">
+                            <li class="mb-2"><a href="collection.html" class="text-white-50 text-decoration-none link-hover">Collection</a></li>
+                            <li class="mb-2"><a href="login.html" class="text-white-50 text-decoration-none link-hover">Account</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-6">
+                        <ul class="list-unstyled small">
+                            <li class="mb-2"><a href="cart.html" class="text-white-50 text-decoration-none link-hover">Shopping Cart</a></li>
+                            <li class="mb-2"><a href="contact.html" class="text-white-50 text-decoration-none link-hover">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h6 class="text-warning small fw-bold">Business Hours:</h6>
+                    <p class="small text-white-50 mb-0">Mon - Sat: 11:00 AM - 8:00 PM</p>
+                    <p class="small text-white-50">Sunday: Closed</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center pt-4 mt-5 border-top border-secondary">
+            <p class="mb-0 small text-white-50">&copy; 2026 <strong>Ramesh Jewellers</strong>. Crafted with Precision.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// if (typeof BASE_URL === 'undefined') {
+//     var isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+//     var BASE_URL = isLocal ? "http://localhost:3000" : "https://your-backend-service.onrender.com";
+// }
+
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const loggedInEmail = localStorage.getItem('userEmail'); 
+        if (loggedInEmail) {
+            fetchOrders(loggedInEmail);
+        } else {
+            window.location.href = 'login.html';
+        }
+    });
+
+async function fetchOrders(email) {
+    const list = document.getElementById('ordersList');
+    try {
+       const response = await fetch(`${BASE_URL}/api/user-orders/${encodeURIComponent(email)}`);
+        const data = await response.json();
+
+ 
+        
+        list.innerHTML = ''; 
+
+        if(data.success && data.orders.length > 0) {
+            data.orders.forEach(order => {
+                const items = JSON.parse(order.items || "[]");
+                
+                // 1. Database se Pincode uthao
+                const userPin = String(order.pincode || "").trim();
+
+                // 2. Order Date Fix
+                const oDate = new Date(order.created_at);
+
+                // 2. ✨ Exact Time formatting (Database wala same time)
+                    const timeString = oDate.toLocaleTimeString('en-IN', { 
+                        hour: '2-digit', 
+                        minute: '2-digit', 
+                        second: '2-digit', // Agar second bhi chahiye toh
+                        hour12: true 
+                    });
+
+                const orderDateStr = !isNaN(oDate) ? oDate.toLocaleDateString('en-IN', { 
+                    day: 'numeric', month: 'short', year: 'numeric' 
+                }) : "Date Pending";
+
+             const fullOrderTime = `${orderDateStr} at ${timeString}`; // Jaise: 5 Feb 2026 at 10:29 AM
+
+                // 3. 📅 Delivery Date Logic (Database Pincode Based)
+                const getDeliveryDate = (days) => {
+                    let d = !isNaN(oDate.getTime()) ? new Date(oDate) : new Date();
+                    d.setDate(d.getDate() + days);
+                    if(d.getDay() === 0) d.setDate(d.getDate() + 1); // Sunday Skip
+                    return d.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' });
+                };
+
+                let finalDeliveryDate = "";
+                // Same logic as your Product-Details
+                if (["400067", "400064", "400091", "400092", "400097", "400095"].includes(userPin)) {
+                    finalDeliveryDate = getDeliveryDate(1); // Kandivali Zones
+                } else if (userPin.startsWith('400') || userPin.startsWith('401')) {
+                    finalDeliveryDate = getDeliveryDate(2); // Mumbai/Suburbs
+                } else {
+                    finalDeliveryDate = getDeliveryDate(6); // Outside Mumbai
+                }
+                  
+                //    const canCancel = ["pending", "order placed"].includes(order.status.toLowerCase());
+
+                   // --- NAYA LOGIC YAHAN HAI ---
+                const currentStatusRaw = order.status.toLowerCase();
+                let cancelBtnHTML = "";
+
+                if (currentStatusRaw === "cancelled") {
+    cancelBtnHTML = `<button class="btn btn-secondary w-100 btn-sm py-2" disabled><i class="bi bi-x-circle me-1"></i> Cancelled</button>`;
+} else if (currentStatusRaw === "delivered") {
+    cancelBtnHTML = `<button class="btn btn-outline-secondary w-100 btn-sm py-2" disabled>Delivered</button>`;
+} else if (currentStatusRaw === "out for delivery" || currentStatusRaw === "insured transit") {
+    // In stages par order cancel nahi hona chahiye
+    cancelBtnHTML = `<button class="btn btn-light w-100 btn-sm py-2 text-muted" disabled title="In Transit">Cannot Cancel</button>`;
+} else {
+    // Normal cancel button for 'Order Confirm' or 'Quality Check'
+    cancelBtnHTML = `<button onclick="cancelOrder('${order.id}', '${order.custom_order_id}')" class="btn btn-outline-danger w-100 btn-sm py-2">Cancel Order</button>`;
+}
+
+
+                // 4. Image Path Fix
+                let firstImage = 'images/PNGLOGO1.png'; 
+                if (items.length > 0 && items[0].image) {
+                    const fileName = items[0].image.split(/[\\/]/).pop();
+                    firstImage = `${BASE_URL}/images/${fileName}`;
+                }
+
+                // const statusClass = order.status.toLowerCase().replace(/\s/g, '');
+
+const statusRaw = order.status || "Order Confirm";
+const statusClass = statusRaw.toLowerCase().replace(/\s/g, '-'); //order.status
+
+
+list.innerHTML += `
+    <div class="col-12 col-md-6 col-xl-4 mb-4">
+        <div class="card order-card p-4 h-100 shadow-sm border-0">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="status-badge status-${statusClass}">${statusRaw}</span>
+                <small class="text-muted fw-bold">#RJ${order.custom_order_id || order.id}</small>
+            </div>
+            
+            <div class="d-flex align-items-center mb-3">
+                <div class="product-img-container me-3 border rounded shadow-sm" style="width:70px; height:70px; overflow:hidden;">
+                    <img src="${firstImage}" alt="Jewellery" class="img-fluid" onerror="this.src='images/PNGLOGO1.png';">
+                </div>
+                <div>
+                    <h6 class="mb-1 fw-bold">${items.length} Item(s)</h6>
+                    <p class="text-muted small mb-0">Ordered on: <b>${fullOrderTime}</b></p>
+                </div>
+            </div>
+
+            <div class="delivery-status-box p-3 rounded-3 mb-4" style="background: #fdf8f2; border-left: 4px solid #a0845a;">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-truck fs-4 me-3" style="color: #4a1d1f;"></i>
+                    <div>
+                        <p class="mb-0 text-uppercase fw-bold" style="font-size: 10px; color: #a0845a; letter-spacing: 1px;">Expected Arrival</p>
+                        <p class="mb-0 fw-bold text-dark">${order.status === 'Cancelled' ? 'Cancelled' : finalDeliveryDate}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-auto">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-muted small">Total Paid:</span>
+                    <h4 class="fw-bold mb-0" style="color: #4a1d1f">₹${Number(order.total_amount).toLocaleString('en-IN')}</h4>
+                </div>
+                
+                <div class="row g-2">
+                    <div class="col-6">
+                        <button onclick="goToTrack('${order.custom_order_id || order.id}')" class="btn btn-outline-dark w-100 btn-sm py-2">Track Order</button>
+                    </div>
+                    <div class="col-6">
+                        <button onclick="viewInvoice('${order.custom_order_id || order.id}')" class="btn btn-dark w-100 btn-sm py-2">Invoice</button>
+                    </div>
+
+                    <div class="col-12 mt-2">
+                        ${cancelBtnHTML} 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>`;
+            });
+
+
+            } else {
+    // Jab koi order na mile (Empty State)
+    list.innerHTML = `
+        <div class="text-center py-5 w-100 animate__animated animate__fadeIn">
+            <div class="d-flex justify-content-center">
+                <dotlottie-player 
+                    src="https://lottie.host/37052c92-e422-442d-8b43-838e759d09d7/1vVI21Qwy1.lottie"
+                    background="transparent" 
+                    speed="1" 
+                    style="width: 250px; height: 250px;" 
+                    loop 
+                    autoplay>
+                </dotlottie-player>
+            </div>
+            <h4 class="fw-bold mt-3" style="color: #2c3e50;">No Orders Yet!</h4>
+            <p class="text-muted">It seems you haven't placed any orders with us yet.</p>
+            <a href="collection.html" class="btn btn-outline-dark rounded-pill px-4 mt-2 shadow-sm">
+                START SHOPPING
+            </a>
+        </div>`;
+}
+} catch (err) {
+    console.error("Fetch Error:", err);
+    // Error aane par bhi thoda saaf-suthra UI dikhe
+    list.innerHTML = `
+        <div class="text-center py-5 w-100">
+            <div class="alert alert-danger d-inline-block px-5 rounded-pill shadow-sm">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i> Error loading orders. Please try again.
+            </div>
+        </div>`;
+}
+}
+
+
+
+async function cancelOrder(dbId, customId) {
+    // Pehle order ka current status check karte hain
+    // Hum frontend se hi check kar lenge ki kya ye 'Order Confirm' stage par hai
+    
+    const { isConfirmed } = await Swal.fire({
+        title: 'Cancel Order?',
+        text: `Do you want to cancel Order #RJ${customId}?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#000',
+        confirmButtonText: 'Yes, Cancel!'
+    });
+
+    if (isConfirmed) {
+        try {
+           const response = await fetch(`${BASE_URL}/api/cancel-order/${dbId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await response.json();
+
+            if (data.success) {
+                Swal.fire('Done!', 'Order cancelled successfully.', 'success').then(() => {
+                    location.reload();
+                });
+            } else {
+                // Agar backend mana kare (Jaise aapki image mein dikh raha hai)
+                // Toh ye error message display hoga
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Sorry',
+                    text: data.message || 'Order cannot be cancelled at this stage.',
+                    confirmButtonColor: '#4a1d1f'
+                });
+            }
+        } catch (err) {
+            console.error("Fetch Error:", err);
+            Swal.fire('Error', 'Server not responding', 'error');
+        }
+    }
+}
+    function goToTrack(id) { window.location.href = `track.html?id=${id}`; }
+    function viewInvoice(id) { window.location.href = `invoice.html?id=${id}`; }
+
+
+
+</script>
+<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/common.js"></script>
+<script src="js/cart.js"></script>
+ <script src="js/auth.js"></script>
+</body>
+</html>

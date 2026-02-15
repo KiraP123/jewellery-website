@@ -16,3 +16,97 @@
     padding: 15px;
     border-radius: 8px;
 }
+
+
+/* ////////// */
+
+
+/* Classic Gold Border for Search */
+.border-gold {
+    border-color: #a0845a !important;
+}
+
+.classic-search .form-control {
+    border-radius: 0; /* Classic square edges */
+    font-size: 0.9rem;
+}
+
+.classic-search .input-group-text {
+    border-radius: 0;
+}
+
+/* Laptop alignment fix */
+@media (min-width: 992px) {
+    .navbar .container {
+        flex-wrap: nowrap; /* Elements ko ek hi line mein rakhega */
+    }
+    
+    .navbar-nav {
+        flex-direction: row !important;
+        gap: 10px;
+    }
+}
+
+/* Mobile alignment fix */
+@media (max-width: 991px) {
+    .custom-logo-font {
+        font-size: 1.1rem !important; /* Mobile readability */
+    }
+    
+    .navbar-collapse {
+        background: white;
+        padding: 10px;
+        text-align: center;
+    }
+}
+
+
+
+/* --- Royal Collection Hover Icons --- */
+
+.hover-icons-container {
+    position: absolute;
+    top: 15px;
+    right: -60px; /* Shuru mein screen se bahar */
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: all 0.4s ease-in-out;
+    z-index: 100 !important;
+}
+
+/* Card par mouse jate hi icons slide honge */
+.product-card:hover .hover-icons-container {
+    right: 15px !important;
+}
+
+.wish-btn, .view-btn {
+    width: 42px !important;
+    height: 42px !important;
+    background: #ffffff !important;
+    border: none !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
+    color: #4a1d1f !important; /* Aapka theme brown */
+    font-size: 18px !important;
+    transition: 0.3s !important;
+    text-decoration: none !important;
+}
+
+.wish-btn:hover, .view-btn:hover {
+    background: #4a1d1f !important;
+    color: #ffffff !important;
+    transform: scale(1.1);
+}
+
+.wish-btn.active {
+    color: #ff4757 !important; /* Heart color when active */
+}
+
+/* Image zoom effect */
+.product-card:hover .product-zoom {
+    transform: scale(1.08);
+}
