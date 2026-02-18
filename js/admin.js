@@ -1,9 +1,16 @@
+// const API = "/api"; 
+
+// console.log("Connecting to API at:", API);
+
+
+
+
 const API = "http://127.0.0.1:3000/api"; 
 const BASE_URL = "http://127.0.0.1:3000/api"; 
 // localhost ki jagah 127.0.0.1 likh kar dekho
 
 
-// // // 1. Check karo ki website kahan chal rahi hai
+// // 1. Check karo ki website kahan chal rahi hai
 // const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
 
 // // 2. Agar local hai toh computer ka address, agar live hai toh Render ka link

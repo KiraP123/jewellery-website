@@ -10,6 +10,13 @@ const app = express();
 // const PORT = 3000;
 const PORT = process.env.PORT || 3000;
 
+
+app.use('/images', express.static('images'));
+app.use('/admin', express.static('admin'));
+
+
+
+
 // app.use(cors()); 
 // app.use(cors({
 //     origin: ["https://your-frontend-website.com", "http://localhost:5500"] // Apni live site ka link yahan daalein
@@ -36,14 +43,23 @@ app.use('/images', express.static('images'));
 //     database: 'ramesh_jewellers_db',
 //     port: 3308 
 // });
+
+// --- DATABASE CONNECTION (Aiven Ready) ---
 const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    port: process.env.DB_PORT,
-    ssl: {
-        rejectUnauthorized: false // TiDB ke liye ye line compulsory hai
+    host: process.env.DB_HOST || '127.0.0.1', 
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '', 
+    database: process.env.DB_NAME || 'ramesh_jewellers_db',
+    port: process.env.DB_PORT || 3308,
+    // Aiven Cloud ke liye SSL zaruri hai, localhost ke liye off
+    ssl: process.env.DB_HOST ? { rejectUnauthorized: false } : false
+});
+
+db.connect(err => {
+    if (err) {
+        console.error('❌ SQL Connection Error:', err.message);
+    } else {
+        console.log('✅ MySQL Connected to ' + (process.env.DB_HOST ? 'Aiven Cloud' : 'Localhost'));
     }
 });
 
@@ -111,11 +127,6 @@ app.get('/api/products', (req, res) => {
         });
     });
 });
-
-
-
-
-
 // --- 3. ADD PRODUCT (UPDATED WITH STOCK) ---
 app.post('/api/products', upload.single('productImage'), (req, res) => {
     // 1. req.body se stock_qty bhi nikaalein
@@ -134,8 +145,6 @@ app.post('/api/products', upload.single('productImage'), (req, res) => {
         res.json({ message: "Product added successfully with Stock!" });
     });
 });
-
-
 // --- 4. UPDATE PRODUCT (UPDATED WITH STOCK) ---
 app.put('/api/products/:id', (req, res) => {
     const { name, weight_gm, making_charge, size, purity, stock_qty } = req.body;
@@ -148,7 +157,6 @@ app.put('/api/products/:id', (req, res) => {
         res.json({ message: "Updated Successfully" });
     });
 });
-
 
 app.delete('/api/:type/:id', (req, res) => {
     const { type, id } = req.params;
@@ -194,8 +202,6 @@ app.get('/api/orders', (req, res) => {
     });
 });
 
-
-
 // --- ADMIN LOGIN VERIFICATION ---
 app.post('/api/admin/verify', (req, res) => {
     const { user, pass } = req.body;
@@ -219,8 +225,6 @@ app.post('/api/admin/verify', (req, res) => {
     });
 });
 
-
-
 // --- CHANGE ADMIN PASSWORD ---
 app.post('/api/admin/change-password', (req, res) => {
     const { oldPass, newPass, newUser } = req.body;
@@ -242,10 +246,6 @@ app.post('/api/admin/change-password', (req, res) => {
         }
     });
 });
-
-
-
-
 
 // --- USER REGISTER (Ramesh Jewellers Customers) ---
 app.post('/api/user/register', (req, res) => {
@@ -321,47 +321,6 @@ app.put('/api/products/toggle-offer/:id', (req, res) => {
         res.json({ message: "Offer status updated" });
     });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-// // 1. POST: Enquiry aur Rating SAVE karne ke liye
-// app.post('/api/enquiries', (req, res) => {
-//     // Yahan 'rating' bhi add kiya hai
-//     const { name, email, phone, subject, message, rating } = req.body;
-    
-//     // SQL query mein 'rating' column add karein
-//     const sql = "INSERT INTO enquiries (name, email, phone, subject, message, rating, status) VALUES (?, ?, ?, ?, ?, ?, 'Pending')";
-    
-//     db.query(sql, [name, email, phone, subject, message, rating || 0], (err, result) => {
-//         if (err) {
-//             console.error("❌ SQL Insert Error:", err);
-//             return res.status(500).json({ success: false, error: err.message });
-//         }
-//         res.json({ success: true, message: "Enquiry & Rating saved!" });
-//     });
-// });
-
-// // 2. GET: Reviews ko Index Page par DIKHANE ke liye (Iske bina 404 aayega)
-// app.get('/api/enquiries', (req, res) => {
-//     const sql = "SELECT * FROM enquiries WHERE rating > 0 ORDER BY created_at DESC";
-    
-//     db.query(sql, (err, results) => {
-//         if (err) {
-//             console.error("❌ SQL Fetch Error:", err);
-//             return res.status(500).json({ success: false, error: err.message });
-//         }
-//         res.json(results); // Ye frontend ko data bhejega
-//     });
-// });
 
 // --- NEW: Public Enquiry Submission (For Contact Page) ---
 app.post('/api/enquiries', (req, res) => {
@@ -504,11 +463,6 @@ app.post('/api/update-tracking', (req, res) => {
         res.json({ success: true });
     });
 });
-
-
-
-
-
 
 app.post('/api/place-order', (req, res) => {
     const uniqueOrderId = Math.floor(10000000 + Math.random() * 90000000);
@@ -672,9 +626,6 @@ cron.schedule('0 * * * *', () => {
     });
 });
 
-
-
-
 app.post('/api/admin/update-order-status', (req, res) => {
     const { orderId, status, trackingId } = req.body;
 
@@ -731,11 +682,6 @@ app.delete('/api/admin/delete-sales-record/:id', (req, res) => {
     });
 });
 
-
-
-
-
-
 // 1. Pehle ye line check karein (Sirf ek baar honi chahiye top par)
 const googleClient = new OAuth2Client('1074517545758-4ijdnhe0tkbjoervpd1810q2hkva3pkp.apps.googleusercontent.com');
 
@@ -791,7 +737,6 @@ app.post('/api/user/google-login', async (req, res) => {
     }
 });
 
-
 app.post('/update-phone', (req, res) => {
     const { email, phoneNumber } = req.body;
     const query = "UPDATE users SET phone = ? WHERE email = ?";
@@ -800,8 +745,6 @@ app.post('/update-phone', (req, res) => {
         res.json({ status: 'Success' });
     });
 });
-
-
 
 // Check kijiye ki route ka naam 'update-product-row' hi hai
 app.put('/api/update-product-row', (req, res) => {
