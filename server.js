@@ -37,6 +37,14 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+app.get('/admin-panel', (req, res) => {
+    // Check karo 'admin' folder ka naam aur 'admin.html' ki spelling sahi hai
+    res.sendFile(path.join(__dirname, 'admin', 'admin.html'));
+});
+
+
+
+
 
 
 app.use(express.json());
