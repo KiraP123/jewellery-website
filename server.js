@@ -8,19 +8,12 @@ const { OAuth2Client } = require('google-auth-library');
 
 const app = express();
 // const PORT = 3000;
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;;
 
 
 app.use('/images', express.static('images'));
 app.use('/admin', express.static('admin'));
 
-
-
-
-// app.use(cors()); 
-// app.use(cors({
-//     origin: ["https://your-frontend-website.com", "http://localhost:5500"] // Apni live site ka link yahan daalein
-// }));
 
 
 
@@ -50,13 +43,6 @@ app.get('/admin-panel', (req, res) => {
 app.use(express.json());
 app.use('/images', express.static('images'));
 
-// const db = mysql.createConnection({
-//     host: '127.0.0.1', 
-//     user: 'root',
-//     password: '', 
-//     database: 'ramesh_jewellers_db',
-//     port: 3308 
-// });
 
 // --- DATABASE CONNECTION (Aiven Ready) ---
 const db = mysql.createConnection({
