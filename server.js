@@ -29,7 +29,13 @@ app.use(cors({
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
+// 1. Ye line server ko batati hai ki saari HTML/CSS/JS files kahan hain
+app.use(express.static(__dirname)); 
 
+// 2. Ye line batati hai ki main link par index.html dikhao
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 
 
