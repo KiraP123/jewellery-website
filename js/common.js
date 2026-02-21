@@ -1,8 +1,20 @@
 // --- 0. SMART CONFIGURATION ---
+// const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+// const BASE_URL = isLocal ? "http://localhost:3000" : "https://your-backend-service.onrender.com";
+// const API = `${BASE_URL}/api`;
+// 1. Check karo ki website computer par chal rahi hai ya Render par
 const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-const BASE_URL = isLocal ? "http://localhost:3000" : "https://your-backend-service.onrender.com";
+
+// 2. Sahi address chuno
+const BASE_URL = isLocal 
+    ? "http://127.0.0.1:3000" 
+    : "https://jewellery-website-f9tx.onrender.com";
+
+// 3. API ka rasta set karo
 const API = `${BASE_URL}/api`;
 
+console.log("Current API Mode:", isLocal ? "Localhost" : "Live Render");
+console.log("Connecting to:", API);
 
 
 // --- CONFIGURATION ---

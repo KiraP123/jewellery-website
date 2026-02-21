@@ -1,26 +1,15 @@
-// const API = "/api"; 
+// Localhost hata kar Render ka link dal diya
+const BASE_URL = "https://jewellery-website-f9tx.onrender.com";
+const API = `${BASE_URL}/api`;
 
-// console.log("Connecting to API at:", API);
-
-
-
-
-const API = "http://127.0.0.1:3000/api"; 
-const BASE_URL = "http://127.0.0.1:3000/api"; 
-// localhost ki jagah 127.0.0.1 likh kar dekho
+console.log("Connecting to Live API at:", API);
 
 
-// // 1. Check karo ki website kahan chal rahi hai
-// const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
 
-// // 2. Agar local hai toh computer ka address, agar live hai toh Render ka link
-// const BASE_URL = isLocal 
-//     ? "http://127.0.0.1:3000" 
-//     : "https://your-backend-api.onrender.com"; // <-- Jab host kar doge, tab ye link yahan daalna
+// const API = "http://127.0.0.1:3000/api"; 
+// const BASE_URL = "http://127.0.0.1:3000/api"; 
+// // localhost ki jagah 127.0.0.1 likh kar dekho
 
-// const API = `${BASE_URL}/api`;
-
-// console.log("Connecting to API at:", API);
 
 // Login check: Ensure user is logged in
 if (sessionStorage.getItem('ownerLoggedIn') !== 'true') {
