@@ -335,13 +335,19 @@ async function fetchOrders(email) {
 
 
                 // 4. Image Path Fix
-                let firstImage = 'images/PNGLOGO1.png'; 
-                if (items.length > 0 && items[0].image) {
-                    const fileName = items[0].image.split(/[\\/]/).pop();
-                    firstImage = `${BASE_URL}/images/${fileName}`;
-                }
+                // let firstImage = 'images/PNGLOGO1.png'; 
+                // if (items.length > 0 && items[0].image) {
+                //     const fileName = items[0].image.split(/[\\/]/).pop();
+                //     firstImage = `${BASE_URL}/images/${fileName}`;
+                // }
 
-                // const statusClass = order.status.toLowerCase().replace(/\s/g, '');
+               // 4. ✨ Naya Image Path Fix (Cloudinary Friendly)
+let firstImage = 'images/PNGLOGO1.png'; 
+if (items.length > 0 && items[0].image) {
+    const imgPath = items[0].image;
+    // Agar link http se shuru hota hai toh wahi rakho, varna BASE_URL jodo
+    firstImage = imgPath.startsWith('http') ? imgPath : `${BASE_URL}/images/${imgPath}`;
+}
 
 const statusRaw = order.status || "Order Confirm";
 const statusClass = statusRaw.toLowerCase().replace(/\s/g, '-'); //order.status
@@ -357,7 +363,7 @@ list.innerHTML += `
             
             <div class="d-flex align-items-center mb-3">
                 <div class="product-img-container me-3 border rounded shadow-sm" style="width:70px; height:70px; overflow:hidden;">
-                    <img src="${firstImage}" alt="Jewellery" class="img-fluid" onerror="this.src='images/PNGLOGO1.png';">
+                   <img src="${firstImage}" alt="Jewellery" class="img-fluid" onerror="this.src='images/PNGLOGO1.png';">
                 </div>
                 <div>
                     <h6 class="mb-1 fw-bold">${items.length} Item(s)</h6>
