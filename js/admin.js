@@ -437,27 +437,54 @@ ${(() => {
         console.error("❌ Error loading dashboard data:", err); 
     }
 
-    // Carousel Form Handle karna
-document.getElementById('uploadCarouselForm')?.addEventListener('submit', async (e) => {
+
+
+
+    document.getElementById('uploadCarouselForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
 
     try {
-       const response = await fetch(`${API}/update-carousel`, {
-        // const response = await fetch(`${API}/update-carousel`, {
+        // YAHAN CHANGE HAI: '/update-carousel' ko '/carousel' kar diya
+        const response = await fetch(`${API}/carousel`, {
             method: 'POST',
             body: formData
         });
 
         const result = await response.json();
         if (result.success) {
-            Swal.fire('Success', 'Carousel Updated!', 'success');
-            // Agar aapne preview function banaya hai toh loadCarouselPreview() call karein
+            Swal.fire('Success', 'Carousel Live on Cloudinary!', 'success');
+            // Upload ke baad 2 second rukh kar page reload kar do taaki nayi image dikhe
+            setTimeout(() => window.location.reload(), 2000);
+        } else {
+            Swal.fire('Error', result.error || 'Upload failed', 'error');
         }
     } catch (err) {
-        Swal.fire('Error', 'Failed to upload', 'error');
+        console.error("Upload Error:", err);
+        Swal.fire('Error', 'Server connection failed', 'error');
     }
 });
+    // Carousel Form Handle karna
+// document.getElementById('uploadCarouselForm')?.addEventListener('submit', async (e) => {
+//     e.preventDefault();
+//     const formData = new FormData(e.target);
+
+//     try {
+//        const response = await fetch(`${API}/update-carousel`, {
+//         // const response = await fetch(`${API}/update-carousel`, {
+//             method: 'POST',
+//             body: formData
+//         });
+
+//         const result = await response.json();
+//         if (result.success) {
+//             Swal.fire('Success', 'Carousel Updated!', 'success');
+//             // Agar aapne preview function banaya hai toh loadCarouselPreview() call karein
+//         }
+//     } catch (err) {
+//         Swal.fire('Error', 'Failed to upload', 'error');
+//     }
+// });
 }
 
 
