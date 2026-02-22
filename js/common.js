@@ -175,7 +175,6 @@ async function loadMainCarousel() {
             container.innerHTML = slides.map((slide, index) => `
                 <div class="carousel-item ${index === 0 ? 'active' : ''}">
                     <div class="hero-overlay"></div>
-                    // Carousel img tag ko aise update karein
 <img src="${slide.image_path.startsWith('http') ? slide.image_path : BASE_URL + '/images/' + slide.image_path}" 
      onerror="this.src='https://placehold.co/600x400?text=No+Image+Found'"
      class="d-block w-100 hero-img" 

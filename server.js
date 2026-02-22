@@ -2,7 +2,7 @@ require('dotenv').config(); // Ye line .env file se saari details load kar degi
 const express = require('express');
 const mysql = require('mysql2'); 
 const cors = require('cors');
-const multer = require('multer');
+// const multer = require('multer');
 const path = require('path');
 const { OAuth2Client } = require('google-auth-library');
 
@@ -17,7 +17,7 @@ app.listen(PORT, '0.0.0.0', () => {
 });
 
 
-app.use('/images', express.static('images'));
+// app.use('/images', express.static('images'));
 app.use('/admin', express.static('admin'));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
@@ -39,12 +39,6 @@ app.get('/admin-panel', (req, res) => {
     // Check karo 'admin' folder ka naam aur 'admin.html' ki spelling sahi hai
     res.sendFile(path.join(__dirname, 'admin', 'admin.html'));
 });
-
-
-
-
-
-
 
 app.use(express.json());
 app.use('/images', express.static('images'));
@@ -74,13 +68,44 @@ db.connect(err => {
     else console.log('✅ MySQL Connected');
 });
 
-const storage = multer.diskStorage({
-    destination: './images/',
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname));
-    }
+
+
+
+
+
+
+
+
+// 1. Cloudinary aur Storage ki libraries import karein
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const multer = require('multer');
+
+// 2. Cloudinary Configuration (Details aapke dashboard se)
+cloudinary.config({
+    cloud_name: 'dmnyehrzi',
+    api_key: '689731278833148',
+    api_secret: 'VlpRJIPGtl9uzUlgBz_apka_secret' // <-- Yahan apna Pura Secret dalo
 });
+
+// 3. Cloudinary Storage Setup
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'jewellery_site', // Cloudinary mein is naam ka folder ban jayega
+        allowed_formats: ['jpg', 'png', 'webp', 'jpeg'],
+    },
+});
+
+// 4. Multer ko ab Cloudinary storage use karne ko kahein
 const upload = multer({ storage: storage });
+// const storage = multer.diskStorage({
+//     destination: './images/',
+//     filename: (req, file, cb) => {
+//         cb(null, Date.now() + path.extname(file.originalname));
+//     }
+// });
+// const upload = multer({ storage: storage });
 
 // --- 1. UPDATE RATES ---
 app.post('/api/update-rates', (req, res) => {
@@ -400,14 +425,61 @@ app.post('/api/update-carousel', upload.single('image'), (req, res) => {
     }
 });
 
-// --- GET CAROUSEL FOR FRONTEND ---
+
+
+
+
+
+
+
+
+app.post('/api/carousel', upload.single('image'), (req, res) => {
+    try {
+        if (!req.file) return res.status(400).json({ error: "Image nahi mili" });
+
+        const { title, description, tag } = req.body;
+        const imageUrl = req.file.path; // Cloudinary URL
+
+        // Humne yahan 'is_active' ko 1 set kar diya hai
+        const sql = "INSERT INTO carousel (title, description, tag, image_path, is_active) VALUES (?, ?, ?, ?, 1)";
+        
+        db.query(sql, [title, description, tag, imageUrl], (err, result) => {
+            if (err) {
+                console.error("❌ DB Error:", err);
+                return res.status(500).json({ error: "Database error" });
+            }
+            res.json({ success: true, message: "Live on Cloudinary!", url: imageUrl });
+        });
+    } catch (error) {
+        console.error("❌ Upload Error:", error);
+        res.status(500).json({ error: "Upload failed" });
+    }
+});
+
+
+
+
+
 app.get('/api/carousel', (req, res) => {
-    // Sirf wahi slides bhej rahe hain jo 'is_active = 1' hain
-    db.query("SELECT * FROM carousel_slides WHERE is_active = 1 ORDER BY id ASC", (err, results) => {
-        if (err) return res.status(500).json(err);
+    // Sirf Active slides mangwao aur Nayi wali Pehle (DESC)
+    const sql = "SELECT * FROM carousel WHERE is_active = 1 ORDER BY id DESC";
+    
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error("❌ Fetch Error:", err);
+            return res.status(500).json(err);
+        }
         res.json(results);
     });
 });
+// // --- GET CAROUSEL FOR FRONTEND ---
+// app.get('/api/carousel', (req, res) => {
+//     // Sirf wahi slides bhej rahe hain jo 'is_active = 1' hain
+//     db.query("SELECT * FROM carousel_slides WHERE is_active = 1 ORDER BY id ASC", (err, results) => {
+//         if (err) return res.status(500).json(err);
+//         res.json(results);
+//     });
+// });
 
 
 // --- 1. ADMIN ORDER UPDATE (YE MISSING THA ISLIYE 500 ERROR AA RAHA THA) ---
