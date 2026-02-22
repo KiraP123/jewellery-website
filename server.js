@@ -451,6 +451,7 @@ app.post('/api/update-carousel', upload.single('image'), (req, res) => {
 
 
 
+// --- 1. POST: Nayi Photo Upload (Isse Button Kaam Karne Lagega) ---
 app.post('/api/carousel', upload.single('image'), (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ error: "Image nahi mili" });
@@ -458,13 +459,13 @@ app.post('/api/carousel', upload.single('image'), (req, res) => {
         const { title, description, tag } = req.body;
         const imageUrl = req.file.path; // Cloudinary URL
 
-        // Humne yahan 'is_active' ko 1 set kar diya hai
-        const sql = "INSERT INTO carousel (title, description, tag, image_path, is_active) VALUES (?, ?, ?, ?, 1)";
+        // Table ka naam 'carousel_slides' rakha hai as per your DB screenshot
+        const sql = "INSERT INTO carousel_slides (title, description, tag, image_path, is_active) VALUES (?, ?, ?, ?, 1)";
         
         db.query(sql, [title, description, tag, imageUrl], (err, result) => {
             if (err) {
-                console.error("❌ DB Error:", err);
-                return res.status(500).json({ error: "Database error" });
+                console.error("❌ DB Error:", err.message);
+                return res.status(500).json({ error: "Database error: " + err.message });
             }
             res.json({ success: true, message: "Live on Cloudinary!", url: imageUrl });
         });
@@ -474,17 +475,15 @@ app.post('/api/carousel', upload.single('image'), (req, res) => {
     }
 });
 
-
-
+// --- 2. GET: Carousel Data (Isse Carousel Wapas Aayega) ---
 app.get('/api/carousel', (req, res) => {
-    // Check karo table ka naam 'carousel' hai ya 'carousel_slides'
-    // Aapke screenshot mein purani images 'carousel_slides' se aa rahi thi shayad
-    const sql = "SELECT * FROM carousel WHERE is_active = 1 ORDER BY id DESC";
+    // Database screenshot ke hisaab se table 'carousel_slides' hai
+    const sql = "SELECT * FROM carousel_slides WHERE is_active = 1 ORDER BY id DESC";
     
     db.query(sql, (err, results) => {
         if (err) {
-            console.error("❌ SQL Error:", err.message);
-            return res.status(500).json({ error: "Database error" });
+            console.error("❌ Fetch Error:", err.message);
+            return res.status(500).json({ error: err.message });
         }
         res.json(results);
     });
