@@ -24,14 +24,25 @@ async function initProductPage() {
     }
 }
 
+
+
+
+
+
 function loadData(id) {
     const product = window.productData.find(p => Number(p.id) === Number(id));
     
     if (product) {
-        // const imgPath = `http://localhost:3000/images/${product.image}`;
-        const imgPath = `${BASE_URL}/images/${product.image}`;
+        // --- SHORTCUT FIX START ---
+        const imgPath = product.image.startsWith('http') ? product.image : `${BASE_URL}/images/${product.image}`;
+        // --- SHORTCUT FIX END ---
+
         const mainImg = document.getElementById('mainImg');
-        if (mainImg) mainImg.src = imgPath;
+        if (mainImg) {
+            mainImg.src = imgPath;
+            // Backup ke liye onerror bhi dal do
+            mainImg.onerror = function() { this.src = 'https://via.placeholder.com/500'; };
+        }
 
         renderUI(product);
         calculateBreakdown(product);
@@ -41,6 +52,23 @@ function loadData(id) {
         if (detailsDiv) detailsDiv.innerHTML = "<h3 class='text-center'>Product Not Found</h3>";
     }
 }
+// function loadData(id) {
+//     const product = window.productData.find(p => Number(p.id) === Number(id));
+    
+//     if (product) {
+//         // const imgPath = `http://localhost:3000/images/${product.image}`;
+//         const imgPath = `${BASE_URL}/images/${product.image}`;
+//         const mainImg = document.getElementById('mainImg');
+//         if (mainImg) mainImg.src = imgPath;
+
+//         renderUI(product);
+//         calculateBreakdown(product);
+//         renderRelated(product.purity, product.id);
+//     } else {
+//         const detailsDiv = document.getElementById('productDetails');
+//         if (detailsDiv) detailsDiv.innerHTML = "<h3 class='text-center'>Product Not Found</h3>";
+//     }
+// }
 
 
 
