@@ -476,7 +476,19 @@ app.post('/api/carousel', upload.single('image'), (req, res) => {
 
 
 
-
+app.get('/api/carousel', (req, res) => {
+    // Check karo table ka naam 'carousel' hai ya 'carousel_slides'
+    // Aapke screenshot mein purani images 'carousel_slides' se aa rahi thi shayad
+    const sql = "SELECT * FROM carousel WHERE is_active = 1 ORDER BY id DESC";
+    
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error("❌ SQL Error:", err.message);
+            return res.status(500).json({ error: "Database error" });
+        }
+        res.json(results);
+    });
+});
 // // --- GET CAROUSEL FOR FRONTEND ---
 // app.get('/api/carousel', (req, res) => {
 //     // Sirf wahi slides bhej rahe hain jo 'is_active = 1' hain
