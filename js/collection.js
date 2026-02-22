@@ -58,7 +58,7 @@ const btnText = stockQty > 0 ? `<i class="fa-solid fa-bag-shopping me-2"></i> AD
                 <div class="product-card-advance">
                     <div class="img-wrapper">
                         <div class="purity-floating-tag">${product.purity || '916'}K</div>
-                         <img src="${BASE_URL}/images/${product.image}" class="img-main-zoom" onerror="this.src='https://placehold.co/300'">
+                         <img src="${BASE_URL}/images/${product.image}" class="img-main-zoom" onerror="this.src='https://via.placeholder.com/300'">
                         
                         <div class="sidebar-hover-actions">
                             <button class="side-action-btn ${isFav ? 'active' : ''}" onclick="toggleWishlist(${product.id})" title="Wishlist">
@@ -129,7 +129,7 @@ function renderNewArrivals() {
             <div class="col-lg-3 col-md-6 mb-4 col-6">
                 <div class="arrival-card">
                     <div class="arrival-img-container">
-                        <img src="${BASE_URL}/images/${product.image}" onerror="this.src='https://placehold.co/300'">
+                        <img src="${BASE_URL}/images/${product.image}" onerror="this.src='https://via.placeholder.com/300'">
                         <div class="arrival-actions visible-mobile">
                             <button class="action-btn" onclick="toggleWishlist(${product.id})">
                                 <i class="bi ${isFav ? 'bi-heart-fill text-danger' : 'bi-heart'}"></i>
@@ -186,7 +186,7 @@ function renderLimitedOffers() {
                     
                     <div class="img-container p-3 text-center">
                        
-                      <img src="${BASE_URL}/images/${p.image}" class="img-fluid rounded" style="height:180px; object-fit:contain;" onerror="this.src='https://placehold.co/300'">
+                      <img src="${BASE_URL}/images/${p.image}" class="img-fluid rounded" style="height:180px; object-fit:contain;" onerror="this.src='https://via.placeholder.com/300'">
                     </div>
 
                     <div class="card-body text-center pt-0">
