@@ -117,34 +117,60 @@
 
 
 
-
-
-
-
-
-
-
-
-/* Card ko ek fix height do taaki boxes barabar dikhen */
-.product-card, .card.h-100 {
-    height: 380px !important; /* Aap apne hisaab se adjust kar sakte ho */
+/* Card Container ko fix karein */
+.product-card {
+    position: relative;
+    overflow: hidden;
+    height: 400px !important; /* Laptop/Desktop ke liye fix height */
     display: flex;
     flex-direction: column;
+    background: #fff;
+    border-radius: 15px;
+    transition: transform 0.3s ease;
 }
 
-/* Image container ko control karo */
-.card-img-top {
-    height: 180px !important; /* Image ka area fix kar diya */
-    object-fit: contain !important; /* Image kategi nahi aur box ke andar rahegi */
-    padding: 10px;
-    background: #f9f9f9; /* Agar image chhoti ho toh peeche halka color */
-}
-
-/* Text area ko niche push karo */
-.card-body {
-    flex-grow: 1;
+/* Image container ko control karein */
+.product-img-wrapper {
+    height: 220px !important; /* Image ka area fix kar diya */
+    width: 100%;
+    overflow: hidden;
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 10px !important;
+    align-items: center;
+    justify-content: center;
+    background: #fdfbf7; /* Halka background color */
+}
+
+/* Image zoom effect aur sizing */
+.product-zoom {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain !important; /* Image kategi nahi, box mein fit hogi */
+    transition: transform 0.4s ease;
+}
+
+
+
+@media (max-width: 991px) {
+    /* ... aapka purana logo/navbar code ... */
+
+    .product-card {
+        height: 350px !important; /* Mobile par card ki height thodi kam */
+        margin-bottom: 10px;
+    }
+
+    .product-img-wrapper {
+        height: 180px !important; /* Mobile par image area chota */
+    }
+
+    /* Mobile par hover icons hamesha dikhao kyunki mobile mein 'hover' nahi hota */
+    .hover-icons-container {
+        right: 10px !important;
+        opacity: 1 !important;
+    }
+    
+    .wish-btn, .view-btn {
+        width: 35px !important;
+        height: 35px !important;
+        font-size: 15px !important;
+    }
 }
