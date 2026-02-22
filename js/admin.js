@@ -184,7 +184,7 @@ if(document.getElementById('cancelledOrdersCount')) {
         
 
 
-
+//  <td><img src="${BASE_URL}/images/${p.image}" class="product-img border" style="width:50px; height:50px; object-fit:cover;"></td>
 
 
         document.getElementById('productTableBody').innerHTML = products.map(p => {
@@ -197,7 +197,8 @@ if(document.getElementById('cancelledOrdersCount')) {
     const isChecked = p.is_limited_offer === 1 ? 'checked' : '';
 
     return `<tr>
-      <td><img src="${BASE_URL}/images/${p.image}" class="product-img border" style="width:50px; height:50px; object-fit:cover;"></td>
+     
+      <td><img src="${p.image?.startsWith('http') ? p.image : `${BASE_URL}/images/${p.image}`}" style="width:50px; height:50px; object-fit:cover;" onerror="this.src='https://placehold.co/50'"></td>
         <td><b>${p.name}</b></td>
         <td><span class="badge bg-dark">${p.purity}K</span></td>
         
