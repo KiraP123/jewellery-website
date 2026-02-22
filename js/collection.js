@@ -158,7 +158,7 @@ function renderLimitedOffers() {
     const HALLMARK_CHARGE = 53.10; // Hallmark value per piece
 
     if (offerItems.length === 0) {
-        container.innerHTML = `<div class="col-12 text-center py-5">...</div>`;
+        container.innerHTML = `<div class="col-12 text-center py-5"></div>`;
         return;
     }
 

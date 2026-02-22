@@ -397,7 +397,7 @@ function renderRelated(purity, currentId) {
         <div class="col-6 col-md-3 mb-3">
             <div class="card h-100 border-0 shadow-sm rounded-4 text-center">
                 <a href="product-detail.html?id=${p.id}">                    
-                     <img src="${BASE_URL}/images/${p.image}" class="card-img-top p-2" style="height:120px; object-fit:contain;" onerror="this.src='https://via.placeholder.com/300'">
+                 <img src="${product.image && product.image.startsWith('http') ? product.image : `${BASE_URL}/images/${product.image}`}" class="card-img-top p-2" style="height:120px; object-fit:contain;" onerror="this.src='https://via.placeholder.com/300'">
                 </a>
                 <div class="card-body p-2">
                     <h6 class="small fw-bold mb-1 text-truncate">${p.name}</h6>
