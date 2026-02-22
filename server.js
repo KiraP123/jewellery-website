@@ -83,7 +83,7 @@ const multer = require('multer');
 
 // 2. Cloudinary Configuration (Details aapke dashboard se)
 cloudinary.config({
-    cloud_name: 'dmnyehrzi',
+    cloud_name: 'dmmyehrzi',
     api_key: '689731278833148',
     api_secret: 'VlpRJlPGtl9uzUIgBzMz91-L-YQ' // <-- Yahan apna Pura Secret dalo
 });
@@ -403,27 +403,45 @@ app.post('/api/orders/update-status', (req, res) => {
 });
 
 
-// --- CAROUSEL UPDATE ROUTE ---
+
+
+
+
+
+
 app.post('/api/update-carousel', upload.single('image'), (req, res) => {
     const { slide_num, title, description, tag } = req.body;
-    const imagePath = req.file ? req.file.filename : null;
+    const imagePath = req.file ? req.file.path : null; // Change filename to path
 
-    // Agar image upload nahi ki, toh sirf text update karne ke liye logic
     if (!imagePath) {
         const sql = "UPDATE carousel_slides SET title=?, description=?, tag=? WHERE id=?";
-        db.query(sql, [title, description, tag, slide_num], (err, result) => {
-            if (err) return res.status(500).json({ success: false });
-            res.json({ success: true, message: "Text Updated" });
-        });
+        // ... rest of your code
     } else {
-        // Agar image hai, toh poora replace karo
         const sql = "REPLACE INTO carousel_slides (id, image_path, tag, title, description, is_active) VALUES (?, ?, ?, ?, ?, 1)";
-        db.query(sql, [slide_num, imagePath, tag, title, description], (err, result) => {
-            if (err) return res.status(500).json({ success: false });
-            res.json({ success: true, message: "Slide Fully Updated" });
-        });
+        // ... rest of your code
     }
 });
+// // --- CAROUSEL UPDATE ROUTE ---
+// app.post('/api/update-carousel', upload.single('image'), (req, res) => {
+//     const { slide_num, title, description, tag } = req.body;
+//     const imagePath = req.file ? req.file.filename : null;
+
+//     // Agar image upload nahi ki, toh sirf text update karne ke liye logic
+//     if (!imagePath) {
+//         const sql = "UPDATE carousel_slides SET title=?, description=?, tag=? WHERE id=?";
+//         db.query(sql, [title, description, tag, slide_num], (err, result) => {
+//             if (err) return res.status(500).json({ success: false });
+//             res.json({ success: true, message: "Text Updated" });
+//         });
+//     } else {
+//         // Agar image hai, toh poora replace karo
+//         const sql = "REPLACE INTO carousel_slides (id, image_path, tag, title, description, is_active) VALUES (?, ?, ?, ?, ?, 1)";
+//         db.query(sql, [slide_num, imagePath, tag, title, description], (err, result) => {
+//             if (err) return res.status(500).json({ success: false });
+//             res.json({ success: true, message: "Slide Fully Updated" });
+//         });
+//     }
+// });
 
 
 
