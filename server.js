@@ -477,19 +477,6 @@ app.post('/api/carousel', upload.single('image'), (req, res) => {
 
 
 
-
-app.get('/api/carousel', (req, res) => {
-    // Sirf Active slides mangwao aur Nayi wali Pehle (DESC)
-    const sql = "SELECT * FROM carousel WHERE is_active = 1 ORDER BY id DESC";
-    
-    db.query(sql, (err, results) => {
-        if (err) {
-            console.error("❌ Fetch Error:", err);
-            return res.status(500).json(err);
-        }
-        res.json(results);
-    });
-});
 // // --- GET CAROUSEL FOR FRONTEND ---
 // app.get('/api/carousel', (req, res) => {
 //     // Sirf wahi slides bhej rahe hain jo 'is_active = 1' hain
