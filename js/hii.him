@@ -1,0 +1,14 @@
+<div class="position-relative">
+                            <img src="${BASE_URL}/images/${item.image}"
+                                 class="img-fluid rounded-3 border p-1" 
+                                 style="max-height: 90px; width: 100%; object-fit: contain; background: #fdfdfd;">
+                        </div>
+
+
+
+
+
+
+                        <img src="${BASE_URL}/images/${item.image}" class="rounded border shadow-sm me-4" 
+                     style="width:65px; height:65px; object-fit:cover;" 
+                     onerror="this.src='https://via.placeholder.com/65'">

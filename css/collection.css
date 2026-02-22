@@ -110,3 +110,41 @@
 .product-card:hover .product-zoom {
     transform: scale(1.08);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Card ko ek fix height do taaki boxes barabar dikhen */
+.product-card, .card.h-100 {
+    height: 380px !important; /* Aap apne hisaab se adjust kar sakte ho */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Image container ko control karo */
+.card-img-top {
+    height: 180px !important; /* Image ka area fix kar diya */
+    object-fit: contain !important; /* Image kategi nahi aur box ke andar rahegi */
+    padding: 10px;
+    background: #f9f9f9; /* Agar image chhoti ho toh peeche halka color */
+}
+
+/* Text area ko niche push karo */
+.card-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px !important;
+}
