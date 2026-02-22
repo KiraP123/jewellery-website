@@ -45,9 +45,10 @@ function renderCheckoutSummary() {
          return `
         <li class="list-group-item d-flex justify-content-between align-items-center py-4 border-bottom px-0 bg-transparent">
             <div class="d-flex align-items-center">
-                <img src="${BASE_URL}/images/${item.image}" class="rounded border shadow-sm me-4" 
-                     style="width:65px; height:65px; object-fit:cover;" 
-                     onerror="this.src='https://via.placeholder.com/65'">
+                <img src="${item.image.startsWith('http') ? item.image : `${BASE_URL}/images/${item.image}`}" 
+                      class="rounded border shadow-sm me-4" 
+                        style="width:65px; height:65px; object-fit:cover;" 
+                          onerror="this.src='https://via.placeholder.com/65'">
                 
                 <div>
                     <h6 class="mb-2 fw-bold text-uppercase" style="font-size: 0.9rem; letter-spacing: 0.5px;">
