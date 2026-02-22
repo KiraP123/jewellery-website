@@ -117,21 +117,21 @@ app.post('/api/update-rates', (req, res) => {
     });
 });
 
-// --- 2. GET PRODUCTS (RAW DATA ONLY) ---
-// Yahan humne calculation frontend (common.js) ke liye chhod di hai
-app.get('/api/products', (req, res) => {
-    db.query("SELECT * FROM settings WHERE id=1", (err, rateResult) => {
-        if (err) return res.status(500).json(err);
-        const rates = rateResult[0];
+// // --- 2. GET PRODUCTS (RAW DATA ONLY) ---
+// // Yahan humne calculation frontend (common.js) ke liye chhod di hai
+// app.get('/api/products', (req, res) => {
+//     db.query("SELECT * FROM settings WHERE id=1", (err, rateResult) => {
+//         if (err) return res.status(500).json(err);
+//         const rates = rateResult[0];
 
-        db.query("SELECT * FROM products ORDER BY id DESC", (err, products) => {
-            if (err) return res.status(500).json(err);
+//         db.query("SELECT * FROM products ORDER BY id DESC", (err, products) => {
+//             if (err) return res.status(500).json(err);
 
-            // Sirf database ka raw data aur current gold rates bhej rahe hain
-            res.json({ products: products, rates: rates });
-        });
-    });
-});
+//             // Sirf database ka raw data aur current gold rates bhej rahe hain
+//             res.json({ products: products, rates: rates });
+//         });
+//     });
+// });
 
 // // --- 1. UPDATE RATES ---
 // app.post('/api/update-rates', (req, res) => {
@@ -158,24 +158,56 @@ app.get('/api/products', (req, res) => {
         });
     });
 });
-// --- 3. ADD PRODUCT (UPDATED WITH STOCK) ---
-app.post('/api/products', upload.single('productImage'), (req, res) => {
-    // 1. req.body se stock_qty bhi nikaalein
-    const { name, weight_gm, making_charge, purity, size, stock_qty } = req.body; 
-    const image = req.file ? req.file.filename : null;
 
-    // 2. SQL query mein 'stock_qty' column aur ek naya '?' jodein
+
+
+
+
+app.post('/api/products', upload.single('productImage'), (req, res) => {
+    // 1. req.body se stock_qty bhi nikaalein (Same as your code)
+    const { name, weight_gm, making_charge, purity, size, stock_qty } = req.body; 
+    
+    // BADLAV: req.file.filename ki jagah req.file.path use kar rahe hain
+    // Kyunki Cloudinary pura URL 'path' mein bhejta hai
+    const image = req.file ? req.file.path : null;
+
+    // 2. SQL query mein 'stock_qty' column aur ek naya '?' jodein (Same as your code)
     const sql = "INSERT INTO products (name, weight_gm, making_charge, purity, size, stock_qty, image) VALUES (?, ?, ?, ?, ?, ?, ?)";
     
-    // 3. Array mein stock_qty ko sahi jagah (size aur image ke beech) dalo
+    // 3. Array mein stock_qty ko sahi jagah dalo (Same as your code)
     db.query(sql, [name, weight_gm, making_charge, purity, size, stock_qty, image], (err, result) => {
         if (err) {
             console.error("❌ DB Insert Error:", err);
             return res.status(500).json(err);
         }
-        res.json({ message: "Product added successfully with Stock!" });
+        // Success response
+        res.json({ 
+            success: true, 
+            message: "Product added successfully with Stock and Cloudinary Image!",
+            url: image 
+        });
     });
 });
+// --- 3. ADD PRODUCT (UPDATED WITH STOCK) ---
+// app.post('/api/products', upload.single('productImage'), (req, res) => {
+//     // 1. req.body se stock_qty bhi nikaalein
+//     const { name, weight_gm, making_charge, purity, size, stock_qty } = req.body; 
+//     const image = req.file ? req.file.filename : null;
+
+//     // 2. SQL query mein 'stock_qty' column aur ek naya '?' jodein
+//     const sql = "INSERT INTO products (name, weight_gm, making_charge, purity, size, stock_qty, image) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    
+//     // 3. Array mein stock_qty ko sahi jagah (size aur image ke beech) dalo
+//     db.query(sql, [name, weight_gm, making_charge, purity, size, stock_qty, image], (err, result) => {
+//         if (err) {
+//             console.error("❌ DB Insert Error:", err);
+//             return res.status(500).json(err);
+//         }
+//         res.json({ message: "Product added successfully with Stock!" });
+//     });
+// });
+
+
 // --- 4. UPDATE PRODUCT (UPDATED WITH STOCK) ---
 app.put('/api/products/:id', (req, res) => {
     const { name, weight_gm, making_charge, size, purity, stock_qty } = req.body;
