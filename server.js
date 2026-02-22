@@ -85,7 +85,7 @@ const multer = require('multer');
 cloudinary.config({
     cloud_name: 'dmnyehrzi',
     api_key: '689731278833148',
-    api_secret: 'VlpRJIPGtl9uzUlgBz_apka_secret' // <-- Yahan apna Pura Secret dalo
+    api_secret: 'VlpRJlPGtl9uzUIgBzMz91-L-YQ' // <-- Yahan apna Pura Secret dalo
 });
 
 // 3. Cloudinary Storage Setup
