@@ -175,7 +175,11 @@ async function loadMainCarousel() {
             container.innerHTML = slides.map((slide, index) => `
                 <div class="carousel-item ${index === 0 ? 'active' : ''}">
                     <div class="hero-overlay"></div>
-                    <img src="${BASE_URL}/images/${slide.image_path}" class="d-block w-100 hero-img" alt="${slide.title}"></img> 
+                    // Carousel img tag ko aise update karein
+<img src="${slide.image_path.startsWith('http') ? slide.image_path : BASE_URL + '/images/' + slide.image_path}" 
+     onerror="this.src='https://placehold.co/600x400?text=No+Image+Found'"
+     class="d-block w-100 hero-img" 
+     alt="${slide.title}">
                     <div class="carousel-caption hero-content text-start">
                         <span class="category-tag mb-3 d-inline-block">${slide.tag || 'EXCLUSIVE'}</span>
                         <h1 class="display-1 gold-text fw-bold mb-3">${slide.title}</h1>
