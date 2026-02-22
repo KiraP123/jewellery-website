@@ -19,8 +19,7 @@ app.listen(PORT, '0.0.0.0', () => {
 
 app.use('/images', express.static('images'));
 app.use('/admin', express.static('admin'));
-
-
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 
 app.use(cors({
@@ -40,6 +39,7 @@ app.get('/admin-panel', (req, res) => {
     // Check karo 'admin' folder ka naam aur 'admin.html' ki spelling sahi hai
     res.sendFile(path.join(__dirname, 'admin', 'admin.html'));
 });
+
 
 
 
