@@ -294,14 +294,14 @@
 
 
 
-/* .product-card-advance {
+.product-card-advance {
     background: #ffffff;
     border-radius: 15px;
     border: 1px solid #f1f1f1;
     overflow: hidden;
     position: relative;
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-} */
+}
 
 .product-card-advance:hover {
     transform: translateY(-10px);
@@ -461,35 +461,8 @@
 
 
 
-@media (max-width: 768px) {
-    /* --- Aapka Logo aur Carousel code waisa hi rahega --- */
 
-    /* 1. Card ki height ko auto se hata kar fix karo */
-    .product-card, .product-card-advance {
-        height: 380px !important; /* Mobile par itni height kaafi hai */
-        display: flex !important;
-        flex-direction: column !important;
-    }
-
-    /* 2. Image ko 250px se kam karke 180px karo */
-    .product-card img, .img-main-zoom {
-        height: 180px !important; /* Mobile ke liye choti height */
-        object-fit: contain !important; /* Jewellery kategi nahi */
-        width: 100%;
-    }
-
-    /* 3. Card ke andar ka gap kam karo */
-    .product-card .card-body, .content-wrapper {
-        padding: 10px !important;
-        justify-content: space-between;
-    }
-
-    /* 4. Button aur Price ko thoda chota karo */
-    .final-price-tag {
-        font-size: 1.2rem !important;
-    }
-}
-    /* @media (max-width: 768px) {
+    @media (max-width: 768px) {
     .sidebar-hover-actions, .arrival-actions {
         opacity: 1 !important;
         visibility: visible !important;
@@ -506,7 +479,7 @@
     .final-price-tag {
         font-size: 1.1rem !important;
     }
- }   */
+ }  
 
 
 
