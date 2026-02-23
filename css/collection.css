@@ -115,61 +115,54 @@
 
 
 
-/* Card Container ko fix karein */
-.product-card {
-    position: relative;
-    overflow: hidden;
-    height: 400px !important; /* Laptop/Desktop ke liye fix height */
-    display: flex;
-    flex-direction: column;
-    background: #fff;
-    border-radius: 15px;
-    transition: transform 0.3s ease;
-}
-
-/* Image container ko control karein */
-.product-img-wrapper {
-    height: 220px !important; /* Image ka area fix kar diya */
-    width: 100%;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #fdfbf7; /* Halka background color */
-}
-
-/* Image zoom effect aur sizing */
-.product-zoom {
-    max-height: 100%;
-    max-width: 100%;
-    object-fit: contain !important; /* Image kategi nahi, box mein fit hogi */
-    transition: transform 0.4s ease;
-}
-
-
-
-@media (max-width: 991px) {
-    /* ... aapka purana logo/navbar code ... */
-
-    .product-card {
-        height: 350px !important; /* Mobile par card ki height thodi kam */
-        margin-bottom: 10px;
+/* ============================================================
+   MOBILE SPECIFIC FIX (FOR CLEANER BOXES)
+   ============================================================ */
+@media (max-width: 768px) {
+    /* 1. Card ki poori height ko control mein rakho */
+    .product-card, .product-card-advance {
+        height: auto !important; /* Fixed height hata kar auto kiya */
+        min-height: 380px !important; 
+        max-height: 450px !important;
+        margin-bottom: 20px;
     }
 
-    .product-img-wrapper {
-        height: 180px !important; /* Mobile par image area chota */
+    /* 2. Image area ko chhota aur square type rakho */
+    .product-card img, .img-wrapper, .img-main-zoom {
+        height: 180px !important; /* Isse image lamba dabba nahi banegi */
+        width: 100% !important;
+        object-fit: contain !important; /* Jewellery asli shape mein rahegi */
+        background: #f8f9fa; /* Light background taaki empty space buri na lage */
+        padding: 10px;
     }
 
-    /* Mobile par hover icons hamesha dikhao kyunki mobile mein 'hover' nahi hota */
-    .hover-icons-container {
+    /* 3. Floating Icons (Heart/Eye) ko adjust karo */
+    .sidebar-hover-actions, .hover-icons-container {
         right: 10px !important;
+        top: 10px !important;
         opacity: 1 !important;
+        visibility: visible !important;
     }
-    
-    .wish-btn, .view-btn {
-        width: 35px !important;
-        height: 35px !important;
-        font-size: 15px !important;
+
+    /* 4. Text aur Button ka space kam karo */
+    .content-wrapper, .card-body {
+        padding: 12px !important;
+    }
+
+    .product-title-luxury, .card-title {
+        font-size: 1rem !important;
+        margin-bottom: 5px !important;
+    }
+
+    .final-price-tag {
+        font-size: 1.2rem !important;
+        display: block;
+        margin-top: 5px;
+    }
+
+    /* Add to Bag button thoda tight karo */
+    .btn-bag-luxury, .btn-primary {
+        padding: 10px !important;
+        font-size: 11px !important;
     }
 }
-
