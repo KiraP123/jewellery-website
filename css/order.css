@@ -1,4 +1,6 @@
-  /* --- General Styling --- */
+/* --- nav bar code styling  --- */
+
+/* --- General Styling (No Change) --- */
     .custom-logo-font { 
         font-family: 'Cinzel', serif; 
         font-weight: 700; 
@@ -7,11 +9,10 @@
     }
     .border-gold { border: 1px solid #a0845a !important; }
 
-    /* --- Laptop (Desktop) View --- */
+    /* --- Laptop (Desktop) View (No Change) --- */
     @media (min-width: 992px) {
         .navbar-brand img { height: 35px !important; }
-        .mobile-only-icons { display: none !important; } /* Laptop pe icons hidden */
-        
+        .mobile-only-icons { display: none !important; } 
         .navbar-collapse {
             display: flex !important;
             position: relative !important;
@@ -21,25 +22,45 @@
         .nav-link { padding: 0 12px !important; font-size: 14px; font-weight: 600; }
     }
 
-    /* --- Mobile (Phone) Stylish View --- */
+    /* --- Mobile (Phone) Stylish View - ONLY ALIGNMENT FIXED --- */
     @media (max-width: 991px) {
-        .navbar-brand {
-            position: absolute !important;
-            left: 50% !important;
-            transform: translateX(-50%) !important;
+        /* Isse logo aur icons takrayenge nahi */
+        .navbar .container {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
         }
-        .navbar-brand img { height: 26px !important; }
-        .custom-logo-font { font-size: 13px !important; margin-left: 5px; }
 
-        /* Icons on Right (Mobile Only) */
+        .navbar-brand {
+            /* Absolute hata kar static kiya taaki overlap na ho */
+            position: static !important;
+            transform: none !important;
+            margin: 0 auto 0 0 !important; /* Left aligned, but manageable */
+            display: flex !important;
+            align-items: center;
+            flex-shrink: 1;
+            min-width: 0;
+        }
+
+        .navbar-brand img { height: 26px !important; }
+        .custom-logo-font { 
+            font-size: 13px !important; 
+            margin-left: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis; /* Name bada hua toh '...' dikhega */
+        }
+
+        /* Icons on Right */
         .mobile-only-icons {
             display: flex !important;
             gap: 15px;
             order: 3;
+            flex-shrink: 0;
         }
         .mobile-only-icons i { color: #4a1d1f; font-size: 18px; }
 
-        /* Stylish Drawer */
+        /* --- Stylish Drawer (EXACTLY SAME AS YOUR CODE) --- */
         .navbar-collapse {
             position: fixed;
             top: 0;
@@ -72,6 +93,12 @@
             align-items: center;
         }
         .nav-link i { margin-right: 12px; color: #a0845a; width: 20px; text-align: center; }
+
+        /* Super small phone fix: taaki naam icons me na ghuse */
+        @media (max-width: 360px) {
+            .custom-logo-font { font-size: 11px !important; }
+            .mobile-only-icons { gap: 10px; }
+        }
     }
 
    .btn-outline-danger {
