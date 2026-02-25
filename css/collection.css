@@ -1,168 +1,141 @@
-/* style.css में जोड़ें या सुनिश्चित करें कि ये मौजूद हैं */
+/* ============================================================
+   TANISHQ-INSPIRED LUXURY SQUARE CARD (FINAL FIX)
+   ============================================================ */
 
-.carousel-item {
-    /* ज़रूरी: यह सुनिश्चित करता है कि इमेज कंटेनर को पूरी तरह से कवर करे */
-    background-size: cover; 
-    /* ज़रूरी: यह सुनिश्चित करता है कि इमेज का केंद्र हमेशा दिखे */
-    background-position: center; 
-    /* सुनिश्चित करें कि ऊँचाई पर्याप्त हो */
-    height: 70vh; /* डेस्कटॉप के लिए एक अच्छी ऊँचाई */
-    min-height: 400px;
-}
-
-.carousel-caption {
-    /* कैप्शन को और साफ़ दिखाने के लिए ओवरले जोड़ें */
-    background-color: rgba(0, 0, 0, 0.4); 
-    padding: 15px;
-    border-radius: 8px;
-}
-
-
-/* ////////// */
-
-
-/* Classic Gold Border for Search */
-.border-gold {
-    border-color: #a0845a !important;
-}
-
-.classic-search .form-control {
-    border-radius: 0; /* Classic square edges */
-    font-size: 0.9rem;
-}
-
-.classic-search .input-group-text {
-    border-radius: 0;
-}
-
-/* Laptop alignment fix */
-@media (min-width: 992px) {
-    .navbar .container {
-        flex-wrap: nowrap; /* Elements ko ek hi line mein rakhega */
-    }
-    
-    .navbar-nav {
-        flex-direction: row !important;
-        gap: 10px;
-    }
-}
-
-/* Mobile alignment fix */
-@media (max-width: 991px) {
-    .custom-logo-font {
-        font-size: 1.1rem !important; /* Mobile readability */
-    }
-    
-    .navbar-collapse {
-        background: white;
-        padding: 10px;
-        text-align: center;
-    }
-}
-
-
-
-/* --- Royal Collection Hover Icons --- */
-
-.hover-icons-container {
-    position: absolute;
-    top: 15px;
-    right: -60px; /* Shuru mein screen se bahar */
+.product-card-advance {
+    background: #ffffff;
+    border: 1px solid #f2f2f2;
+    border-radius: 8px; /* Tanishq subtle curves */
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    transition: all 0.4s ease-in-out;
-    z-index: 100 !important;
+    height: 100%;
+    transition: all 0.3s ease;
+    position: relative;
 }
 
-/* Card par mouse jate hi icons slide honge */
-.product-card:hover .hover-icons-container {
-    right: 15px !important;
+/* 1. Perfect Square Image Area */
+.img-wrapper {
+    position: relative;
+    width: 100%;
+    /* Isse dabba hamesha square rahega chahe photo kisi bhi size ki ho */
+    aspect-ratio: 1 / 1 !important; 
+    background: #fcfcfc;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.wish-btn, .view-btn {
-    width: 42px !important;
-    height: 42px !important;
-    background: #ffffff !important;
-    border: none !important;
-    border-radius: 50% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
-    color: #4a1d1f !important; /* Aapka theme brown */
-    font-size: 18px !important;
-    transition: 0.3s !important;
-    text-decoration: none !important;
+.img-main-zoom {
+    width: 100%;
+    height: 100%;
+    /* 'cover' use karenge taaki poora square fill ho jaye gaps na bachein */
+    object-fit: cover !important; 
+    transition: transform 0.6s ease;
 }
 
-.wish-btn:hover, .view-btn:hover {
-    background: #4a1d1f !important;
-    color: #ffffff !important;
-    transform: scale(1.1);
-}
-
-.wish-btn.active {
-    color: #ff4757 !important; /* Heart color when active */
-}
-
-/* Image zoom effect */
-.product-card:hover .product-zoom {
+/* Hover effect: Subtle zoom */
+.product-card-advance:hover .img-main-zoom {
     transform: scale(1.08);
 }
 
+/* 2. Content Section (Clean & Minimal) */
+.content-wrapper {
+    padding: 10px 8px !important;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
 
+/* Title: Locking to 1 line like high-end sites */
+.product-title-luxury {
+    font-size: 13px !important;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 5px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+}
 
+/* 3. Price & Stock Row (Compact) */
+.price-display-box {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
 
+.final-price-tag {
+    font-size: 15px !important;
+    font-weight: 700;
+    color: #111;
+}
 
-/* ============================================================
-   MOBILE SPECIFIC FIX (FOR CLEANER BOXES)
-   ============================================================ */
+.stock-status-inline {
+    font-size: 9px;
+    font-weight: 600;
+    color: #27ae60; /* Green for in-stock */
+    text-transform: uppercase;
+}
+
+/* 4. Tanishq Style Border Button */
+.btn-bag-luxury {
+    width: 100%;
+    padding: 8px !important;
+    background: transparent;
+    color: #83272d; /* Tanishq Maroon */
+    border: 1px solid #83272d;
+    border-radius: 4px;
+    font-size: 11px !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.btn-bag-luxury:hover {
+    background: #83272d;
+    color: #fff;
+}
+
+/* 5. Heart & Eye Icons (Top Right) */
+.sidebar-hover-actions {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 5;
+}
+
+.side-action-btn {
+    width: 30px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    color: #444;
+}
+
+/* 6. Mobile Fix: 2 columns per row */
 @media (max-width: 768px) {
-    /* 1. Card ki poori height ko control mein rakho */
-    .product-card, .product-card-advance {
-        height: auto !important; /* Fixed height hata kar auto kiya */
-        min-height: 380px !important; 
-        max-height: 450px !important;
-        margin-bottom: 20px;
+    .product-title-luxury {
+        font-size: 12px !important;
     }
-
-    /* 2. Image area ko chhota aur square type rakho */
-    .product-card img, .img-wrapper, .img-main-zoom {
-        height: 180px !important; /* Isse image lamba dabba nahi banegi */
-        width: 100% !important;
-        object-fit: contain !important; /* Jewellery asli shape mein rahegi */
-        background: #f8f9fa; /* Light background taaki empty space buri na lage */
-        padding: 10px;
-    }
-
-    /* 3. Floating Icons (Heart/Eye) ko adjust karo */
-    .sidebar-hover-actions, .hover-icons-container {
-        right: 10px !important;
-        top: 10px !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-    }
-
-    /* 4. Text aur Button ka space kam karo */
-    .content-wrapper, .card-body {
-        padding: 12px !important;
-    }
-
-    .product-title-luxury, .card-title {
-        font-size: 1rem !important;
-        margin-bottom: 5px !important;
-    }
-
     .final-price-tag {
-        font-size: 1.2rem !important;
-        display: block;
-        margin-top: 5px;
+        font-size: 14px !important;
     }
-
-    /* Add to Bag button thoda tight karo */
-    .btn-bag-luxury, .btn-primary {
-        padding: 10px !important;
-        font-size: 11px !important;
+    .btn-bag-luxury {
+        padding: 6px !important;
+        font-size: 10px !important;
     }
 }

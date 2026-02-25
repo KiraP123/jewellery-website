@@ -140,24 +140,24 @@
 .product-card {
     height: 100%; 
 
-} 
+}
 
 
 .product-card .card-body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-} 
+}
 
 
- .product-card .button-container {
+.product-card .button-container {
     display: flex;
     justify-content: center;
     gap: 10px;
     width: 100%;
     height: 250px;
     margin-top: 10px;
-} 
+}
 
 .product-card img {
     height: 250px; 
@@ -287,7 +287,13 @@
     }
 }
 
-/* --- Luxury Advance Product Card 
+
+
+
+
+
+
+
 .product-card-advance {
     background: #ffffff;
     border-radius: 15px;
@@ -303,29 +309,23 @@
 }
 
 /* Image & Badge Container */
-/* .img-wrapper {
+.img-wrapper {
     position: relative;
     height: 270px;
     overflow: hidden;
     background: #fdfdfd;
-} */
+}
 
-/* .img-main-zoom {
+.img-main-zoom {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.8s ease;
-} */
+}
 
-/* .product-card-advance:hover .img-main-zoom {
+.product-card-advance:hover .img-main-zoom {
     transform: scale(1.1);
-} */
-
-
-
-
-
-
+}
 
 /* Floating Purity Badge (Top Left) */
 .purity-floating-tag {
@@ -353,11 +353,11 @@
     gap: 12px;
     transition: all 0.4s ease-in-out;
     z-index: 6;
- }
+}
 
- /* .product-card-advance:hover .sidebar-hover-actions {
-    right: 15px; 
-}  */ 
+.product-card-advance:hover .sidebar-hover-actions {
+    right: 15px; /* Hover par andar */
+}
 
 .side-action-btn {
     width: 42px;
@@ -390,7 +390,13 @@
     text-align: left;
 }
 
-
+.product-title-luxury {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #222;
+    margin-bottom: 8px;
+}
 
 .specs-bar-luxury {
     display: flex;
@@ -432,12 +438,31 @@
 }
 
 /* Premium Button */
+.btn-bag-luxury {
+    width: 100%;
+    padding: 14px;
+    background: #222;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 1px;
+    transition: 0.3s;
+}
+
+.btn-bag-luxury:hover {
+    background: #c5a059;
+    box-shadow: 0 5px 20px rgba(197, 160, 89, 0.4);
+}
 
 
 
 
-/* Collection Mobile Fix */
-@media (max-width: 768px) {
+
+
+
+    @media (max-width: 768px) {
     .sidebar-hover-actions, .arrival-actions {
         opacity: 1 !important;
         visibility: visible !important;
@@ -448,16 +473,17 @@
     }
     
     .sidebar-hover-actions {
-        transform: translateX(0) !important; /* Agar pehle se koi transform tha toh */
+        transform: translateX(0) !important; 
     }
 
     .final-price-tag {
-        font-size: 1.1rem !important; /* Mobile pe price thodi badi dikhe */
+        font-size: 1.1rem !important;
     }
-}
+ }  
 
- /* Desktop Navbar Hover Fix  */
-@media (min-width: 992px) {
+
+
+    @media (min-width: 992px) {
     
     .cart-hover-dropdown {
         position: relative;
