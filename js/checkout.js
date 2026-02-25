@@ -157,14 +157,23 @@ async function proceedToCheckoutAction(event) {
 
 
 const orderData = {
-        customer_name: document.getElementById('firstName').value + " " + (document.getElementById('lastName')?.value || ""),
-        user_email: document.getElementById('email').value,
-        pincode: pincodeValue, // ✨ Yahan seedha variable use karo jo upar banaya hai
-        phone: document.getElementById('mobile').value,
-        address: document.getElementById('address').value,
-        total_amount: document.getElementById('checkoutGrandTotal').innerText.replace(/[^0-9]/g, ''), 
-        items: checkoutCart // Cart variable jo upar check kiya hai
-    };
+    customer_name: (document.getElementById('firstName')?.value || "") + " " + (document.getElementById('lastName')?.value || ""),
+    user_email: document.getElementById('email')?.value || "",
+    pincode: pincodeValue, 
+    phone: document.getElementById('mobile')?.value || "",
+    address: document.getElementById('address')?.value || "",
+    // Yahan '?' lagane se code crash nahi hoga agar ID galat hai
+    total_amount: (document.getElementById('checkoutGrandTotal')?.innerText || "0").replace(/[^0-9]/g, ''), 
+    
+    items: checkoutCart.map(item => ({
+        id: item.id,
+        name: item.name,
+        quantity: Number(item.quantity || item.qty || 1), 
+        price: item.price
+    }))
+};
+
+console.log("BHAI AB TOH MESSAGE AAYEGA:", orderData);
 
     try {
 

@@ -590,6 +590,13 @@ app.post('/api/update-tracking', (req, res) => {
     });
 });
 
+
+
+
+
+
+
+
 app.post('/api/place-order', (req, res) => {
     const uniqueOrderId = Math.floor(10000000 + Math.random() * 90000000);
     const { user_email, pincode, customer_name, items, total_amount, address, phone } = req.body;
@@ -615,22 +622,74 @@ app.post('/api/place-order', (req, res) => {
             return res.status(500).json({ success: false, error: err.message });
         }
 
+
+
+
+
+
         // --- STOCK MINUS LOGIC START ---
         if (items && Array.isArray(items)) {
             items.forEach(item => {
-                // Har product ki quantity 1 kam hogi (AND stock_qty > 0 taaki minus mein na jaye)
-                const updateStockSql = "UPDATE products SET stock_qty = stock_qty - 1 WHERE id = ? AND stock_qty > 0";
-                db.query(updateStockSql, [item.id], (err) => {
-                    if (err) console.error("❌ Stock Minus Error for ID " + item.id + ":", err.message);
+                // Pehle yahan '- 1' tha, ab hum '- ?' karke item.quantity bhejenge
+                const qtyToMinus = Number(item.quantity) || 1; // Safety ke liye Number() lagaya hai
+                
+                const updateStockSql = "UPDATE products SET stock_qty = stock_qty - ? WHERE id = ? AND stock_qty >= ?";
+                
+                db.query(updateStockSql, [qtyToMinus, item.id, qtyToMinus], (err) => {
+                    if (err) {
+                        console.error("❌ Stock Minus Error for ID " + item.id + ":", err.message);
+                    } else {
+                        console.log(`✅ Stock reduced by ${qtyToMinus} for Product ID: ${item.id}`);
+                    }
                 });
             });
         }
-        // --- STOCK MINUS LOGIC END ---
 
         console.log("✅ Order Saved & Stock Updated! ID:", uniqueOrderId);
         res.json({ success: true, orderId: uniqueOrderId });
     });
 });
+// app.post('/api/place-order', (req, res) => {
+//     const uniqueOrderId = Math.floor(10000000 + Math.random() * 90000000);
+//     const { user_email, pincode, customer_name, items, total_amount, address, phone } = req.body;
+    
+//     // Items ko string mein badlein DB mein save karne ke liye
+//     const itemsStr = JSON.stringify(items || []);
+
+//     const sql = "INSERT INTO orders (user_email, pincode, customer_name, items, total_amount, address, phone, status, custom_order_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    
+//     db.query(sql, [
+//         user_email || 'No Email', 
+//         pincode || 'no pincode',
+//         customer_name || 'Guest', 
+//         itemsStr, 
+//         total_amount || 0, 
+//         address || 'No Address', 
+//         phone || 'No Phone',
+//         'ORDER CONFIRM', 
+//         uniqueOrderId
+//     ], (err, result) => {
+//         if (err) {
+//             console.error("❌ SQL Insert Error:", err.message);
+//             return res.status(500).json({ success: false, error: err.message });
+//         }
+
+//         // --- STOCK MINUS LOGIC START ---
+//         if (items && Array.isArray(items)) {
+//             items.forEach(item => {
+//                 // Har product ki quantity 1 kam hogi (AND stock_qty > 0 taaki minus mein na jaye)
+//                 const updateStockSql = "UPDATE products SET stock_qty = stock_qty - 1 WHERE id = ? AND stock_qty > 0";
+//                 db.query(updateStockSql, [item.id], (err) => {
+//                     if (err) console.error("❌ Stock Minus Error for ID " + item.id + ":", err.message);
+//                 });
+//             });
+//         }
+//         // --- STOCK MINUS LOGIC END ---
+
+//         console.log("✅ Order Saved & Stock Updated! ID:", uniqueOrderId);
+//         res.json({ success: true, orderId: uniqueOrderId });
+//     });
+// });
 
 
 // Order Tracking ke liye status fetch karna
@@ -678,7 +737,11 @@ app.get('/api/user-orders/:email', (req, res) => {
     });
 });
 
-// --- CANCEL ORDER API (WITH AUTOMATIC STOCK RESTORE) ---
+
+
+
+
+
 app.put('/api/cancel-order/:id', (req, res) => {
     const orderId = req.params.id;
 
@@ -712,12 +775,28 @@ app.put('/api/cancel-order/:id', (req, res) => {
                 // Step 4: AGAR SUCCESSFUL CANCEL HUA, TOH STOCK WAPAS PLUS KARO
                 try {
                     const items = JSON.parse(order.items || "[]");
-                    items.forEach(item => {
-                        const restoreStockSql = "UPDATE products SET stock_qty = stock_qty + 1 WHERE id = ?";
-                        db.query(restoreStockSql, [item.id], (err) => {
-                            if (err) console.error(`❌ Restore Stock Error for ID ${item.id}:`, err.message);
-                        });
-                    });
+
+
+
+                    // --- Step 4 mein sirf ye 3 line badlo (items.forEach ke andar) ---
+items.forEach(item => {
+    // 1. Asali quantity nikaalo (jo 3 mangayi thi)
+    const qtyToRestore = Number(item.quantity || 1); 
+
+    // 2. Query mein '+ 1' ki jagah '+ ?' dalo
+    const restoreStockSql = "UPDATE products SET stock_qty = stock_qty + ? WHERE id = ?";
+    
+    // 3. Array mein qtyToRestore ko pehle dalo
+    db.query(restoreStockSql, [qtyToRestore, item.id], (err) => {
+        if (err) console.error(`❌ Restore Stock Error for ID ${item.id}:`, err.message);
+    });
+});
+                    // items.forEach(item => {
+                    //     const restoreStockSql = "UPDATE products SET stock_qty = stock_qty + 1 WHERE id = ?";
+                    //     db.query(restoreStockSql, [item.id], (err) => {
+                    //         if (err) console.error(`❌ Restore Stock Error for ID ${item.id}:`, err.message);
+                    //     });
+                    // });
                     console.log(`✅ Order ${orderId} cancelled and stock restored.`);
                     res.json({ success: true, message: "Order cancelled and stock updated!" });
                 } catch (parseErr) {
@@ -728,6 +807,56 @@ app.put('/api/cancel-order/:id', (req, res) => {
         });
     });
 });
+// // --- CANCEL ORDER API (WITH AUTOMATIC STOCK RESTORE) ---
+// app.put('/api/cancel-order/:id', (req, res) => {
+//     const orderId = req.params.id;
+
+//     // Step 1: Pehle check karo ki order cancel hone layak hai ya nahi aur uske items nikaalo
+//     const checkSql = "SELECT items, status FROM orders WHERE id = ?";
+    
+//     db.query(checkSql, [orderId], (err, rows) => {
+//         if (err) return res.status(500).json({ success: false, error: err.message });
+//         if (rows.length === 0) return res.status(404).json({ success: false, message: "Order not found" });
+
+//         const order = rows[0];
+//         const currentStatus = order.status.toUpperCase();
+        
+//         // Step 2: Sirf inhi status par cancel allow karein
+//         const allowableStatuses = ['ORDER CONFIRM', 'QUALITY CHECK', 'ORDER PLACED'];
+        
+//         if (!allowableStatuses.includes(currentStatus)) {
+//             return res.status(400).json({ 
+//                 success: false, 
+//                 message: `Order cannot be cancelled because it is already '${order.status}'` 
+//             });
+//         }
+
+//         // Step 3: Status ko 'Cancelled' mein update karein
+//         const updateSql = "UPDATE orders SET status = 'Cancelled' WHERE id = ?";
+        
+//         db.query(updateSql, [orderId], (err, result) => {
+//             if (err) return res.status(500).json({ success: false, error: err.message });
+
+//             if (result.affectedRows > 0) {
+//                 // Step 4: AGAR SUCCESSFUL CANCEL HUA, TOH STOCK WAPAS PLUS KARO
+//                 try {
+//                     const items = JSON.parse(order.items || "[]");
+//                     items.forEach(item => {
+//                         const restoreStockSql = "UPDATE products SET stock_qty = stock_qty + 1 WHERE id = ?";
+//                         db.query(restoreStockSql, [item.id], (err) => {
+//                             if (err) console.error(`❌ Restore Stock Error for ID ${item.id}:`, err.message);
+//                         });
+//                     });
+//                     console.log(`✅ Order ${orderId} cancelled and stock restored.`);
+//                     res.json({ success: true, message: "Order cancelled and stock updated!" });
+//                 } catch (parseErr) {
+//                     console.error("❌ JSON Parse Error:", parseErr);
+//                     res.json({ success: true, message: "Order cancelled but stock restore failed (Data Error)" });
+//                 }
+//             }
+//         });
+//     });
+// });
 
 const cron = require('node-cron');
 
