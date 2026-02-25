@@ -118,11 +118,13 @@ function updateCartUI() {
 
                 <div class="row g-3 align-items-center">
                   <div class="col-4 col-md-2 text-center">
-                               <img src="http://localhost:3000/images/${item.image}" class="rounded border me-3" style="width:65px; height:65px; object-fit:contain;">
-                            class="img-fluid rounded-3 border p-1" 
-                           style="width: 65px; height: 65px; object-fit: contain; background: #fdfdfd;"
-                         onerror="this.src='images/placeholder.png'">
-                  </div>
+                        <div class="position-relative">
+                            <img src="${item.image.startsWith('http') ? item.image : `${BASE_URL}/images/${item.image}`}"
+                             class="img-fluid rounded-3 border p-1" 
+                             style="max-height: 90px; width: 100%; object-fit: contain; background: #fdfdfd;"
+                             onerror="this.src='https://placehold.co/100'">
+                        </div>
+                    </div>
 
                     <div class="col-8 col-md-6">
                         <div class="d-flex flex-column h-100">
