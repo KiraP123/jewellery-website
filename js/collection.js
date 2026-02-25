@@ -96,7 +96,7 @@ const btnText = stockQty > 0 ? `<i class="fa-solid fa-bag-shopping me-2"></i> AD
                 <div class="product-card-advance">
                     <div class="img-wrapper">
                         <div class="purity-floating-tag">${product.purity || '916'}K</div>
-                        <img src="http://localhost:3000/images/${product.image}" class="img-main-zoom" onerror="this.src='https://via.placeholder.com/300'"></img>
+                        <img src="${product.image && product.image.startsWith('http') ? product.image : `${BASE_URL}/images/${product.image}`}" class="img-main-zoom" onerror="this.src='https://placehold.co/300'">
                         
                         <div class="sidebar-hover-actions">
                             <button class="side-action-btn ${isFav ? 'active' : ''}" onclick="toggleWishlist(${product.id})" title="Wishlist">
