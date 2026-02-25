@@ -96,7 +96,7 @@ const btnText = stockQty > 0 ? `<i class="fa-solid fa-bag-shopping me-2"></i> AD
                 <div class="product-card-advance">
                     <div class="img-wrapper">
                         <div class="purity-floating-tag">${product.purity || '916'}K</div>
-                        </div> <small>${stockBadge}</small>
+                        
                          <img src="${product.image && product.image.startsWith('http') ? product.image : `${BASE_URL}/images/${product.image}`}" class="img-main-zoom" onerror="this.src='https://placehold.co/300'">
                         
                         <div class="sidebar-hover-actions">
@@ -113,7 +113,7 @@ const btnText = stockQty > 0 ? `<i class="fa-solid fa-bag-shopping me-2"></i> AD
                         <h6 class="product-title-luxury">${product.name}</h6>
                         <div class="price-display-box">
                             <div class="final-price-tag">₹ ${finalPriceWithGST.toLocaleString('en-IN')}
-                          
+                          </div> <small>${stockBadge}</small>
                         </div> 
                         <button class="btn-bag-luxury" ${btnStatus} onclick="addToCart(${product.id})">
                          ${btnText}
