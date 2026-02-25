@@ -159,12 +159,29 @@ function updateCartUI() {
                     </div>
 
                     <div class="col-12 col-md-4 border-top-mobile pt-3-mobile">
-                        <div class="d-flex justify-content-between align-items-center flex-md-column align-items-md-end h-100">
-                            <div class="input-group input-group-sm shadow-sm rounded-pill overflow-hidden" style="width: 110px; border: 1px solid #eee;">
-                                <button class="btn btn-white border-0 px-2" onclick="changeQty(${index}, -1)"><i class="bi bi-dash"></i></button>
-                                <input type="text" class="form-control text-center border-0 fw-bold bg-white" value="${qty}" readonly style="font-size: 13px;">
-                                <button class="btn btn-white border-0 px-2" onclick="changeQty(${index}, 1)"><i class="bi bi-plus"></i></button>
-                            </div>
+
+
+                       <div class="d-flex align-items-center" style="gap: 15px;">
+    <div class="input-group shadow-sm rounded-pill overflow-hidden" 
+         style="width: 100px !important; flex: none !important; border: 1px solid #eee; background: #fff; height: 30px;">
+        
+        <button class="btn btn-white border-0 px-2" onclick="changeQty(${index}, -1)" style="box-shadow: none; padding: 0 8px;">
+            <i class="bi bi-dash" style="font-size: 12px;"></i>
+        </button>
+        
+        <input type="text" class="form-control text-center border-0 fw-bold bg-white p-0" 
+               value="${qty}" readonly 
+               style="font-size: 13px; pointer-events: none; box-shadow: none; background: transparent !important;">
+        
+        <button class="btn btn-white border-0 px-2" onclick="changeQty(${index}, 1)" style="box-shadow: none; padding: 0 8px;">
+            <i class="bi bi-plus" style="font-size: 12px;"></i>
+        </button>
+    </div>
+
+    </div>
+
+
+
 
                             <div class="text-end mt-md-3">
                                 <small class="text-muted d-block fw-bold" style="font-size: 9px; letter-spacing: 0.5px;">SUBTOTAL</small>

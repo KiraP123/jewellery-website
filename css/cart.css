@@ -50,19 +50,6 @@
         z-index: 10000 !important; /* Cart Summary se zyada */
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 .cart-item-checkbox {
     width: 1.2rem;
     height: 1.2rem;
@@ -75,3 +62,37 @@
 }
 
 
+
+/* Cart Item Laptop Gap Fix */
+.cart-item-container {
+    display: flex;
+    gap: 20px; /* Space between Image and Text */
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 15px;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #f2f2f2;
+}
+
+/* Laptop View (Desktop) specifically */
+@media (min-width: 992px) {
+    .cart-item-container {
+        padding: 20px 30px; /* Extra breathing space for laptop */
+        gap: 40px; /* More gap on big screens */
+    }
+    
+    /* Order Summary chipak raha ho toh margin left add karein */
+    .order-summary-sidebar {
+        margin-left: 30px;
+    }
+}
+
+/* Image scaling fix */
+.cart-item-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
