@@ -169,7 +169,8 @@ const orderData = {
         id: item.id,
         name: item.name,
         quantity: Number(item.quantity || item.qty || 1), 
-        price: item.price
+        price: item.price,
+        image: item.image
     }))
 };
 
