@@ -68,8 +68,8 @@ function renderWishlist() {
     
     tableBody.innerHTML = wishlistProducts.map(product => {
         const displayPrice = product.real_price || 0;
-    //    const imageSrc = `${BASE_URL}/images/${product.image}`;
-       const imageSrc = `images/${product.image}`;
+       const imageSrc = `${BASE_URL}/images/${product.image}`;
+    //    const imageSrc = `images/${product.image}`;
 
 
         const stockQty = parseInt(product.stock_qty) || 0;

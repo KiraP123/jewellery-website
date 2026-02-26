@@ -269,7 +269,7 @@ const stockDisplay = (stockQty > 0)
                 <div class="col-3">
                     <div class="spec-card shadow-sm border text-center p-1">
                         <small class="text-muted" style="font-size: 10px;">METAL</small>
-                        <span class="d-block fw-bold small">${p.purity}K Gold</span>
+                        <span class="d-block fw-bold small">${p.purity}K</span>
                     </div>
                 </div>
                 <div class="col-3">
@@ -289,7 +289,7 @@ const stockDisplay = (stockQty > 0)
             <div class="mb-4">
                 <label class="fw-bold small mb-2 d-block text-uppercase">Choose Different Size</label>
                 <div class="d-flex gap-2 flex-wrap" id="sizeSelector">
-                    ${[10, 12, 14, 16, 18, 20 ,30].map(s => `
+                    ${[10, 12, 14, 16, 18, 20].map(s => `
                         <button class="btn btn-outline-secondary btn-sm rounded-circle size-btn" 
                                 onclick="setProductSize(this, '${s}')">${s}</button>
                     `).join('')}
