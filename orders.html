@@ -271,200 +271,104 @@
 async function fetchOrders(email) {
     const list = document.getElementById('ordersList');
     try {
-       const response = await fetch(`${BASE_URL}/api/user-orders/${encodeURIComponent(email)}`);
+        const response = await fetch(`${BASE_URL}/api/user-orders/${encodeURIComponent(email)}`);
         const data = await response.json();
 
- 
-        
         list.innerHTML = ''; 
 
         if(data.success && data.orders.length > 0) {
             data.orders.forEach(order => {
                 const items = JSON.parse(order.items || "[]");
 
-                
-                // 1. Database se Pincode uthao
-                const userPin = String(order.pincode || "").trim();
+                // --- SHOP/CART STYLE IMAGE LOGIC ---
+                let firstImage = ""; // Default Khali rakhein (No Logo)
 
-                // 2. Order Date Fix
-                const oDate = new Date(order.created_at);
+                if (items.length > 0) {
+                    const itemData = items[0];
+                    const productId = Number(itemData.id);
 
-                // 2. ✨ Exact Time formatting (Database wala same time)
-                    const timeString = oDate.toLocaleTimeString('en-IN', { 
-                        hour: '2-digit', 
-                        minute: '2-digit', 
-                        second: '2-digit', // Agar second bhi chahiye toh
-                        hour12: true 
-                    });
+                    // window.productData (Master List) se match karein
+                    if (window.productData && window.productData.length > 0) {
+                        const foundProduct = window.productData.find(p => Number(p.id) === productId);
 
-                const orderDateStr = !isNaN(oDate) ? oDate.toLocaleDateString('en-IN', { 
-                    day: 'numeric', month: 'short', year: 'numeric' 
-                }) : "Date Pending";
-
-             const fullOrderTime = `${orderDateStr} at ${timeString}`; // Jaise: 5 Feb 2026 at 10:29 AM
-
-                // 3. 📅 Delivery Date Logic (Database Pincode Based)
-                const getDeliveryDate = (days) => {
-                    let d = !isNaN(oDate.getTime()) ? new Date(oDate) : new Date();
-                    d.setDate(d.getDate() + days);
-                    if(d.getDay() === 0) d.setDate(d.getDate() + 1); // Sunday Skip
-                    return d.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' });
-                };
-
-                let finalDeliveryDate = "";
-                // Same logic as your Product-Details
-                if (["400067", "400064", "400091", "400092", "400097", "400095"].includes(userPin)) {
-                    finalDeliveryDate = getDeliveryDate(1); // Kandivali Zones
-                } else if (userPin.startsWith('400') || userPin.startsWith('401')) {
-                    finalDeliveryDate = getDeliveryDate(2); // Mumbai/Suburbs
-                } else {
-                    finalDeliveryDate = getDeliveryDate(6); // Outside Mumbai
+                        if (foundProduct && foundProduct.image) {
+                            const imgPath = foundProduct.image;
+                            firstImage = imgPath.startsWith('http') 
+                                ? imgPath 
+                                : `https://res.cloudinary.com/dmmyehrzi/image/upload/jewellery_site/${imgPath}`;
+                        }
+                    }
                 }
-                  
-                //    const canCancel = ["pending", "order placed"].includes(order.status.toLowerCase());
 
-                   // --- NAYA LOGIC YAHAN HAI ---
-                const currentStatusRaw = order.status.toLowerCase();
-                let cancelBtnHTML = "";
+                console.log(`Order #RJ${order.custom_order_id}: Image Linked ->`, firstImage);
 
-                if (currentStatusRaw === "cancelled") {
-    cancelBtnHTML = `<button class="btn btn-secondary w-100 btn-sm py-2" disabled><i class="bi bi-x-circle me-1"></i> Cancelled</button>`;
-} else if (currentStatusRaw === "delivered") {
-    cancelBtnHTML = `<button class="btn btn-outline-secondary w-100 btn-sm py-2" disabled>Delivered</button>`;
-} else if (currentStatusRaw === "out for delivery" || currentStatusRaw === "insured transit") {
-    // In stages par order cancel nahi hona chahiye
-    cancelBtnHTML = `<button class="btn btn-light w-100 btn-sm py-2 text-muted" disabled title="In Transit">Cannot Cancel</button>`;
-} else {
-    // Normal cancel button for 'Order Confirm' or 'Quality Check'
-    cancelBtnHTML = `<button onclick="cancelOrder('${order.id}', '${order.custom_order_id}')" class="btn btn-outline-danger w-100 btn-sm py-2">Cancel Order</button>`;
-}
+                // --- DATE & STATUS LOGIC ---
+                const oDate = new Date(order.created_at);
+                const orderTime = oDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) + 
+                                 " at " + oDate.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
 
+                const statusRaw = order.status || "Order Confirm";
+                const statusClass = statusRaw.toLowerCase().replace(/\s/g, '-');
 
+                // --- HTML RENDER ---
+                list.innerHTML += `
+                <div class="col-12 col-md-6 col-xl-4 mb-4">
+                    <div class="card order-card p-4 h-100 shadow-sm border-0">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="status-badge status-${statusClass}">${statusRaw}</span>
+                            <small class="text-muted fw-bold">#RJ${order.custom_order_id || order.id}</small>
+                        </div>
+                        
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="product-img-container me-3 border rounded shadow-sm" style="width:75px; height:75px; overflow:hidden; background:#fff; display:flex; align-items:center; justify-content:center;">
+                                ${firstImage ? `
+                                    <img src="${firstImage}" 
+                                         alt="Product"
+                                         style="width: 100%; height: 100%; object-fit: contain; padding: 5px;">
+                                ` : `
+                                    <div style="font-size: 10px; color: #ccc; text-align:center;">No<br>Image</div>
+                                `}
+                            </div>
+                            <div>
+                                <h6 class="mb-1 fw-bold">${items.length} Item(s)</h6>
+                                <p class="text-muted small mb-0">Ordered: <b>${orderTime}</b></p>
+                            </div>
+                        </div>
 
-// --- JAISE SHOP/CART MEIN IMAGE DHUNDTE HAIN (NO DEFAULT LOGO) ---
-let firstImage = ""; // Khali rakhein taaki logo na aaye
-
-if (items && items.length > 0) {
-    const itemData = items[0];
-    const productId = Number(itemData.id);
-
-    // Master list (window.productData) se match karein
-    if (window.productData && window.productData.length > 0) {
-        const foundProduct = window.productData.find(p => Number(p.id) === productId);
-
-        if (foundProduct && foundProduct.image) {
-            const imgPath = foundProduct.image;
-            // Agar full URL hai toh wahi, varna Cloudinary prefix
-            firstImage = imgPath.startsWith('http') 
-                ? imgPath 
-                : `https://res.cloudinary.com/dmmyehrzi/image/upload/jewellery_site/${imgPath}`;
+                        <div class="mt-auto pt-3 border-top">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-muted small">Total Paid:</span>
+                                <h4 class="fw-bold mb-0" style="color: #4a1d1f">₹${Number(order.total_amount).toLocaleString('en-IN')}</h4>
+                            </div>
+                            <div class="row g-2">
+                                <div class="col-6"><button class="btn btn-outline-dark w-100 btn-sm">Track</button></div>
+                                <div class="col-6"><button class="btn btn-dark w-100 btn-sm">Invoice</button></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            });
         }
+    } catch (err) {
+        console.error("Fetch Error:", err);
     }
 }
 
-// Console mein check karne ke liye (Debug)
-console.log("Final Image Found for ID " + items[0].id + ":", firstImage);
-
-// let firstImage = 'images/LOGORJ.png'; 
-// if (items.length > 0 && items[0].image) {
-//     const imgPath = items[0].image;
-//     // Agar link http se shuru hota hai toh wahi rakho, varna BASE_URL jodo
-//     firstImage = imgPath.startsWith('http') ? imgPath : `${BASE_URL}/images/${imgPath}`;
-// }
-
-const statusRaw = order.status || "Order Confirm";
-const statusClass = statusRaw.toLowerCase().replace(/\s/g, '-'); //order.status
-
-
-list.innerHTML += `
-    <div class="col-12 col-md-6 col-xl-4 mb-4">
-        <div class="card order-card p-4 h-100 shadow-sm border-0">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <span class="status-badge status-${statusClass}">${statusRaw}</span>
-                <small class="text-muted fw-bold">#RJ${order.custom_order_id || order.id}</small>
-            </div>
-            
-            <div class="d-flex align-items-center mb-3">
-                <div class="product-img-container me-3 border rounded shadow-sm" style="width:70px; height:70px; overflow:hidden;">
-            
-                 <div class="product-img-container me-3 border rounded shadow-sm" style="width:75px; height:75px; overflow:hidden; background:#fff;">
-    <img src="${firstImage}" 
-         alt="Product"
-         style="width: 100%; height: 100%; object-fit: contain; padding: 5px; display: ${firstImage ? 'block' : 'none'};">
-</div>
-                </div>
-                <div>
-                    <h6 class="mb-1 fw-bold">${items.length} Item(s)</h6>
-                    <p class="text-muted small mb-0">Ordered on: <b>${fullOrderTime}</b></p>
-                </div>
-            </div>
-
-            <div class="delivery-status-box p-3 rounded-3 mb-4" style="background: #fdf8f2; border-left: 4px solid #a0845a;">
-                <div class="d-flex align-items-center">
-                    <i class="bi bi-truck fs-4 me-3" style="color: #4a1d1f;"></i>
-                    <div>
-                        <p class="mb-0 text-uppercase fw-bold" style="font-size: 10px; color: #a0845a; letter-spacing: 1px;">Expected Arrival</p>
-                        <p class="mb-0 fw-bold text-dark">${order.status === 'Cancelled' ? 'Cancelled' : finalDeliveryDate}</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-auto">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="text-muted small">Total Paid:</span>
-                    <h4 class="fw-bold mb-0" style="color: #4a1d1f">₹${Number(order.total_amount).toLocaleString('en-IN')}</h4>
-                </div>
-                
-                <div class="row g-2">
-                    <div class="col-6">
-                        <button onclick="goToTrack('${order.custom_order_id || order.id}')" class="btn btn-outline-dark w-100 btn-sm py-2">Track Order</button>
-                    </div>
-                    <div class="col-6">
-                        <button onclick="viewInvoice('${order.custom_order_id || order.id}')" class="btn btn-dark w-100 btn-sm py-2">Invoice</button>
-                    </div>
-
-                    <div class="col-12 mt-2">
-                        ${cancelBtnHTML} 
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>`;
-            });
-
-
+// --- PAGE LOAD LOGIC (Wait for ProductData) ---
+window.onload = () => {
+    setTimeout(() => {
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        if (userData && userData.email) {
+            // Agar window.productData abhi bhi nahi aaya, toh thoda aur wait karein
+            if (!window.productData || window.productData.length === 0) {
+                console.log("Waiting extra for productData...");
+                setTimeout(() => fetchOrders(userData.email), 1000);
             } else {
-    // Jab koi order na mile (Empty State)
-    list.innerHTML = `
-        <div class="text-center py-5 w-100 animate__animated animate__fadeIn">
-            <div class="d-flex justify-content-center">
-                <dotlottie-player 
-                    src="https://lottie.host/37052c92-e422-442d-8b43-838e759d09d7/1vVI21Qwy1.lottie"
-                    background="transparent" 
-                    speed="1" 
-                    style="width: 250px; height: 250px;" 
-                    loop 
-                    autoplay>
-                </dotlottie-player>
-            </div>
-            <h4 class="fw-bold mt-3" style="color: #2c3e50;">No Orders Yet!</h4>
-            <p class="text-muted">It seems you haven't placed any orders with us yet.</p>
-            <a href="collection.html" class="btn btn-outline-dark rounded-pill px-4 mt-2 shadow-sm">
-                START SHOPPING
-            </a>
-        </div>`;
-}
-} catch (err) {
-    console.error("Fetch Error:", err);
-    // Error aane par bhi thoda saaf-suthra UI dikhe
-    list.innerHTML = `
-        <div class="text-center py-5 w-100">
-            <div class="alert alert-danger d-inline-block px-5 rounded-pill shadow-sm">
-                <i class="bi bi-exclamation-triangle-fill me-2"></i> Error loading orders. Please try again.
-            </div>
-        </div>`;
-}
-}
+                fetchOrders(userData.email);
+            }
+        }
+    }, 1500); 
+};
 
 
 
@@ -510,18 +414,6 @@ async function cancelOrder(dbId, customId) {
         }
     }
 }
-
-
-
-window.onload = () => {
-    // Thoda zyada wait karte hain taaki common.js ka data aa jaye
-    setTimeout(() => {
-        const userData = JSON.parse(localStorage.getItem('userData'));
-        if (userData && userData.email) {
-            fetchOrders(userData.email);
-        }
-    }, 1200); // 1.2 second wait
-};
 
 
     function goToTrack(id) { window.location.href = `track.html?id=${id}`; }
