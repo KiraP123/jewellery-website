@@ -342,29 +342,29 @@ async function fetchOrders(email) {
 
 // fetchOrders function ke andar jahan firstImage banti hai:
 
-let firstImage = 'images/PNGLOGO1.png'; // Default logo
+// let firstImage = 'images/PNGLOGO1.png'; // Default logo
 
-if (items.length > 0 && items[0].image) {
-    const imgPath = items[0].image;
-
-    if (imgPath.startsWith('http')) {
-        // CASE 1: Agar database mein pura link hai (https://res.cloudinary.com...)
-        // Toh kuch mat jodo, direct link use karo
-        firstImage = imgPath;
-    } else {
-        // CASE 2: Agar database mein sirf '1767...jpg' jaisa naam hai
-        // Toh use images folder se uthao
-        firstImage = `images/${imgPath}`;
-    }
-}
-
-
-// let firstImage = 'images/PNGLOGO1.png'; 
 // if (items.length > 0 && items[0].image) {
 //     const imgPath = items[0].image;
-//     // Agar link http se shuru hota hai toh wahi rakho, varna BASE_URL jodo
-//     firstImage = imgPath.startsWith('http') ? imgPath : `${BASE_URL}/images/${imgPath}`;
+
+//     if (imgPath.startsWith('http')) {
+//         // CASE 1: Agar database mein pura link hai (https://res.cloudinary.com...)
+//         // Toh kuch mat jodo, direct link use karo
+//         firstImage = imgPath;
+//     } else {
+//         // CASE 2: Agar database mein sirf '1767...jpg' jaisa naam hai
+//         // Toh use images folder se uthao
+//         firstImage = `images/${imgPath}`;
+//     }
 // }
+
+
+let firstImage = 'images/LOGORJ.png'; 
+if (items.length > 0 && items[0].image) {
+    const imgPath = items[0].image;
+    // Agar link http se shuru hota hai toh wahi rakho, varna BASE_URL jodo
+    firstImage = imgPath.startsWith('http') ? imgPath : `${BASE_URL}/images/${imgPath}`;
+}
 
 const statusRaw = order.status || "Order Confirm";
 const statusClass = statusRaw.toLowerCase().replace(/\s/g, '-'); //order.status
@@ -381,7 +381,7 @@ list.innerHTML += `
             <div class="d-flex align-items-center mb-3">
                 <div class="product-img-container me-3 border rounded shadow-sm" style="width:70px; height:70px; overflow:hidden;">
             
-                  <img src="${firstImage}" onerror="this.src='images/PNGLOGO1.png';">
+                  <img src="${firstImage}" onerror="this.src='';">
                 </div>
                 <div>
                     <h6 class="mb-1 fw-bold">${items.length} Item(s)</h6>
