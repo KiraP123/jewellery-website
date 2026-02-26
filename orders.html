@@ -270,27 +270,26 @@
 
 async function fetchOrders(email) {
     const list = document.getElementById('ordersList');
+    // Jab tak loading ho rahi hai, screen khali rakhein
+    list.innerHTML = '<div class="text-center py-5">Loading your premium orders...</div>';
+
     try {
         const response = await fetch(`${BASE_URL}/api/user-orders/${encodeURIComponent(email)}`);
         const data = await response.json();
 
-        list.innerHTML = ''; 
+        list.innerHTML = ''; // Loading text hatayein
 
         if(data.success && data.orders.length > 0) {
             data.orders.forEach(order => {
                 const items = JSON.parse(order.items || "[]");
-
-                // --- SHOP/CART STYLE IMAGE LOGIC ---
-                let firstImage = ""; // Default Khali rakhein (No Logo)
+                let firstImage = ""; 
 
                 if (items.length > 0) {
-                    const itemData = items[0];
-                    const productId = Number(itemData.id);
+                    const productId = Number(items[0].id);
 
-                    // window.productData (Master List) se match karein
+                    // --- LIVE MAPPING LOGIC ---
                     if (window.productData && window.productData.length > 0) {
                         const foundProduct = window.productData.find(p => Number(p.id) === productId);
-
                         if (foundProduct && foundProduct.image) {
                             const imgPath = foundProduct.image;
                             firstImage = imgPath.startsWith('http') 
@@ -302,20 +301,15 @@ async function fetchOrders(email) {
 
                 console.log(`Order #RJ${order.custom_order_id}: Image Linked ->`, firstImage);
 
-                // --- DATE & STATUS LOGIC ---
                 const oDate = new Date(order.created_at);
                 const orderTime = oDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) + 
                                  " at " + oDate.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
 
-                const statusRaw = order.status || "Order Confirm";
-                const statusClass = statusRaw.toLowerCase().replace(/\s/g, '-');
-
-                // --- HTML RENDER ---
                 list.innerHTML += `
                 <div class="col-12 col-md-6 col-xl-4 mb-4">
                     <div class="card order-card p-4 h-100 shadow-sm border-0">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="status-badge status-${statusClass}">${statusRaw}</span>
+                            <span class="status-badge status-${(order.status || 'pending').toLowerCase().replace(/\s/g, '-')}">${order.status || "Order Confirm"}</span>
                             <small class="text-muted fw-bold">#RJ${order.custom_order_id || order.id}</small>
                         </div>
                         
@@ -323,10 +317,9 @@ async function fetchOrders(email) {
                             <div class="product-img-container me-3 border rounded shadow-sm" style="width:75px; height:75px; overflow:hidden; background:#fff; display:flex; align-items:center; justify-content:center;">
                                 ${firstImage ? `
                                     <img src="${firstImage}" 
-                                         alt="Product"
                                          style="width: 100%; height: 100%; object-fit: contain; padding: 5px;">
                                 ` : `
-                                    <div style="font-size: 10px; color: #ccc; text-align:center;">No<br>Image</div>
+                                    <div style="font-size: 10px; color: #ccc; text-align:center;">Image<br>Not Loaded</div>
                                 `}
                             </div>
                             <div>
@@ -348,27 +341,35 @@ async function fetchOrders(email) {
                     </div>
                 </div>`;
             });
+        } else {
+            list.innerHTML = '<div class="text-center py-5">No orders found.</div>';
         }
     } catch (err) {
         console.error("Fetch Error:", err);
+        list.innerHTML = '<div class="alert alert-danger">Failed to load orders.</div>';
     }
 }
 
-// --- PAGE LOAD LOGIC (Wait for ProductData) ---
-window.onload = () => {
-    setTimeout(() => {
-        const userData = JSON.parse(localStorage.getItem('userData'));
-        if (userData && userData.email) {
-            // Agar window.productData abhi bhi nahi aaya, toh thoda aur wait karein
-            if (!window.productData || window.productData.length === 0) {
-                console.log("Waiting extra for productData...");
-                setTimeout(() => fetchOrders(userData.email), 1000);
-            } else {
-                fetchOrders(userData.email);
-            }
+// --- WAIT FOR DATA SCRIPT ---
+function startOrderProcess() {
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    if (!userData || !userData.email) return;
+
+    // Agar productData abhi nahi aaya, toh har 500ms par check karo (Max 10 baar)
+    let attempts = 0;
+    const checkData = setInterval(() => {
+        attempts++;
+        if (window.productData && window.productData.length > 0) {
+            clearInterval(checkData);
+            fetchOrders(userData.email);
+        } else if (attempts > 10) {
+            clearInterval(checkData);
+            fetchOrders(userData.email); // Force fetch after 5 seconds
         }
-    }, 1500); 
-};
+    }, 500);
+}
+
+document.addEventListener('DOMContentLoaded', startOrderProcess);
 
 
 
