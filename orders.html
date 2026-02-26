@@ -341,36 +341,29 @@ async function fetchOrders(email) {
 
 
 
-// --- JAISE SHOP/CART MEIN IMAGE DHUNDTE HAIN ---
-let firstImage = 'images/PNGLOGO1.png'; // Default logo
+// --- JAISE SHOP/CART MEIN IMAGE DHUNDTE HAIN (NO DEFAULT LOGO) ---
+let firstImage = ""; // Khali rakhein taaki logo na aaye
 
 if (items && items.length > 0) {
     const itemData = items[0];
+    const productId = Number(itemData.id);
 
-    // 1. Pehle window.productData mein check karo (Shop ki master list)
+    // Master list (window.productData) se match karein
     if (window.productData && window.productData.length > 0) {
-        // ID match karke product dhundo
-        const foundProduct = window.productData.find(p => Number(p.id) === Number(itemData.id));
+        const foundProduct = window.productData.find(p => Number(p.id) === productId);
 
         if (foundProduct && foundProduct.image) {
             const imgPath = foundProduct.image;
-            // Agar link http se shuru hota hai toh wahi rakho, varna Cloudinary jodo
+            // Agar full URL hai toh wahi, varna Cloudinary prefix
             firstImage = imgPath.startsWith('http') 
                 ? imgPath 
                 : `https://res.cloudinary.com/dmmyehrzi/image/upload/jewellery_site/${imgPath}`;
         }
     }
-    
-    // 2. Fallback: Agar upar kuch na mile toh direct item.image check karo (Naye orders ke liye)
-    if (firstImage === 'images/PNGLOGO1.png' && itemData.image) {
-        firstImage = itemData.image.startsWith('http') 
-            ? itemData.image 
-            : `https://res.cloudinary.com/dmmyehrzi/image/upload/jewellery_site/${itemData.image}`;
-    }
 }
 
-// Console mein check karne ke liye:
-console.log("Matched Image for ID " + items[0].id + ":", firstImage);
+// Console mein check karne ke liye (Debug)
+console.log("Final Image Found for ID " + items[0].id + ":", firstImage);
 
 // let firstImage = 'images/LOGORJ.png'; 
 // if (items.length > 0 && items[0].image) {
@@ -394,10 +387,11 @@ list.innerHTML += `
             <div class="d-flex align-items-center mb-3">
                 <div class="product-img-container me-3 border rounded shadow-sm" style="width:70px; height:70px; overflow:hidden;">
             
-                 <img src="${firstImage}" 
-         class="img-fluid rounded-3 border p-1" 
-         style="max-height: 90px; width: 100%; object-fit: contain;"
-         onerror="this.onerror=null; this.src='images/PNGLOGO1.png';">
+                 <div class="product-img-container me-3 border rounded shadow-sm" style="width:75px; height:75px; overflow:hidden; background:#fff;">
+    <img src="${firstImage}" 
+         alt="Product"
+         style="width: 100%; height: 100%; object-fit: contain; padding: 5px; display: ${firstImage ? 'block' : 'none'};">
+</div>
                 </div>
                 <div>
                     <h6 class="mb-1 fw-bold">${items.length} Item(s)</h6>
@@ -519,13 +513,14 @@ async function cancelOrder(dbId, customId) {
 
 
 
-// orders.js ke end mein
 window.onload = () => {
-    // Pehle products load hone ka thoda intezar karein ya productData check karein
+    // Thoda zyada wait karte hain taaki common.js ka data aa jaye
     setTimeout(() => {
-        const userEmail = JSON.parse(localStorage.getItem('userData'))?.email;
-        if (userEmail) fetchOrders(userEmail);
-    }, 500); // 0.5 second ka delay taaki productData load ho jaye
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        if (userData && userData.email) {
+            fetchOrders(userData.email);
+        }
+    }, 1200); // 1.2 second wait
 };
 
 
