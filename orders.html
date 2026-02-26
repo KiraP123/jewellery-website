@@ -341,19 +341,21 @@ async function fetchOrders(email) {
 
 
 
-// --- IMAGE LOGIC (FIXED) ---
 let firstImage = 'images/PNGLOGO1.png'; 
 
-if (items.length > 0 && items[0].image) {
-    const imgPath = (items[0].image || "").trim();
+if (items.length > 0) {
+    console.log("Full Item Data:", items[0]); // Check karein isme 'image' key hai ya nahi
     
-    if (imgPath.startsWith('http')) {
-        firstImage = imgPath;
-    } else {
-        // Agar local name hai toh Cloudinary link banayein
-        firstImage = `https://res.cloudinary.com/dmmyehrzi/image/upload/jewellery_site/${imgPath}`;
+    const imgPath = items[0].image || items[0].img || ""; 
+    
+    if (imgPath && imgPath.trim() !== "") {
+        firstImage = imgPath.startsWith('http') 
+            ? imgPath 
+            : `https://res.cloudinary.com/dmmyehrzi/image/upload/jewellery_site/${imgPath}`;
     }
 }
+console.log("Final URL being used:", firstImage);
+
 
 // let firstImage = 'images/LOGORJ.png'; 
 // if (items.length > 0 && items[0].image) {
