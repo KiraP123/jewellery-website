@@ -278,6 +278,32 @@ async function fetchOrders(email) {
         if(data.success && data.orders.length > 0) {
             data.orders.forEach(order => {
                 const items = JSON.parse(order.items || "[]");
+
+                
+                // / --- IS LOGIC KO PASTE KAREIN (FIXED) ---
+                let firstImage = 'images/PNGLOGO1.png'; 
+
+                if (items.length > 0) {
+                    // Item ke andar se image property nikalni hai
+                    const itemData = items[0]; 
+                    const imgPath = (itemData.image || "").trim();
+
+                    if (imgPath) {
+                        if (imgPath.startsWith('http')) {
+                            firstImage = imgPath;
+                        } else {
+                            // Local name ko Cloudinary folder ke saath jodein
+                            firstImage = `https://res.cloudinary.com/dmmyehrzi/image/upload/jewellery_site/${imgPath}`;
+                        }
+                    }
+                }
+                console.log("Final Resolved Image:", firstImage);
+
+
+
+
+
+
                 
                 // 1. Database se Pincode uthao
                 const userPin = String(order.pincode || "").trim();
@@ -338,21 +364,21 @@ async function fetchOrders(email) {
 
 
 
-// fetchOrders function ke andar image logic update karein
-let firstImage = 'images/PNGLOGO1.png'; // Default backup
+// // fetchOrders function ke andar image logic update karein
+// let firstImage = 'images/PNGLOGO1.png'; // Default backup
 
-if (items.length > 0 && items[0].image) {
-    let imgPath = items[0].image.trim();
+// if (items.length > 0 && items[0].image) {
+//     let imgPath = items[0].image.trim();
 
-    if (imgPath.startsWith('http')) {
-        // CASE 1: Agar database mein poora link pehle se hai (id 20-27)
-        firstImage = imgPath;
-    } else {
-        // CASE 2: Agar sirf '1767...jpg' jaisa naam hai (id 11)
-        // Aapke Cloudinary screenshot ke mutabiq folder path ye hai:
-        firstImage = `https://res.cloudinary.com/dmmyehrzi/image/upload/jewellery_site/${imgPath}`;
-    }
-}
+//     if (imgPath.startsWith('http')) {
+//         // CASE 1: Agar database mein poora link pehle se hai (id 20-27)
+//         firstImage = imgPath;
+//     } else {
+//         // CASE 2: Agar sirf '1767...jpg' jaisa naam hai (id 11)
+//         // Aapke Cloudinary screenshot ke mutabiq folder path ye hai:
+//         firstImage = `https://res.cloudinary.com/dmmyehrzi/image/upload/jewellery_site/${imgPath}`;
+//     }
+// }
 
 // Console mein check karein ki link sahi bana ya nahi
 console.log("Final Image URL:", firstImage);
