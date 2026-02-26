@@ -341,12 +341,26 @@ async function fetchOrders(email) {
 
 
 
-let firstImage = 'images/LOGORJ.png'; 
+// --- IMAGE LOGIC (FIXED) ---
+let firstImage = 'images/PNGLOGO1.png'; 
+
 if (items.length > 0 && items[0].image) {
-    const imgPath = items[0].image;
-    // Agar link http se shuru hota hai toh wahi rakho, varna BASE_URL jodo
-    firstImage = imgPath.startsWith('http') ? imgPath : `${BASE_URL}/images/${imgPath}`;
+    const imgPath = (items[0].image || "").trim();
+    
+    if (imgPath.startsWith('http')) {
+        firstImage = imgPath;
+    } else {
+        // Agar local name hai toh Cloudinary link banayein
+        firstImage = `https://res.cloudinary.com/dmmyehrzi/image/upload/jewellery_site/${imgPath}`;
+    }
 }
+
+// let firstImage = 'images/LOGORJ.png'; 
+// if (items.length > 0 && items[0].image) {
+//     const imgPath = items[0].image;
+//     // Agar link http se shuru hota hai toh wahi rakho, varna BASE_URL jodo
+//     firstImage = imgPath.startsWith('http') ? imgPath : `${BASE_URL}/images/${imgPath}`;
+// }
 
 const statusRaw = order.status || "Order Confirm";
 const statusClass = statusRaw.toLowerCase().replace(/\s/g, '-'); //order.status
