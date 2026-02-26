@@ -340,21 +340,20 @@ async function fetchOrders(email) {
 
 
 
-// --- Is logic ko update karein ---
-let firstImage = 'images/PNGLOGO1.png'; // Default logo agar kuch na mile
+let firstImage = 'images/PNGLOGO1.png'; // Default logo
 
 if (items.length > 0 && items[0].image) {
     const imgPath = items[0].image;
 
-    // 1. Agar path Cloudinary ka pura link hai (http se shuru hota hai)
+    // Agar image link 'http' se shuru hota hai (Cloudinary/External)
     if (imgPath.startsWith('http')) {
-        firstImage = imgPath; 
+        firstImage = imgPath;
     } 
-    // 2. Agar path mein sirf file ka naam hai, toh naye folder se uthao
+    // Agar image aapne GitHub ke kisi naye folder mein daali hai (e.g., 'fig' ya 'images')
     else {
-        // Yahan check karein ki aapne folder ka naam badla toh nahi?
-        // Agar folder 'images' hi hai toh ye chalega:
-        firstImage = `images/${imgPath}`;
+        // Bina BASE_URL ke direct path try karein
+        firstImage = `images/${imgPath}`; 
+        // Agar folder ka naam 'fig' hai toh `fig/${imgPath}` karein
     }
 }
 // let firstImage = 'images/PNGLOGO1.png'; 
@@ -378,7 +377,8 @@ list.innerHTML += `
             
             <div class="d-flex align-items-center mb-3">
                 <div class="product-img-container me-3 border rounded shadow-sm" style="width:70px; height:70px; overflow:hidden;">
-                   <img src="${firstImage}" alt="Jewellery" class="img-fluid" onerror="this.src='images/PNGLOGO1.png';">
+            
+                   <img src="${firstImage}" alt="Jewellery" class="img-fluid">
                 </div>
                 <div>
                     <h6 class="mb-1 fw-bold">${items.length} Item(s)</h6>
