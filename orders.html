@@ -270,7 +270,7 @@
 
 
 
-    async function fetchOrders(email) {
+ async function fetchOrders(email) {
     const list = document.getElementById('ordersList');
     try {
         const response = await fetch(`${BASE_URL}/api/user-orders/${encodeURIComponent(email)}`);
@@ -282,37 +282,33 @@
             data.orders.forEach(order => {
                 const items = JSON.parse(order.items || "[]");
 
-                // 1. Order Time & Delivery Logic
+                // --- 1. Advance Time & Delivery Logic ---
                 const oDate = new Date(order.created_at);
-                const timeString = oDate.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
-                const orderDateStr = !isNaN(oDate) ? oDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : "Date Pending";
-                const fullOrderTime = `${orderDateStr} at ${timeString}`;
+                const orderTimeStr = oDate.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+                const orderDateStr = oDate.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
 
                 const userPin = String(order.pincode || "").trim();
                 const getDeliveryDate = (days) => {
-                    let d = !isNaN(oDate.getTime()) ? new Date(oDate) : new Date();
+                    let d = new Date(oDate);
                     d.setDate(d.getDate() + days);
                     if(d.getDay() === 0) d.setDate(d.getDate() + 1);
-                    return d.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' });
+                    return d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
                 };
 
-                let finalDeliveryDate = (["400067", "400064", "400091", "400092", "400097", "400095"].includes(userPin)) ? getDeliveryDate(1) : 
-                                       (userPin.startsWith('400') || userPin.startsWith('401')) ? getDeliveryDate(2) : getDeliveryDate(6);
+                let arrival = (["400067", "400064", "400091", "400092", "400097", "400095"].includes(userPin)) ? getDeliveryDate(1) : 
+                              (userPin.startsWith('400') || userPin.startsWith('401')) ? getDeliveryDate(2) : getDeliveryDate(6);
 
-                // 2. Status & Cancel Logic
-                const statusRaw = order.status || "Order Confirm";
-                const statusClass = statusRaw.toLowerCase().replace(/\s/g, '-');
-                const currentStatusRaw = statusRaw.toLowerCase();
-                let cancelBtnHTML = (currentStatusRaw === "cancelled") ? `<button class="btn btn-secondary w-100 btn-sm py-2" disabled>Cancelled</button>` :
-                                    (currentStatusRaw === "delivered") ? `<button class="btn btn-outline-secondary w-100 btn-sm py-2" disabled>Delivered</button>` :
-                                    (currentStatusRaw === "out for delivery" || currentStatusRaw === "insured transit") ? `<button class="btn btn-light w-100 btn-sm py-2 text-muted" disabled>Cannot Cancel</button>` :
-                                    `<button onclick="cancelOrder('${order.id}', '${order.custom_order_id}')" class="btn btn-outline-danger w-100 btn-sm py-2">Cancel Order</button>`;
+                // --- 2. Status Colors & Buttons ---
+                const status = (order.status || "Order Confirm");
+                const sClass = status.toLowerCase().replace(/\s/g, '-');
+                
+                let actionBtn = `<button onclick="cancelOrder('${order.id}', '${order.custom_order_id}')" class="btn btn-sm w-100 mt-2" style="color: #dc3545; border: 1px solid #ff00002b; background: #fff5f5; border-radius: 8px; font-weight: 500;">Cancel Order</button>`;
+                if(sClass === 'cancelled' || sClass === 'delivered') actionBtn = "";
 
-                // 3. ✨ GENERATE PRODUCT LIST HTML
-                let itemsListHTML = "";
+                // --- 3. Items Rendering (Premium List Style) ---
+                let itemsHTML = "";
                 items.forEach(item => {
-                    let itemImg = "";
-                    // ProductData se live image fetch karna
+                    let itemImg = "images/LOGORJ.png"; // Fallback
                     if (window.productData) {
                         const found = window.productData.find(p => Number(p.id) === Number(item.id));
                         if (found && found.image) {
@@ -320,66 +316,62 @@
                         }
                     }
 
-                    itemsListHTML += `
-                    <div class="d-flex align-items-center mb-3 pb-2 border-bottom-dashed">
-                        <div class="position-relative me-3">
-                            <div class="border rounded shadow-sm" style="width:60px; height:60px; overflow:hidden; background:#fff; display:flex; align-items:center; justify-content:center;">
-                                <img src="${itemImg || 'images/LOGORJ.png'}" style="width: 100%; height: 100%; object-fit: contain; padding: 3px;">
-                            </div>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark" style="font-size: 10px;">x${item.quantity}</span>
+                    itemsHTML += `
+                    <div class="d-flex align-items-center mb-3 p-2" style="background: #f8f9fa; border-radius: 12px; border: 1px solid #eee;">
+                        <div class="position-relative">
+                            <img src="${itemImg}" style="width: 55px; height: 55px; object-fit: contain; background: white; border-radius: 8px; border: 1px solid #ddd; padding: 2px;">
+                            <span class="position-absolute translate-middle badge rounded-pill bg-dark" style="top: 0; left: 100%; font-size: 9px; padding: 4px 6px;">x${item.quantity}</span>
                         </div>
-                        <div style="flex: 1;">
-                            <h6 class="mb-0 fw-bold text-dark" style="font-size: 13px;">${item.name || 'Jewellery Item'}</h6>
-                            <p class="mb-0 text-muted" style="font-size: 11px;">
-                                ${item.size ? `Size: ${item.size}` : ''} 
-                                ${item.weight ? ` | Wt: ${item.weight}g` : ''}
-                            </p>
+                        <div class="ms-3 flex-grow-1">
+                            <h6 class="mb-0 fw-bold text-truncate" style="font-size: 13px; max-width: 150px;">${item.name}</h6>
+                            <div class="d-flex gap-2 mt-1" style="font-size: 10px; color: #666;">
+                                ${item.size ? `<span>Size: <b>${item.size}</b></span>` : ''}
+                                ${item.weight ? `<span>Wt: <b>${item.weight}g</b></span>` : ''}
+                            </div>
                         </div>
                     </div>`;
                 });
 
-                // 4. Final Card Rendering
+                // --- 4. Main Card Build ---
                 list.innerHTML += `
-                <div class="col-12 col-md-6 col-xl-4 mb-4">
-                    <div class="card order-card p-4 h-100 shadow-sm border-0" style="border-radius: 15px;">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="status-badge status-${statusClass}">${statusRaw}</span>
-                            <small class="text-muted fw-bold">#RJ${order.custom_order_id || order.id}</small>
-                        </div>
+                <div class="col-12 mb-4 animate__animated animate__fadeInUp">
+                    <div class="order-card-premium shadow-sm p-3" style="background: white; border-radius: 20px; border: 1px solid #f0f0f0; position: relative; overflow: hidden;">
                         
-                        <p class="text-muted small mb-3">Ordered: <b>${fullOrderTime}</b></p>
-
-                        <div class="ordered-items-container mb-3" style="max-height: 200px; overflow-y: auto; padding-right: 5px;">
-                            ${itemsListHTML}
-                        </div>
-
-                        <div class="delivery-status-box p-3 rounded-3 mb-4" style="background: #fdf8f2; border-left: 4px solid #a0845a;">
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-truck fs-4 me-3" style="color: #4a1d1f;"></i>
-                                <div>
-                                    <p class="mb-0 text-uppercase fw-bold" style="font-size: 10px; color: #a0845a; letter-spacing: 1px;">Expected Arrival</p>
-                                    <p class="mb-0 fw-bold text-dark">${statusRaw === 'Cancelled' ? 'Cancelled' : finalDeliveryDate}</p>
-                                </div>
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <span class="badge" style="background: #fdf8f2; color: #a0845a; font-size: 10px; border: 1px solid #f1e4d1;">#RJ${order.custom_order_id}</span>
+                                <div class="text-muted mt-1" style="font-size: 11px;">${orderDateStr} at ${orderTimeStr}</div>
+                            </div>
+                            <div class="status-pill ${sClass}" style="padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 600;">
+                                ${status}
                             </div>
                         </div>
 
-                        <div class="mt-auto pt-2">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <span class="text-muted small">Total Paid:</span>
-                                <h4 class="fw-bold mb-0" style="color: #4a1d1f">₹${Number(order.total_amount).toLocaleString('en-IN')}</h4>
+                        <div class="product-scroller" style="max-height: 180px; overflow-y: auto;">
+                            ${itemsHTML}
+                        </div>
+
+                        <div class="row g-2 mt-2 align-items-center" style="background: #fafafa; border-radius: 15px; padding: 10px; margin: 0;">
+                            <div class="col-7">
+                                <div style="font-size: 10px; color: #a0845a; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Arrival Estimate</div>
+                                <div class="fw-bold" style="font-size: 13px; color: #2c3e50;"><i class="bi bi-truck me-1"></i> ${status === 'Cancelled' ? 'Order Cancelled' : arrival}</div>
                             </div>
-                            
-                            <div class="row g-2">
-                                <div class="col-6"><button onclick="goToTrack('${order.custom_order_id || order.id}')" class="btn btn-outline-dark w-100 btn-sm py-2">Track</button></div>
-                                <div class="col-6"><button onclick="viewInvoice('${order.custom_order_id || order.id}')" class="btn btn-dark w-100 btn-sm py-2">Invoice</button></div>
-                                <div class="col-12 mt-2">${cancelBtnHTML}</div>
+                            <div class="col-5 text-end">
+                                <div style="font-size: 10px; color: #888;">Grand Total</div>
+                                <div class="fw-bold" style="font-size: 16px; color: #4a1d1f;">₹${Number(order.total_amount).toLocaleString('en-IN')}</div>
                             </div>
                         </div>
+
+                        <div class="d-flex gap-2 mt-3">
+                            <button onclick="goToTrack('${order.custom_order_id}')" class="btn btn-dark btn-sm flex-grow-1 py-2" style="border-radius: 10px; font-size: 12px; background: #222;">Track</button>
+                            <button onclick="viewInvoice('${order.custom_order_id}')" class="btn btn-outline-dark btn-sm flex-grow-1 py-2" style="border-radius: 10px; font-size: 12px; border: 1px solid #ddd;">Invoice</button>
+                        </div>
+                        ${actionBtn}
                     </div>
                 </div>`;
             });
         } else {
-            list.innerHTML = `<div class="text-center py-5 w-100"><h4>No Orders Yet!</h4><a href="collection.html" class="btn btn-dark mt-3">Start Shopping</a></div>`;
+            list.innerHTML = `<div class="text-center py-5"><img src="images/empty-cart.png" style="width:120px;opacity:0.5;"><h5 class="mt-3 text-muted">No Orders Found</h5></div>`;
         }
     } catch (err) {
         console.error("Fetch Error:", err);

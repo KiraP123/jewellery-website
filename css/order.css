@@ -174,3 +174,9 @@
     font-size: 0.85rem;
     text-transform: uppercase;
 }
+
+
+.status-pill.order-confirm { background: #e3f7f7; color: #008080; }
+.status-pill.cancelled { background: #fee2e2; color: #dc2626; }
+.status-pill.delivered { background: #f0fdf4; color: #16a34a; }
+.border-bottom-dashed { border-bottom: 1px dashed #ddd; }
