@@ -338,19 +338,19 @@ async function fetchOrders(email) {
 
 
 
-let firstImage = 'images/PNGLOGO1.png'; // Default logo
+let firstImage = 'images/PNGLOGO1.png'; // Default backup logo
 
 if (items.length > 0 && items[0].image) {
     const imgPath = items[0].image;
 
     if (imgPath.startsWith('http')) {
-        // CASE 1: Agar database mein pura link hai (https://res.cloudinary.com...)
-        // Toh kuch mat jodo, direct link use karo
+        // Case 1: Agar Cloudinary ka full link hai (Jaise id 20-27)
         firstImage = imgPath;
     } else {
-        // CASE 2: Agar database mein sirf '1767...jpg' jaisa naam hai
-        // Toh use images folder se uthao
-        firstImage = `images/${imgPath}`;
+        // Case 2: Agar sirf file name hai (Jaise id 11)
+        // Hum 'products/' folder ka path manually add karenge
+        // Hum BASE_URL use nahi karenge kyunki images frontend folder mein hain
+        firstImage = `products/${imgPath}`; 
     }
 }
 
@@ -378,9 +378,9 @@ list.innerHTML += `
                 <div class="product-img-container me-3 border rounded shadow-sm" style="width:70px; height:70px; overflow:hidden;">
             
                  <img src="${firstImage}" 
-                             class="img-fluid rounded-3 border p-1" 
-                               style="max-height: 90px; width: 100%; object-fit: contain; background: #fdfdfd;"
-                                  onerror="this.onerror=null; this.src='images/PNGLOGO1.png';">
+         class="img-fluid rounded-3 border p-1" 
+         style="max-height: 90px; width: 100%; object-fit: contain;"
+         onerror="this.onerror=null; this.src='images/PNGLOGO1.png';">
                 </div>
                 <div>
                     <h6 class="mb-1 fw-bold">${items.length} Item(s)</h6>

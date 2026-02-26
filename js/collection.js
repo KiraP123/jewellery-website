@@ -53,44 +53,6 @@ const cartBtnAttr = stockQty > 0 ? `onclick="addToCart(${product.id})"` : `disab
 const cartBtnText = stockQty > 0 ? `<i class="fa-solid fa-bag-shopping me-2"></i> ADD TO BAG` : `OUT OF STOCK`;
 const btnStatus = stockQty > 0 ? "" : "disabled";
 const btnText = stockQty > 0 ? `<i class="fa-solid fa-bag-shopping me-2"></i> ADD TO BAG` : `OUT OF STOCK`;
-        // return `
-        //     <div class="col-md-4 mb-4">
-        //         <div class="product-card-advance">
-        //             <div class="img-wrapper">
-        //                 <div class="purity-floating-tag">${product.purity || '916'}K</div>
-        //                  <img src="${product.image && product.image.startsWith('http') ? product.image : `${BASE_URL}/images/${product.image}`}" class="img-main-zoom" onerror="this.src='https://placehold.co/300'">
-                        
-        //                 <div class="sidebar-hover-actions">
-        //                     <button class="side-action-btn ${isFav ? 'active' : ''}" onclick="toggleWishlist(${product.id})" title="Wishlist">
-        //                         <i class="${isFav ? 'fa-solid fa-heart' : 'fa-regular fa-heart'}"></i>
-        //                     </button>
-        //                     <button class="side-action-btn" onclick="location.href='product-detail.html?id=${product.id}'" title="View Details">
-        //                         <i class="fa-regular fa-eye"></i>
-        //                     </button>
-        //                 </div>
-        //             </div>
-
-        //             <div class="content-wrapper">
-        //                 <h6 class="product-title-luxury">${product.name}</h6>
-        //                 <div class="specs-bar-luxury">
-        //                     <span><i class="fa-solid fa-weight-hanging"></i> ${weight} gm</span>
-        //                     <span><i class="fa-solid fa-ruler-horizontal"></i> ${product.size || 'Standard'}</span>
-        //                 </div>
-
-        //                 <div class="price-display-box">
-        //                     <div class="final-price-tag">₹ ${finalPriceWithGST.toLocaleString('en-IN')}</div> <small>${stockBadge}</small>
-        //                     <span class="price-title">${product.is_limited_offer == 1 ? 'Special Offer Price' : 'Total Price (Incl. GST)'}</span>
-        //                 </div> 
-        //                 <button class="btn-bag-luxury" ${btnStatus} onclick="addToCart(${product.id})">
-        //                  ${btnText}
-        //                 </button> 
-        //             </div>
-        //         </div>
-        //     </div>`;
-
-
-
-
         return `
             <div class="col-md-4 mb-4">
                 <div class="product-card-advance">
