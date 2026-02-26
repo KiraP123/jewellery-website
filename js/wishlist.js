@@ -68,10 +68,7 @@ function renderWishlist() {
     
     tableBody.innerHTML = wishlistProducts.map(product => {
         const displayPrice = product.real_price || 0;
-       const imageSrc = product.image.startsWith('http') 
-        ? product.image 
-        : `images/${product.image}`;
-    //    const imageSrc = `images/${product.image}`;
+       const imageSrc = `images/${product.image}`;
 
 
         const stockQty = parseInt(product.stock_qty) || 0;
@@ -94,11 +91,7 @@ function renderWishlist() {
         <tr>
             <td class="align-middle">
                 <div class="d-flex align-items-center">
-                   
-                    <img src="${imageSrc}" 
-                     style="width:70px; height:70px; object-fit:cover;" 
-                     class="me-3 rounded shadow-sm" 
-                     onerror="this.onerror=null;this.src='https://via.placeholder.com/70?text=No+Image'">
+                     <img src="${imageSrc}" style="width:70px; height:70px; object-fit:cover;" class="me-3 rounded shadow-sm" onerror="this.src='https://via.placeholder.com/100'"></img>
                     <div>
                         <h6 class="mb-0 fw-bold">${product.name}</h6>
                         <small class="text-muted">${product.weight_gm} gm | ${product.purity || '22'}K</small>
