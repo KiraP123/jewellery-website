@@ -385,14 +385,6 @@ function buyNowLink(id) {
         window.location.href = 'checkout.html';
     }
 }
-// function buyNowLink(id) {
-//     const size = document.getElementById('selectedUserSize').value;
-//     if(!size) { alert("Chooce The Size!"); return; }
-//     if (typeof addToCart === 'function') {
-//         addToCart(id, size);
-//         window.location.href = 'checkout.html';
-//     }
-// }
 
 function shareProduct(name) {
     if (navigator.share) {
