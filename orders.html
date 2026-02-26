@@ -341,20 +341,28 @@ async function fetchOrders(email) {
 
 
 
+// --- IMAGE LOGIC (JAISE SHOP/CART MEIN HAI) ---
 let firstImage = 'images/PNGLOGO1.png'; 
 
 if (items.length > 0) {
-    console.log("Full Item Data:", items[0]); // Check karein isme 'image' key hai ya nahi
+    const itemData = items[0];
     
-    const imgPath = items[0].image || items[0].img || ""; 
-    
-    if (imgPath && imgPath.trim() !== "") {
-        firstImage = imgPath.startsWith('http') 
-            ? imgPath 
-            : `https://res.cloudinary.com/dmmyehrzi/image/upload/jewellery_site/${imgPath}`;
+    // 1. Pehle check karo kya Order ke sath image aayi hai (Naye Orders ke liye)
+    if (itemData.image) {
+        firstImage = itemData.image.startsWith('http') 
+            ? itemData.image 
+            : `https://res.cloudinary.com/dmmyehrzi/image/upload/jewellery_site/${itemData.image}`;
+    } 
+    // 2. Agar nahi aayi (Purane Orders), toh window.productData se match karo (Jaise Shop/Cart karte hain)
+    else if (window.productData) {
+        const originalProduct = window.productData.find(p => Number(p.id) === Number(itemData.id));
+        if (originalProduct && originalProduct.image) {
+            firstImage = originalProduct.image.startsWith('http') 
+                ? originalProduct.image 
+                : `https://res.cloudinary.com/dmmyehrzi/image/upload/jewellery_site/${originalProduct.image}`;
+        }
     }
 }
-console.log("Final URL being used:", firstImage);
 
 
 // let firstImage = 'images/LOGORJ.png'; 
