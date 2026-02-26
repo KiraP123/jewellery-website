@@ -341,29 +341,36 @@ async function fetchOrders(email) {
 
 
 
-// --- IMAGE LOGIC (JAISE SHOP/CART MEIN HAI) ---
-let firstImage = 'images/PNGLOGO1.png'; 
+// --- JAISE SHOP/CART MEIN IMAGE DHUNDTE HAIN ---
+let firstImage = 'images/PNGLOGO1.png'; // Default logo
 
-if (items.length > 0) {
+if (items && items.length > 0) {
     const itemData = items[0];
+
+    // 1. Pehle window.productData mein check karo (Shop ki master list)
+    if (window.productData && window.productData.length > 0) {
+        // ID match karke product dhundo
+        const foundProduct = window.productData.find(p => Number(p.id) === Number(itemData.id));
+
+        if (foundProduct && foundProduct.image) {
+            const imgPath = foundProduct.image;
+            // Agar link http se shuru hota hai toh wahi rakho, varna Cloudinary jodo
+            firstImage = imgPath.startsWith('http') 
+                ? imgPath 
+                : `https://res.cloudinary.com/dmmyehrzi/image/upload/jewellery_site/${imgPath}`;
+        }
+    }
     
-    // 1. Pehle check karo kya Order ke sath image aayi hai (Naye Orders ke liye)
-    if (itemData.image) {
+    // 2. Fallback: Agar upar kuch na mile toh direct item.image check karo (Naye orders ke liye)
+    if (firstImage === 'images/PNGLOGO1.png' && itemData.image) {
         firstImage = itemData.image.startsWith('http') 
             ? itemData.image 
             : `https://res.cloudinary.com/dmmyehrzi/image/upload/jewellery_site/${itemData.image}`;
-    } 
-    // 2. Agar nahi aayi (Purane Orders), toh window.productData se match karo (Jaise Shop/Cart karte hain)
-    else if (window.productData) {
-        const originalProduct = window.productData.find(p => Number(p.id) === Number(itemData.id));
-        if (originalProduct && originalProduct.image) {
-            firstImage = originalProduct.image.startsWith('http') 
-                ? originalProduct.image 
-                : `https://res.cloudinary.com/dmmyehrzi/image/upload/jewellery_site/${originalProduct.image}`;
-        }
     }
 }
 
+// Console mein check karne ke liye:
+console.log("Matched Image for ID " + items[0].id + ":", firstImage);
 
 // let firstImage = 'images/LOGORJ.png'; 
 // if (items.length > 0 && items[0].image) {
@@ -509,6 +516,19 @@ async function cancelOrder(dbId, customId) {
         }
     }
 }
+
+
+
+// orders.js ke end mein
+window.onload = () => {
+    // Pehle products load hone ka thoda intezar karein ya productData check karein
+    setTimeout(() => {
+        const userEmail = JSON.parse(localStorage.getItem('userData'))?.email;
+        if (userEmail) fetchOrders(userEmail);
+    }, 500); // 0.5 second ka delay taaki productData load ho jaye
+};
+
+
     function goToTrack(id) { window.location.href = `track.html?id=${id}`; }
     function viewInvoice(id) { window.location.href = `invoice.html?id=${id}`; }
 
