@@ -336,20 +336,33 @@ async function fetchOrders(email) {
 }
 
 
-                // 4. Image Path Fix
-                // let firstImage = 'images/PNGLOGO1.png'; 
-                // if (items.length > 0 && items[0].image) {
-                //     const fileName = items[0].image.split(/[\\/]/).pop();
-                //     firstImage = `${BASE_URL}/images/${fileName}`;
-                // }
 
-               // 4. ✨ Naya Image Path Fix (Cloudinary Friendly)
-let firstImage = 'images/PNGLOGO1.png'; 
+
+
+
+// --- Is logic ko update karein ---
+let firstImage = 'images/PNGLOGO1.png'; // Default logo agar kuch na mile
+
 if (items.length > 0 && items[0].image) {
     const imgPath = items[0].image;
-    // Agar link http se shuru hota hai toh wahi rakho, varna BASE_URL jodo
-    firstImage = imgPath.startsWith('http') ? imgPath : `${BASE_URL}/images/${imgPath}`;
+
+    // 1. Agar path Cloudinary ka pura link hai (http se shuru hota hai)
+    if (imgPath.startsWith('http')) {
+        firstImage = imgPath; 
+    } 
+    // 2. Agar path mein sirf file ka naam hai, toh naye folder se uthao
+    else {
+        // Yahan check karein ki aapne folder ka naam badla toh nahi?
+        // Agar folder 'images' hi hai toh ye chalega:
+        firstImage = `images/${imgPath}`;
+    }
 }
+// let firstImage = 'images/PNGLOGO1.png'; 
+// if (items.length > 0 && items[0].image) {
+//     const imgPath = items[0].image;
+//     // Agar link http se shuru hota hai toh wahi rakho, varna BASE_URL jodo
+//     firstImage = imgPath.startsWith('http') ? imgPath : `${BASE_URL}/images/${imgPath}`;
+// }
 
 const statusRaw = order.status || "Order Confirm";
 const statusClass = statusRaw.toLowerCase().replace(/\s/g, '-'); //order.status
