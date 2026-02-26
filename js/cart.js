@@ -180,47 +180,101 @@ function updateCartUI() {
     renderSummaryValues(totalGoldValue, totalFinalMakingCharges);
 }
 
-// --- 4. UTILITY FUNCTIONS (Qty & Storage) ---
+
+
+
+
+
+
+
+
+
+
+
+
+
 window.changeQty = function(index, delta) {
     if (cart[index]) {
         let cartItem = cart[index];
         const allProducts = window.productData || [];
         const productInDB = allProducts.find(p => String(p.id) === String(cartItem.id));
 
-        // 1. Asali Total Stock (Cart + DB)
-        const totalStockAvailable = Number(cartItem.quantity || 0) + Number(productInDB ? productInDB.stock_qty : 0);
+        if (!productInDB) return;
 
-        // 2. AGAR PLUS DABAYA (+1)
+        // --- FIXED LOGIC START ---
+        let currentQtyInCart = Number(cartItem.quantity || 0);
+        
+        // Asali Limit wo hai jo DB se aayi hai (Example: 6)
+        // Refresh par agar DB 6 dikha raha hai aur Cart mein 1 hai, 
+        // toh hum sirf 5 baar aur + karne denge.
+        let maxLimit = Number(productInDB.stock_qty); 
+
         if (delta > 0) {
-            // CHECK: Kya cart mein pehle se hi maximum maal hai?
-            if (Number(cartItem.quantity) >= totalStockAvailable) {
-                // Yahan ruk jao, aage mat badho!
+            // Agar Cart ki quantity pehle se hi Limit ke barabar ya badi hai, toh RUK JAO
+            // Example: Agar 6 pieces hain, toh 6 >= 6 hote hi Error aayega.
+            if (currentQtyInCart >= maxLimit) {
                 Swal.fire({
-                    icon: 'error',
+                    icon: 'warning',
                     title: 'Stock Limit!',
-                    text: `Bhai, sirf ${totalStockAvailable} piece hi hain hamare paas.`,
+                    text: `Bhai, sirf ${maxLimit} piece hi available hain!`,
                     timer: 1500,
                     showConfirmButton: false
                 });
-                return; // ⛔ STOP: Ye aage jane hi nahi dega
+                return; // ⛔ STOP: Ab 7 nahi ho payega
             }
             
-            // Agar limit nahi aayi, tabhi badhao
-            cartItem.quantity = Number(cartItem.quantity) + 1;
-            if (productInDB) productInDB.stock_qty -= 1;
+            cartItem.quantity = currentQtyInCart + 1;
         } 
-        
-        // 3. AGAR MINUS DABAYA (-1)
         else if (delta < 0) {
-            if (Number(cartItem.quantity) > 1) {
-                cartItem.quantity = Number(cartItem.quantity) - 1;
-                if (productInDB) productInDB.stock_qty += 1;
+            if (currentQtyInCart > 1) {
+                cartItem.quantity = currentQtyInCart - 1;
             }
         }
 
-        saveAndRefresh(); // UI Update
+        saveAndRefresh();
     }
 };
+// // --- 4. UTILITY FUNCTIONS (Qty & Storage) ---
+// window.changeQty = function(index, delta) {
+//     if (cart[index]) {
+//         let cartItem = cart[index];
+//         const allProducts = window.productData || [];
+//         const productInDB = allProducts.find(p => String(p.id) === String(cartItem.id));
+
+//         // 1. Asali Total Stock (Cart + DB)
+//         const totalStockAvailable = Number(cartItem.quantity || 0) + Number(productInDB ? productInDB.stock_qty : 0);
+
+//         // 2. AGAR PLUS DABAYA (+1)
+//         if (delta > 0) {
+//             // CHECK: Kya cart mein pehle se hi maximum maal hai?
+//             if (Number(cartItem.quantity) >= totalStockAvailable) {
+//                 // Yahan ruk jao, aage mat badho!
+//                 Swal.fire({
+//                     icon: 'error',
+//                     title: 'Stock Limit!',
+//                     text: `Bhai, sirf ${totalStockAvailable} piece hi hain hamare paas.`,
+//                     timer: 1500,
+//                     showConfirmButton: false
+//                 });
+//                 return; // ⛔ STOP: Ye aage jane hi nahi dega
+//             }
+            
+//             // Agar limit nahi aayi, tabhi badhao
+//             cartItem.quantity = Number(cartItem.quantity) + 1;
+//             if (productInDB) productInDB.stock_qty -= 1;
+//         } 
+        
+//         // 3. AGAR MINUS DABAYA (-1)
+//         else if (delta < 0) {
+//             if (Number(cartItem.quantity) > 1) {
+//                 cartItem.quantity = Number(cartItem.quantity) - 1;
+//                 if (productInDB) productInDB.stock_qty += 1;
+//             }
+//         }
+
+//         saveAndRefresh(); // UI Update
+//     }
+// };
 
 window.removeFromCart = function(index) {
     cart.splice(index, 1);
