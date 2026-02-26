@@ -338,21 +338,24 @@ async function fetchOrders(email) {
 
 
 
-let firstImage = 'images/PNGLOGO1.png'; // Default backup logo
+// fetchOrders function ke andar image logic update karein
+let firstImage = 'images/PNGLOGO1.png'; // Default backup
 
 if (items.length > 0 && items[0].image) {
-    const imgPath = items[0].image;
+    let imgPath = items[0].image.trim();
 
     if (imgPath.startsWith('http')) {
-        // Case 1: Agar Cloudinary ka full link hai (Jaise id 20-27)
+        // CASE 1: Agar database mein poora link pehle se hai (id 20-27)
         firstImage = imgPath;
     } else {
-        // Case 2: Agar sirf file name hai (Jaise id 11)
-        // Hum 'products/' folder ka path manually add karenge
-        // Hum BASE_URL use nahi karenge kyunki images frontend folder mein hain
-        firstImage = `products/${imgPath}`; 
+        // CASE 2: Agar sirf '1767...jpg' jaisa naam hai (id 11)
+        // Aapke Cloudinary screenshot ke mutabiq folder path ye hai:
+        firstImage = `https://res.cloudinary.com/dmmyehrzi/image/upload/jewellery_site/${imgPath}`;
     }
 }
+
+// Console mein check karein ki link sahi bana ya nahi
+console.log("Final Image URL:", firstImage);
 
 
 // let firstImage = 'images/LOGORJ.png'; 
