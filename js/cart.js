@@ -234,47 +234,6 @@ window.changeQty = function(index, delta) {
         saveAndRefresh();
     }
 };
-// // --- 4. UTILITY FUNCTIONS (Qty & Storage) ---
-// window.changeQty = function(index, delta) {
-//     if (cart[index]) {
-//         let cartItem = cart[index];
-//         const allProducts = window.productData || [];
-//         const productInDB = allProducts.find(p => String(p.id) === String(cartItem.id));
-
-//         // 1. Asali Total Stock (Cart + DB)
-//         const totalStockAvailable = Number(cartItem.quantity || 0) + Number(productInDB ? productInDB.stock_qty : 0);
-
-//         // 2. AGAR PLUS DABAYA (+1)
-//         if (delta > 0) {
-//             // CHECK: Kya cart mein pehle se hi maximum maal hai?
-//             if (Number(cartItem.quantity) >= totalStockAvailable) {
-//                 // Yahan ruk jao, aage mat badho!
-//                 Swal.fire({
-//                     icon: 'error',
-//                     title: 'Stock Limit!',
-//                     text: `Bhai, sirf ${totalStockAvailable} piece hi hain hamare paas.`,
-//                     timer: 1500,
-//                     showConfirmButton: false
-//                 });
-//                 return; // ⛔ STOP: Ye aage jane hi nahi dega
-//             }
-            
-//             // Agar limit nahi aayi, tabhi badhao
-//             cartItem.quantity = Number(cartItem.quantity) + 1;
-//             if (productInDB) productInDB.stock_qty -= 1;
-//         } 
-        
-//         // 3. AGAR MINUS DABAYA (-1)
-//         else if (delta < 0) {
-//             if (Number(cartItem.quantity) > 1) {
-//                 cartItem.quantity = Number(cartItem.quantity) - 1;
-//                 if (productInDB) productInDB.stock_qty += 1;
-//             }
-//         }
-
-//         saveAndRefresh(); // UI Update
-//     }
-// };
 
 window.removeFromCart = function(index) {
     cart.splice(index, 1);
@@ -311,47 +270,83 @@ function renderSummaryValues(goldTotal, totalMakingWithHallmark) {
 }
 
 
+
+
 window.moveToWishlist = function() {
-    // 1. Sabhi checked checkboxes ko pakdo
     const selectedCheckboxes = document.querySelectorAll('.cart-item-checkbox:checked');
-    
     if (selectedCheckboxes.length === 0) {
-        Swal.fire({ icon: 'info', title: 'Nothing Selected', text: 'Please select items to move to wishlist' });
+        Swal.fire({ icon: 'info', title: 'Nothing Selected', text: 'Please select items first!' });
         return;
     }
 
-    // Wishlist ko localStorage se lo (ya khali array)
-    let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+    // YAHAN FIX HAI: 'jewelleryWishlist' use karein jo wishlist page mang raha hai
+    let wishlistIds = JSON.parse(localStorage.getItem('jewelleryWishlist')) || [];
 
-    // Reverse order mein loop chalayenge taaki splice karte waqt index na bigde
-    const indicesToMove = Array.from(selectedCheckboxes).map(cb => parseInt(cb.value)).sort((a, b) => b - a);
+    const indicesToMove = Array.from(selectedCheckboxes)
+        .map(cb => Number(cb.value))
+        .sort((a, b) => b - a);
 
     indicesToMove.forEach(index => {
         const item = cart[index];
-        
-        // Wishlist mein add karo (duplicate check kar sakte hain)
-        const exists = wishlist.some(w => w.id === item.id);
-        if (!exists) {
-            wishlist.push(item);
+        if (item) {
+            // Wishlist page sirf ID mangta hai (Number)
+            if (!wishlistIds.includes(Number(item.id))) {
+                wishlistIds.push(Number(item.id));
+            }
+            cart.splice(index, 1); // Cart se hatao
         }
-
-        // Cart se hatao
-        cart.splice(index, 1);
     });
 
-    // Dono storage update karo
+    // Dono storage ko overwrite karo
     localStorage.setItem('cart', JSON.stringify(cart));
-    localStorage.setItem('wishlist', JSON.stringify(wishlist));
+    localStorage.setItem('jewelleryWishlist', JSON.stringify(wishlistIds));
 
-    // UI Refresh
     updateCartUI();
     if(typeof updateCartCount === 'function') updateCartCount();
 
-    Swal.fire({
-        icon: 'success',
-        title: 'Moved to Wishlist',
-        text: `${selectedCheckboxes.length} items have been moved.`,
-        timer: 2000,
-        showConfirmButton: false
-    });
+    Swal.fire({ icon: 'success', title: 'Moved!', text: 'Saved to your favorites!.', timer: 1500, showConfirmButton: false });
 };
+// window.moveToWishlist = function() {
+//     // 1. Sabhi checked checkboxes ko pakdo
+//     const selectedCheckboxes = document.querySelectorAll('.cart-item-checkbox:checked');
+    
+//     if (selectedCheckboxes.length === 0) {
+//         Swal.fire({ icon: 'info', title: 'Nothing Selected', text: 'Please select items to move to wishlist' });
+//         return;
+//     }
+
+//     // Wishlist ko localStorage se lo (ya khali array)
+//     let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+//     // Reverse order mein loop chalayenge taaki splice karte waqt index na bigde
+//     const indicesToMove = Array.from(selectedCheckboxes).map(cb => parseInt(cb.value)).sort((a, b) => b - a);
+
+//     indicesToMove.forEach(index => {
+//         const item = cart[index];
+        
+//         // Wishlist mein add karo (duplicate check kar sakte hain)
+//         const exists = wishlist.some(w => w.id === item.id);
+//         if (!exists) {
+//             wishlist.push(item);
+//         }
+
+//         // Cart se hatao
+//         cart.splice(index, 1);
+//     });
+
+//     // Dono storage update karo
+//     localStorage.setItem('cart', JSON.stringify(cart));
+//     localStorage.setItem('wishlist', JSON.stringify(wishlist));
+
+//     // UI Refresh
+//     updateCartUI();
+//     if(typeof updateCartCount === 'function') updateCartCount();
+
+//     Swal.fire({
+//         icon: 'success',
+//         title: 'Moved to Wishlist',
+//         text: `${selectedCheckboxes.length} items have been moved.`,
+//         timer: 2000,
+//         showConfirmButton: false
+//     });
+// };

@@ -52,27 +52,6 @@ function loadData(id) {
         if (detailsDiv) detailsDiv.innerHTML = "<h3 class='text-center'>Product Not Found</h3>";
     }
 }
-// function loadData(id) {
-//     const product = window.productData.find(p => Number(p.id) === Number(id));
-    
-//     if (product) {
-//         // const imgPath = `http://localhost:3000/images/${product.image}`;
-//         const imgPath = `${BASE_URL}/images/${product.image}`;
-//         const mainImg = document.getElementById('mainImg');
-//         if (mainImg) mainImg.src = imgPath;
-
-//         renderUI(product);
-//         calculateBreakdown(product);
-//         renderRelated(product.purity, product.id);
-//     } else {
-//         const detailsDiv = document.getElementById('productDetails');
-//         if (detailsDiv) detailsDiv.innerHTML = "<h3 class='text-center'>Product Not Found</h3>";
-//     }
-// }
-
-
-
-
 
 function calculateBreakdown(p) {
     const weight = parseFloat(p.weight_gm) || 0;
@@ -113,7 +92,7 @@ function calculateBreakdown(p) {
                         </div>
                         <div>
                             <span class="d-block fw-bold small text-dark">Gold Value</span>
-                            <small class="text-muted" style="font-size: 10px;">${p.purity}K Gold | ${weight}g</small>
+                            <small class="text-muted" style="font-size: 10px;">${p.purity}K| ${weight}g</small>
                         </div>
                     </div>
                     <span class="fw-bold text-dark">₹${pureGoldValue.toLocaleString('en-IN')}</span>
