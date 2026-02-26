@@ -68,7 +68,8 @@ function renderWishlist() {
     
     tableBody.innerHTML = wishlistProducts.map(product => {
         const displayPrice = product.real_price || 0;
-       const imageSrc = `${BASE_URL}/images/${product.image}`;
+    //    const imageSrc = `${BASE_URL}/images/${product.image}`;
+       const imageSrc = `images/${product.image}`;
 
 
         const stockQty = parseInt(product.stock_qty) || 0;
@@ -76,6 +77,8 @@ function renderWishlist() {
     // --- 1. YAHAN LOGIC HAI ---
     const isOutOfStock = stockQty <= 0;
     
+
+    //  <img src="${imageSrc}" style="width:70px; height:70px; object-fit:cover;" class="me-3 rounded shadow-sm" onerror="this.src='https://via.placeholder.com/100'"></img>
     // Agar stock nahi hai toh button disable hoga aur uska look badal jayega
     const cartButtonHtml = isOutOfStock 
         ? `<button class="btn btn-secondary btn-sm" disabled title="Out of Stock" style="cursor: not-allowed; opacity: 0.6;">
@@ -89,7 +92,11 @@ function renderWishlist() {
         <tr>
             <td class="align-middle">
                 <div class="d-flex align-items-center">
-                    <img src="${imageSrc}" style="width:70px; height:70px; object-fit:cover;" class="me-3 rounded shadow-sm" onerror="this.src='https://via.placeholder.com/100'">
+                   
+                    <img src="${imageSrc}" 
+                     style="width:70px; height:70px; object-fit:cover;" 
+                     class="me-3 rounded shadow-sm" 
+                     onerror="this.onerror=null;this.src='https://via.placeholder.com/70?text=No+Image'">
                     <div>
                         <h6 class="mb-0 fw-bold">${product.name}</h6>
                         <small class="text-muted">${product.weight_gm} gm | ${product.purity || '22'}K</small>

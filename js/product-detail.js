@@ -364,14 +364,35 @@ function setProductSize(btn, size) {
     document.getElementById('selectedUserSize').value = size;
 }
 
+
+
 function buyNowLink(id) {
     const size = document.getElementById('selectedUserSize').value;
-    if(!size) { alert("Chooce The Size!"); return; }
+    
+    if(!size) {
+        Swal.fire({
+            title: 'Size Required',
+            text: 'Please select a size before proceeding to buy!',
+            icon: 'warning',
+            confirmButtonColor: '#d33', // Aapke brand colour ke hisaab se change karein
+            confirmButtonText: 'Okay'
+        });
+        return;
+    }
+
     if (typeof addToCart === 'function') {
         addToCart(id, size);
         window.location.href = 'checkout.html';
     }
 }
+// function buyNowLink(id) {
+//     const size = document.getElementById('selectedUserSize').value;
+//     if(!size) { alert("Chooce The Size!"); return; }
+//     if (typeof addToCart === 'function') {
+//         addToCart(id, size);
+//         window.location.href = 'checkout.html';
+//     }
+// }
 
 function shareProduct(name) {
     if (navigator.share) {
@@ -382,15 +403,53 @@ function shareProduct(name) {
     }
 }
 
+
+
 function addToBagDetail(id) {
     const size = document.getElementById('selectedUserSize').value;
+
+    // 1. Pehle check karein ki kya ye item pehle se cart mein hai
+    // Hum localstorage ya aapke cart array ka use kar sakte hain
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const isAlreadyInBag = cart.some(item => item.id === id);
+
+    if (isAlreadyInBag) {
+        // Agar pehle se hai toh ye alert dikhao
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: 'info',
+                title: 'Already in Bag',
+                text: 'This item is already in your shopping bag!',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+        return; // Function ko yahi rok dein
+    }
+
+    // 2. Agar nahi hai, toh cart mein add karein
     if (typeof addToCart === 'function') {
         addToCart(id, size);
         if (typeof Swal !== 'undefined') {
-            Swal.fire({ icon: 'success', title: 'Added to BagG', showConfirmButton: false, timer: 1000 });
+            Swal.fire({ 
+                icon: 'success', 
+                title: 'Added to Bag', 
+                text: 'Product successfully added!',
+                showConfirmButton: false, 
+                timer: 1500 
+            });
         }
     }
 }
+// function addToBagDetail(id) {
+//     const size = document.getElementById('selectedUserSize').value;
+//     if (typeof addToCart === 'function') {
+//         addToCart(id, size);
+//         if (typeof Swal !== 'undefined') {
+//             Swal.fire({ icon: 'success', title: 'Added to BagG', showConfirmButton: false, timer: 1000 });
+//         }
+//     }
+// }
 
 function renderRelated(purity, currentId) {
     const container = document.getElementById('relatedContainer');
