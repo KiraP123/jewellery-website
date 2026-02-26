@@ -283,25 +283,6 @@ async function fetchOrders(email) {
                 const items = JSON.parse(order.items || "[]");
 
                 
-                // --- 1. IMAGE RESOLUTION LOGIC (FIXED) ---
-                let firstImage = 'images/PNGLOGO1.png'; 
-
-                if (items.length > 0) {
-                    const itemData = items[0]; 
-                    const imgPath = (itemData.image || "").trim();
-
-                    if (imgPath) {
-                        if (imgPath.startsWith('http')) {
-                            firstImage = imgPath;
-                        } else {
-                            // Agar sirf file name hai (jaise: ring.jpg), toh Cloudinary path jodo
-                            firstImage = `https://res.cloudinary.com/dmmyehrzi/image/upload/jewellery_site/${imgPath}`;
-                        }
-                    }
-                }
-                console.log("Final Resolved Image:", firstImage);
-
-                
                 // 1. Database se Pincode uthao
                 const userPin = String(order.pincode || "").trim();
 
@@ -358,6 +339,8 @@ async function fetchOrders(email) {
     cancelBtnHTML = `<button onclick="cancelOrder('${order.id}', '${order.custom_order_id}')" class="btn btn-outline-danger w-100 btn-sm py-2">Cancel Order</button>`;
 }
 
+
+firstImage = `https://res.cloudinary.com/dmmyehrzi/image/upload/jewellery_site/${imgPath}`;
 // let firstImage = 'images/LOGORJ.png'; 
 // if (items.length > 0 && items[0].image) {
 //     const imgPath = items[0].image;
