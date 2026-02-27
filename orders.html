@@ -320,25 +320,26 @@ async function fetchOrders(email) {
                         }
                     }
 
-                   // --- Calculation Update ---
-const wtValue = parseFloat(item.weight_gm || item.weight || 0);
-const szValue = item.customerSize || item.size || 'Adj';
-const perGramPrice = parseFloat(item.price) || 0;
-const totalCalculated = Math.round(wtValue * perGramPrice); // Weight * Price logic
+// --- Cart Jaisi Sahi Calculation ---
+const qty = Number(item.quantity || 1);
+const weight = parseFloat(item.weight_gm || item.weight || 0);
+const hallmarkPerPiece = 53.10; 
 
+// Cart logic: Gold Price (Per Piece) * Qty
+const itemGoldTotal = Math.round(item.price) * qty; 
 
-                itemsHTML += `
+  itemsHTML += `
 <div class="d-flex align-items-center mb-3 p-2" style="background: #f8f9fa; border-radius: 12px; border: 1px solid #eee;">
     <div class="position-relative">
         <img src="${itemImg}" style="width: 55px; height: 55px; object-fit: contain; background: white; border-radius: 8px; border: 1px solid #ddd; padding: 2px;">
-        <span class="position-absolute translate-middle badge rounded-pill bg-dark" style="top: 0; left: 100%; font-size: 9px; padding: 4px 6px;">x${item.quantity}</span>
+        <span class="position-absolute translate-middle badge rounded-pill bg-dark" style="top: 0; left: 100%; font-size: 9px; padding: 4px 6px;">x${qty}</span>
     </div>
     <div class="ms-3 flex-grow-1">
         <h6 class="mb-0 fw-bold text-truncate" style="font-size: 13px; max-width: 150px;">${item.name}</h6>
         <div class="d-flex flex-wrap gap-2 mt-1" style="font-size: 10px; color: #666;">
-            <span>Wt: <b>${wtValue}g</b></span>
-            <span>Size: <b>${szValue}</b></span>
-            <span>Price: <b>₹${totalCalculated.toLocaleString('en-IN')}</b></span>
+            <span>${weight}g</span>
+            <span>| Size: <b>${item.customerSize || 'Adj'}</b></span>
+            <span class="ms-auto fw-bold text-dark">₹${itemGoldTotal.toLocaleString('en-IN')}</span>
         </div>
     </div>
 </div>`;
