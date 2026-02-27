@@ -268,9 +268,7 @@
 
 
 
-
-
- async function fetchOrders(email) {
+async function fetchOrders(email) {
     const list = document.getElementById('ordersList');
     try {
         const response = await fetch(`${BASE_URL}/api/user-orders/${encodeURIComponent(email)}`);
@@ -279,10 +277,12 @@
         list.innerHTML = ''; 
 
         if(data.success && data.orders.length > 0) {
+            // Row wrapper for laptop grid
+            list.innerHTML = '<div class="row g-4" id="ordersGrid"></div>';
+            const grid = document.getElementById('ordersGrid');
+
             data.orders.forEach(order => {
                 const items = JSON.parse(order.items || "[]");
-
-                // --- 1. Advance Time & Delivery Logic ---
                 const oDate = new Date(order.created_at);
                 const orderTimeStr = oDate.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
                 const orderDateStr = oDate.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
@@ -298,94 +298,177 @@
                 let arrival = (["400067", "400064", "400091", "400092", "400097", "400095"].includes(userPin)) ? getDeliveryDate(1) : 
                               (userPin.startsWith('400') || userPin.startsWith('401')) ? getDeliveryDate(2) : getDeliveryDate(6);
 
-                // --- 2. Status Colors & Buttons ---
                 const status = (order.status || "Order Confirm");
                 const sClass = status.toLowerCase().replace(/\s/g, '-');
                 
-                let actionBtn = `<button onclick="cancelOrder('${order.id}', '${order.custom_order_id}')" class="btn btn-sm w-100 mt-2" style="color: #dc3545; border: 1px solid #ff00002b; background: #fff5f5; border-radius: 8px; font-weight: 500;">Cancel Order</button>`;
-                if(sClass === 'cancelled' || sClass === 'delivered') actionBtn = "";
-
-
-                // --- INVOICE SECTION LOGIC (Yahan define kiya hai) ---
                 let invoiceSection = "";
                 if (sClass === 'delivered') {
                     invoiceSection = `<button onclick="viewInvoice('${order.custom_order_id}')" class="btn btn-outline-dark btn-sm flex-grow-1 py-2" style="border-radius: 10px; font-size: 12px; border: 1px solid #ddd;">Invoice</button>`;
                 } else if (sClass === 'cancelled') {
                     invoiceSection = "";
                 } else {
-                    invoiceSection = `<div class="flex-grow-1 text-center py-1" style="font-size: 10px; color: #888; border: 1px dashed #ddd; border-radius: 10px; line-height: 1.2;">
-                                        Invoice will be available <br><b>after delivery</b>
-                                      </div>`;
+                    invoiceSection = `<div class="flex-grow-1 text-center py-1" style="font-size: 10px; color: #888; border: 1px dashed #ddd; border-radius: 10px; line-height: 1.2;">Invoice after delivery</div>`;
                 }
 
-                // --- 3. Items Rendering (Premium List Style) ---
                 let itemsHTML = "";
                 items.forEach(item => {
-                    let itemImg = "images/LOGORJ.png"; // Fallback
+                    let itemImg = "images/LOGORJ.png";
                     if (window.productData) {
                         const found = window.productData.find(p => Number(p.id) === Number(item.id));
                         if (found && found.image) {
                             itemImg = found.image.startsWith('http') ? found.image : `https://res.cloudinary.com/dmmyehrzi/image/upload/jewellery_site/${found.image}`;
                         }
                     }
-  
+
+                    // Calculation for Gold Rate per gram if not provided
+                    const itemWeight = parseFloat(item.weight_gm || item.weight || 0);
+                    const itemPrice = parseFloat(item.price || 0);
+                    const ratePerGm = itemWeight > 0 ? Math.round(itemPrice / itemWeight) : 0;
+
                     itemsHTML += `
-                    <div class="d-flex align-items-center mb-3 p-2" style="background: #f8f9fa; border-radius: 12px; border: 1px solid #eee;">
-                        <div class="position-relative">
-                            <img src="${itemImg}" style="width: 55px; height: 55px; object-fit: contain; background: white; border-radius: 8px; border: 1px solid #ddd; padding: 2px;">
-                            <span class="position-absolute translate-middle badge rounded-pill bg-dark" style="top: 0; left: 100%; font-size: 9px; padding: 4px 6px;">x${item.quantity}</span>
-                        </div>
-                        <div class="ms-3 flex-grow-1">
-                            <h6 class="mb-0 fw-bold text-truncate" style="font-size: 13px; max-width: 150px;">${item.name}</h6>
-                            <div class="d-flex gap-2 mt-1" style="font-size: 10px; color: #666;">
-                                ${item.size ? `<span>Size: <b>${item.size}</b></span>` : ''}
-                                ${item.weight ? `<span>Wt: <b>${item.weight}g</b></span>` : ''}
+                    <div class="mb-3 p-3" style="background: #fdfcf9; border-radius: 15px; border: 1px solid #f1e4d1;">
+                        <div class="d-flex align-items-center">
+                            <div class="position-relative">
+                                <img src="${itemImg}" style="width: 60px; height: 60px; object-fit: contain; background: white; border-radius: 10px; border: 1px solid #eee; padding: 4px;">
+                                <span class="position-absolute translate-middle badge rounded-pill bg-dark" style="top: 0; left: 100%; font-size: 10px;">x${item.quantity}</span>
+                            </div>
+                            <div class="ms-3 flex-grow-1">
+                                <h6 class="mb-1 fw-bold text-dark" style="font-size: 14px;">${item.name}</h6>
+                                <div class="row g-0 mt-1">
+                                    <div class="col-4" style="font-size: 11px; color: #777;">Wt: <b class="text-dark">${itemWeight}g</b></div>
+                                    <div class="col-4" style="font-size: 11px; color: #777;">Size: <b class="text-dark">${item.customerSize || item.size || 'Adj'}</b></div>
+                                    <div class="col-4 text-end" style="font-size: 11px; color: #777;">Rate: <b class="text-dark">₹${ratePerGm.toLocaleString('en-IN')}</b></div>
+                                </div>
                             </div>
                         </div>
                     </div>`;
                 });
 
+                let actionBtn = `<button onclick="cancelOrder('${order.id}', '${order.custom_order_id}')" class="btn btn-sm w-100 mt-2" style="color: #dc3545; border: 1px solid #ff00002b; background: #fff5f5; border-radius: 8px; font-weight: 500;">Cancel Order</button>`;
+                if(sClass === 'cancelled' || sClass === 'delivered') actionBtn = "";
 
-
-
-
-                list.innerHTML += `
-                <div class="col-12 mb-4 animate__animated animate__fadeInUp">
-                    <div class="order-card-premium shadow-sm p-3" style="background: white; border-radius: 20px; border: 1px solid #f0f0f0; position: relative; overflow: hidden;">
-                        
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <div>
-                                <span class="badge" style="background: #fdf8f2; color: #a0845a; font-size: 10px; border: 1px solid #f1e4d1;">#RJ${order.custom_order_id}</span>
-                                <div class="text-muted mt-1" style="font-size: 11px;">${orderDateStr} at ${orderTimeStr}</div>
-                            </div>
-                            <div class="status-pill ${sClass}" style="padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 600;">
-                                ${status}
-                            </div>
+                grid.innerHTML += `
+                <div class="col-12 col-md-6 col-lg-4 animate__animated animate__fadeInUp">
+                    <div class="order-card-premium shadow-sm p-3 h-100 d-flex flex-column" style="background: white; border-radius: 20px; border: 1px solid #f0f0f0;">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge" style="background: #fdf8f2; color: #a0845a; font-size: 11px; border: 1px solid #f1e4d1; padding: 6px 10px;">#RJ${order.custom_order_id}</span>
+                            <div class="status-pill ${sClass}" style="padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase;">${status}</div>
                         </div>
 
-                        <div class="product-scroller" style="max-height: 180px; overflow-y: auto;">
+                        <div class="product-list flex-grow-1" style="max-height: 250px; overflow-y: auto;">
                             ${itemsHTML}
                         </div>
 
-                        <div class="row g-2 mt-2 align-items-center" style="background: #fafafa; border-radius: 15px; padding: 10px; margin: 0;">
-                            <div class="col-7">
-                                <div style="font-size: 10px; color: #a0845a; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Arrival Estimate</div>
-                                <div class="fw-bold" style="font-size: 13px; color: #2c3e50;"><i class="bi bi-truck me-1"></i> ${status === 'Cancelled' ? 'Order Cancelled' : arrival}</div>
+                        <div class="mt-auto">
+                            <div class="row g-0 align-items-center mb-3 p-2" style="background: #fafafa; border-radius: 12px;">
+                                <div class="col-6">
+                                    <small class="text-muted d-block" style="font-size: 10px;">Estimated Arrival</small>
+                                    <span class="fw-bold" style="font-size: 13px; color: #a0845a;">${status === 'Cancelled' ? 'N/A' : arrival}</span>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <small class="text-muted d-block" style="font-size: 10px;">Order Total</small>
+                                    <span class="fw-bold text-dark" style="font-size: 16px;">₹${Number(order.total_amount).toLocaleString('en-IN')}</span>
+                                </div>
                             </div>
-                            <div class="col-5 text-end">
-                                <div style="font-size: 10px; color: #888;">Grand Total</div>
-                                <div class="fw-bold" style="font-size: 16px; color: #4a1d1f;">₹${Number(order.total_amount).toLocaleString('en-IN')}</div>
+
+                            <div class="d-flex gap-2">
+                                <button onclick="goToTrack('${order.custom_order_id}')" class="btn btn-dark btn-sm flex-grow-1 py-2" style="border-radius: 10px; font-weight: 600; background: #222;">Track Order</button>
+                                ${invoiceSection} 
                             </div>
+                            ${actionBtn}
+                            <div class="text-center mt-2 text-muted" style="font-size: 10px;">Ordered on ${orderDateStr}</div>
                         </div>
-                        
-                        <div class="d-flex gap-2 mt-3 align-items-center">
-                            <button onclick="goToTrack('${order.custom_order_id}')" class="btn btn-dark btn-sm flex-grow-1 py-2" style="border-radius: 10px; font-size: 12px; background: #222;">Track</button>
-                            ${invoiceSection} 
-                        </div>
-                        ${actionBtn}  
                     </div>
                 </div>`;
-//                 // --- 4. Main Card Build ---
+            });
+        } else {
+            list.innerHTML = `<div class="text-center py-5"><img src="images/empty-cart.png" style="width:120px;opacity:0.5;"><h5 class="mt-3 text-muted">No Orders Found</h5></div>`;
+        }
+    } catch (err) {
+        console.error("Fetch Error:", err);
+    }
+}
+
+
+//  async function fetchOrders(email) {
+//     const list = document.getElementById('ordersList');
+//     try {
+//         const response = await fetch(`${BASE_URL}/api/user-orders/${encodeURIComponent(email)}`);
+//         const data = await response.json();
+
+//         list.innerHTML = ''; 
+
+//         if(data.success && data.orders.length > 0) {
+//             data.orders.forEach(order => {
+//                 const items = JSON.parse(order.items || "[]");
+
+//                 // --- 1. Advance Time & Delivery Logic ---
+//                 const oDate = new Date(order.created_at);
+//                 const orderTimeStr = oDate.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+//                 const orderDateStr = oDate.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+
+//                 const userPin = String(order.pincode || "").trim();
+//                 const getDeliveryDate = (days) => {
+//                     let d = new Date(oDate);
+//                     d.setDate(d.getDate() + days);
+//                     if(d.getDay() === 0) d.setDate(d.getDate() + 1);
+//                     return d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
+//                 };
+
+//                 let arrival = (["400067", "400064", "400091", "400092", "400097", "400095"].includes(userPin)) ? getDeliveryDate(1) : 
+//                               (userPin.startsWith('400') || userPin.startsWith('401')) ? getDeliveryDate(2) : getDeliveryDate(6);
+
+//                 // --- 2. Status Colors & Buttons ---
+//                 const status = (order.status || "Order Confirm");
+//                 const sClass = status.toLowerCase().replace(/\s/g, '-');
+                
+//                 let actionBtn = `<button onclick="cancelOrder('${order.id}', '${order.custom_order_id}')" class="btn btn-sm w-100 mt-2" style="color: #dc3545; border: 1px solid #ff00002b; background: #fff5f5; border-radius: 8px; font-weight: 500;">Cancel Order</button>`;
+//                 if(sClass === 'cancelled' || sClass === 'delivered') actionBtn = "";
+
+
+//                 // --- INVOICE SECTION LOGIC (Yahan define kiya hai) ---
+//                 let invoiceSection = "";
+//                 if (sClass === 'delivered') {
+//                     invoiceSection = `<button onclick="viewInvoice('${order.custom_order_id}')" class="btn btn-outline-dark btn-sm flex-grow-1 py-2" style="border-radius: 10px; font-size: 12px; border: 1px solid #ddd;">Invoice</button>`;
+//                 } else if (sClass === 'cancelled') {
+//                     invoiceSection = "";
+//                 } else {
+//                     invoiceSection = `<div class="flex-grow-1 text-center py-1" style="font-size: 10px; color: #888; border: 1px dashed #ddd; border-radius: 10px; line-height: 1.2;">
+//                                         Invoice will be available <br><b>after delivery</b>
+//                                       </div>`;
+//                 }
+
+//                 // --- 3. Items Rendering (Premium List Style) ---
+//                 let itemsHTML = "";
+//                 items.forEach(item => {
+//                     let itemImg = "images/LOGORJ.png"; // Fallback
+//                     if (window.productData) {
+//                         const found = window.productData.find(p => Number(p.id) === Number(item.id));
+//                         if (found && found.image) {
+//                             itemImg = found.image.startsWith('http') ? found.image : `https://res.cloudinary.com/dmmyehrzi/image/upload/jewellery_site/${found.image}`;
+//                         }
+//                     }
+  
+//                     itemsHTML += `
+//                     <div class="d-flex align-items-center mb-3 p-2" style="background: #f8f9fa; border-radius: 12px; border: 1px solid #eee;">
+//                         <div class="position-relative">
+//                             <img src="${itemImg}" style="width: 55px; height: 55px; object-fit: contain; background: white; border-radius: 8px; border: 1px solid #ddd; padding: 2px;">
+//                             <span class="position-absolute translate-middle badge rounded-pill bg-dark" style="top: 0; left: 100%; font-size: 9px; padding: 4px 6px;">x${item.quantity}</span>
+//                         </div>
+//                         <div class="ms-3 flex-grow-1">
+//                             <h6 class="mb-0 fw-bold text-truncate" style="font-size: 13px; max-width: 150px;">${item.name}</h6>
+//                             <div class="d-flex gap-2 mt-1" style="font-size: 10px; color: #666;">
+//                                 ${item.size ? `<span>Size: <b>${item.size}</b></span>` : ''}
+//                                 ${item.weight ? `<span>Wt: <b>${item.weight}g</b></span>` : ''}
+//                             </div>
+//                         </div>
+//                     </div>`;
+//                 });
+
+
+
+
+
 //                 list.innerHTML += `
 //                 <div class="col-12 mb-4 animate__animated animate__fadeInUp">
 //                     <div class="order-card-premium shadow-sm p-3" style="background: white; border-radius: 20px; border: 1px solid #f0f0f0; position: relative; overflow: hidden;">
@@ -414,192 +497,23 @@
 //                                 <div class="fw-bold" style="font-size: 16px; color: #4a1d1f;">₹${Number(order.total_amount).toLocaleString('en-IN')}</div>
 //                             </div>
 //                         </div>
-
-            
-// <div class="d-flex gap-2 mt-3">
+                        
+//                         <div class="d-flex gap-2 mt-3 align-items-center">
 //                             <button onclick="goToTrack('${order.custom_order_id}')" class="btn btn-dark btn-sm flex-grow-1 py-2" style="border-radius: 10px; font-size: 12px; background: #222;">Track</button>
-//                             <button onclick="viewInvoice('${order.custom_order_id}')" class="btn btn-outline-dark btn-sm flex-grow-1 py-2" style="border-radius: 10px; font-size: 12px; border: 1px solid #ddd;">Invoice</button>
+//                             ${invoiceSection} 
 //                         </div>
 //                         ${actionBtn}  
 //                     </div>
 //                 </div>`;
-            });
-        } else {
-            list.innerHTML = `<div class="text-center py-5"><img src="images/empty-cart.png" style="width:120px;opacity:0.5;"><h5 class="mt-3 text-muted">No Orders Found</h5></div>`;
-        }
-    } catch (err) {
-        console.error("Fetch Error:", err);
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// async function fetchOrders(email) {
-//     const list = document.getElementById('ordersList');
-//     try {
-//         const response = await fetch(`${BASE_URL}/api/user-orders/${encodeURIComponent(email)}`);
-//         const data = await response.json();
-
-//         list.innerHTML = ''; 
-
-//         if(data.success && data.orders.length > 0) {
-//             data.orders.forEach(order => {
-//                 const items = JSON.parse(order.items || "[]");
-
-//                 // 1. Database se Pincode uthao
-//                 const userPin = String(order.pincode || "").trim();
-
-//                 // 2. Order Date Fix & Exact Time formatting
-//                 const oDate = new Date(order.created_at);
-//                 const timeString = oDate.toLocaleTimeString('en-IN', { 
-//                     hour: '2-digit', 
-//                     minute: '2-digit', 
-//                     second: '2-digit', 
-//                     hour12: true 
-//                 });
-
-//                 const orderDateStr = !isNaN(oDate) ? oDate.toLocaleDateString('en-IN', { 
-//                     day: 'numeric', month: 'short', year: 'numeric' 
-//                 }) : "Date Pending";
-
-//                 const fullOrderTime = `${orderDateStr} at ${timeString}`;
-
-//                 // 3. 📅 Delivery Date Logic
-//                 const getDeliveryDate = (days) => {
-//                     let d = !isNaN(oDate.getTime()) ? new Date(oDate) : new Date();
-//                     d.setDate(d.getDate() + days);
-//                     if(d.getDay() === 0) d.setDate(d.getDate() + 1); // Sunday Skip
-//                     return d.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' });
-//                 };
-
-//                 let finalDeliveryDate = "";
-//                 if (["400067", "400064", "400091", "400092", "400097", "400095"].includes(userPin)) {
-//                     finalDeliveryDate = getDeliveryDate(1); 
-//                 } else if (userPin.startsWith('400') || userPin.startsWith('401')) {
-//                     finalDeliveryDate = getDeliveryDate(2); 
-//                 } else {
-//                     finalDeliveryDate = getDeliveryDate(6); 
-//                 }
-
-//                 // 4. Cancel Button Logic
-//                 const currentStatusRaw = (order.status || "").toLowerCase();
-//                 let cancelBtnHTML = "";
-
-//                 if (currentStatusRaw === "cancelled") {
-//                     cancelBtnHTML = `<button class="btn btn-secondary w-100 btn-sm py-2" disabled><i class="bi bi-x-circle me-1"></i> Cancelled</button>`;
-//                 } else if (currentStatusRaw === "delivered") {
-//                     cancelBtnHTML = `<button class="btn btn-outline-secondary w-100 btn-sm py-2" disabled>Delivered</button>`;
-//                 } else if (currentStatusRaw === "out for delivery" || currentStatusRaw === "insured transit") {
-//                     cancelBtnHTML = `<button class="btn btn-light w-100 btn-sm py-2 text-muted" disabled title="In Transit">Cannot Cancel</button>`;
-//                 } else {
-//                     cancelBtnHTML = `<button onclick="cancelOrder('${order.id}', '${order.custom_order_id}')" class="btn btn-outline-danger w-100 btn-sm py-2">Cancel Order</button>`;
-//                 }
-
-//                 // 5. ✨ LIVE IMAGE MAPPING (No Logo Logic)
-//                 let firstImage = ""; 
-//                 if (items && items.length > 0) {
-//                     const productId = Number(items[0].id);
-//                     if (window.productData && window.productData.length > 0) {
-//                         const foundProduct = window.productData.find(p => Number(p.id) === productId);
-//                         if (foundProduct && foundProduct.image) {
-//                             const imgPath = foundProduct.image;
-//                             firstImage = imgPath.startsWith('http') 
-//                                 ? imgPath 
-//                                 : `https://res.cloudinary.com/dmmyehrzi/image/upload/jewellery_site/${imgPath}`;
-//                         }
-//                     }
-//                 }
-
-//                 const statusRaw = order.status || "Order Confirm";
-//                 const statusClass = statusRaw.toLowerCase().replace(/\s/g, '-');
-
-//                 // 6. Final HTML Rendering
-//                 list.innerHTML += `
-//                 <div class="col-12 col-md-6 col-xl-4 mb-4">
-//                     <div class="card order-card p-4 h-100 shadow-sm border-0">
-//                         <div class="d-flex justify-content-between align-items-center mb-3">
-//                             <span class="status-badge status-${statusClass}">${statusRaw}</span>
-//                             <small class="text-muted fw-bold">#RJ${order.custom_order_id || order.id}</small>
-//                         </div>
-                        
-//                         <div class="d-flex align-items-center mb-3">
-//                             <div class="product-img-container me-3 border rounded shadow-sm" style="width:75px; height:75px; overflow:hidden; background:#fff; display:flex; align-items:center; justify-content:center;">
-//                                 ${firstImage ? `
-//                                     <img src="${firstImage}" 
-//                                          alt="Product"
-//                                          style="width: 100%; height: 100%; object-fit: contain; padding: 5px;">
-//                                 ` : `
-//                                     <div style="font-size: 10px; color: #ccc; text-align:center;">Image<br>Not Loaded</div>
-//                                 `}
-//                             </div>
-//                             <div>
-//                                 <h6 class="mb-1 fw-bold">${items.length} Item(s)</h6>
-//                                 <p class="text-muted small mb-0">Ordered on: <b>${fullOrderTime}</b></p>
-//                             </div>
-//                         </div>
-
-//                         <div class="delivery-status-box p-3 rounded-3 mb-4" style="background: #fdf8f2; border-left: 4px solid #a0845a;">
-//                             <div class="d-flex align-items-center">
-//                                 <i class="bi bi-truck fs-4 me-3" style="color: #4a1d1f;"></i>
-//                                 <div>
-//                                     <p class="mb-0 text-uppercase fw-bold" style="font-size: 10px; color: #a0845a; letter-spacing: 1px;">Expected Arrival</p>
-//                                     <p class="mb-0 fw-bold text-dark">${statusRaw === 'Cancelled' ? 'Cancelled' : finalDeliveryDate}</p>
-//                                 </div>
-//                             </div>
-//                         </div>
-
-//                         <div class="mt-auto">
-//                             <div class="d-flex justify-content-between align-items-center mb-3">
-//                                 <span class="text-muted small">Total Paid:</span>
-//                                 <h4 class="fw-bold mb-0" style="color: #4a1d1f">₹${Number(order.total_amount).toLocaleString('en-IN')}</h4>
-//                             </div>
-                            
-//                             <div class="row g-2">
-//                                 <div class="col-6">
-//                                     <button onclick="goToTrack('${order.custom_order_id || order.id}')" class="btn btn-outline-dark w-100 btn-sm py-2">Track Order</button>
-//                                 </div>
-//                                 <div class="col-6">
-//                                     <button onclick="viewInvoice('${order.custom_order_id || order.id}')" class="btn btn-dark w-100 btn-sm py-2">Invoice</button>
-//                                 </div>
-//                                 <div class="col-12 mt-2">
-//                                     ${cancelBtnHTML} 
-//                                 </div>
-//                             </div>
-//                         </div>
-//                     </div>
-//                 </div>`;
 //             });
 //         } else {
-//             // Empty State Logic
-//             list.innerHTML = `
-//                 <div class="text-center py-5 w-100 animate__animated animate__fadeIn">
-//                     <div class="d-flex justify-content-center">
-//                         <dotlottie-player 
-//                             src="https://lottie.host/37052c92-e422-442d-8b43-838e759d09d7/1vVI21Qwy1.lottie"
-//                             background="transparent" speed="1" style="width: 250px; height: 250px;" loop autoplay>
-//                         </dotlottie-player>
-//                     </div>
-//                     <h4 class="fw-bold mt-3" style="color: #2c3e50;">No Orders Yet!</h4>
-//                     <p class="text-muted">It seems you haven't placed any orders with us yet.</p>
-//                     <a href="collection.html" class="btn btn-outline-dark rounded-pill px-4 mt-2 shadow-sm">START SHOPPING</a>
-//                 </div>`;
+//             list.innerHTML = `<div class="text-center py-5"><img src="images/empty-cart.png" style="width:120px;opacity:0.5;"><h5 class="mt-3 text-muted">No Orders Found</h5></div>`;
 //         }
 //     } catch (err) {
 //         console.error("Fetch Error:", err);
-//         list.innerHTML = `<div class="text-center py-5 w-100"><div class="alert alert-danger d-inline-block px-5 rounded-pill shadow-sm">Error loading orders. Please try again.</div></div>`;
 //     }
 // }
+
 
 // orders.js ke ekdum niche ise rehne dena
 function startOrderProcess() {
