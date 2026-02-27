@@ -1,4 +1,470 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Official Tax Invoice | Ramesh Jewellers</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- <style>
+        :root {
+            --gold-gradient: linear-gradient(135deg, #8a6d3b 0%, #c5a368 50%, #8a6d3b 100%);
+            --dark-luxury: #121212;
+            --glass-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        body { 
+            background: #f4f1ea; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            color: #2d2d2d;
+            -webkit-print-color-adjust: exact;
+        }
+
+        .invoice-wrapper {
+            max-width: 850px;
+            margin: 40px auto;
+            background: var(--glass-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            border: 1px solid rgba(160, 132, 90, 0.2);
+            position: relative;
+        }
+
+        /* Top Luxury Header */
+        .invoice-header-strip {
+            background: var(--dark-luxury);
+            height: 12px;
+            width: 100%;
+        }
+
+        .brand-section {
+            padding: 40px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .brand-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 32px;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .luxury-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #fdf8f2;
+            border: 1px solid #c5a368;
+            color: #8a6d3b;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            border-radius: 50px;
+            letter-spacing: 1px;
+        }
+
+        /* Tables for Mobile */
+        .table-luxury {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .table-luxury thead {
+            background: #f9f7f2;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        .table-luxury th {
+            padding: 15px;
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #8a6d3b;
+            letter-spacing: 1px;
+        }
+
+        .table-luxury td {
+            padding: 20px 15px;
+            border-bottom: 1px solid #fafafa;
+            vertical-align: middle;
+        }
+
+        .item-name { font-weight: 800; font-size: 15px; color: #1a1a1a; }
+        .item-meta { font-size: 11px; color: #888; margin-top: 4px; }
+
+        /* Total Section */
+        .summary-card {
+            background: #1a1a1a;
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px;
+        }
+
+        .grand-total-text {
+            font-size: 28px;
+            font-weight: 800;
+            color: #c5a368;
+        }
+
+        /* Responsive Fix */
+        @media (max-width: 600px) {
+            .invoice-wrapper { margin: 10px; border-radius: 10px; }
+            .brand-section { padding: 25px; text-align: center; }
+            .col-mobile-100 { width: 100% !important; text-align: center !important; margin-bottom: 20px; }
+            
+            /* Mobile Table to Cards */
+            .table-luxury thead { display: none; }
+            .table-luxury tr { display: block; border-bottom: 1px solid #eee; padding: 15px 0; }
+            .table-luxury td { display: flex; justify-content: space-between; padding: 5px 15px; text-align: right; }
+            .table-luxury td::before { content: attr(data-label); font-weight: 800; color: #8a6d3b; text-align: left; font-size: 12px; }
+        }
+
+        @media print {
+            .no-print { display: none; }
+            body { background: white; padding: 0; }
+            .invoice-wrapper { box-shadow: none; border: none; margin: 0; width: 100%; }
+        }
+
+
+        /* Phone par table ko seedha rakhne ke liye naya style */
+    .brand-section {
+        text-align: center; /* Company name top center */
+        padding: 20px 10px;
+    }
+
+    .table-luxury {
+        width: 100%;
+        font-size: 11px; /* Font thoda chota kiya phone ke liye */
+        border-collapse: collapse;
+    }
+
+    .table-luxury th {
+        background: #f8f9fa;
+        padding: 8px 4px;
+        border-bottom: 2px solid #eee;
+        white-space: nowrap;
+    }
+
+    .table-luxury td {
+        padding: 10px 4px;
+        border-bottom: 1px solid #eee;
+        vertical-align: middle;
+    }
+
+    /* Mobile view mein cards ko disable kiya */
+    @media (max-width: 600px) {
+        .table-luxury thead { display: table-header-group !important; }
+        .table-luxury tr { display: table-row !important; }
+        .table-luxury td { display: table-cell !important; text-align: center !important; }
+        .table-luxury td:first-child { text-align: left !important; width: 30%; }
+        .table-luxury td:last-child { text-align: right !important; }
+        
+        .item-name { font-size: 12px; }
+        .brand-logo { font-size: 24px; }
+    }
+    </style> -->
+
+
+    <style>
+    :root {
+        --gold-gradient: linear-gradient(135deg, #8a6d3b 0%, #c5a368 50%, #8a6d3b 100%);
+        --dark-luxury: #121212;
+    }
+
+    body { 
+        background: #f4f1ea; 
+        font-family: 'Plus Jakarta Sans', sans-serif; 
+        color: #2d2d2d;
+    }
+
+    .invoice-wrapper {
+        max-width: 850px;
+        margin: 20px auto;
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    /* Top Center Header Fix */
+    .brand-section {
+        padding: 30px 15px;
+        text-align: center; /* Sab kuch center mein */
+        border-bottom: 1px solid #eee;
+    }
+
+    .brand-logo {
+        font-family: 'Cinzel', serif;
+        font-size: 28px;
+        background: var(--gold-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: 2px;
+        margin-bottom: 5px;
+    }
+
+    /* Table Fix for Mobile (No Cards) */
+    .table-luxury {
+        width: 100%;
+        margin-top: 10px;
+        border-collapse: collapse;
+        font-size: 13px; /* Phone ke liye thoda chota */
+    }
+
+    .table-luxury thead {
+        background: #f9f7f2;
+    }
+
+    .table-luxury th {
+        padding: 10px 5px;
+        color: #8a6d3b;
+        text-transform: uppercase;
+        font-size: 11px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .table-luxury td {
+        padding: 12px 5px;
+        border-bottom: 1px solid #fafafa;
+        vertical-align: middle;
+    }
+
+    /* Force Table to stay Straight on Mobile */
+    @media (max-width: 600px) {
+        .invoice-wrapper { margin: 0; border-radius: 0; }
+        .brand-logo { font-size: 22px; }
+        
+        /* Table responsive behavior disabled to keep it horizontal */
+        .table-luxury {
+            display: table !important; 
+        }
+        .table-luxury thead {
+            display: table-header-group !important;
+        }
+        .table-luxury tr {
+            display: table-row !important;
+        }
+        .table-luxury td, .table-luxury th {
+            display: table-cell !important;
+            padding: 8px 3px !important;
+            font-size: 10px !important; /* Mobile par fit karne ke liye */
+        }
+        
+        .item-name { font-size: 11px !important; }
+        .item-meta { display: none; } /* Extra details mobile par chhupa di taaki space bache */
+    }
+
+    .summary-card {
+        background: #1a1a1a;
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 15px;
+    }
+
+    .grand-total-text {
+        font-size: 22px;
+        font-weight: 800;
+        color: #c5a368;
+    }
+
+    @media print {
+        .no-print { display: none; }
+        .invoice-wrapper { box-shadow: none; border: none; width: 100%; }
+    }
+</style>
+</head>
+<body>
+
+<div class="container no-print mt-4 text-center">
+    <button class="btn btn-dark shadow rounded-pill px-4" onclick="window.print()">
+        <i class="bi bi-printer me-2"></i> Print Official Invoice
+    </button>
+</div>
+
+<div class="invoice-wrapper shadow-lg" id="invoiceArea">
+    <div class="invoice-header-strip"></div>
+    
+    <div class="brand-section">
+        <div class="row align-items-center">
+            <div class="col-md-7 col-mobile-100">
+                <div class="brand-logo">RAMESH JEWELLERS</div>
+                <div class="luxury-badge">BIS Hallmarked • 100% Certified</div>
+                <p class="mt-3 small mb-0 text-muted">
+                    Zaveri Bazaar, Mumbai, MH 400002<br>
+                    <strong>GSTIN:</strong> 27AAAAA0000A1Z5 | <strong>PAN:</strong> ABCDE1234F
+                </p>
+            </div>
+            <div class="col-md-5 text-md-end col-mobile-100">
+                <h4 class="fw-800 mb-1">TAX INVOICE</h4>
+                <p class="text-muted small mb-0">Invoice No: <span class="text-dark fw-bold" id="invId">#---</span></p>
+                <p class="text-muted small">Date: <span class="text-dark fw-bold" id="invDate">--/--/----</span></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="px-4 py-4 border-bottom bg-light bg-opacity-50">
+        <div class="row">
+            <div class="col-6 col-mobile-100">
+                <span class="text-uppercase small fw-bold text-muted" style="letter-spacing: 1px;">Customer Details</span>
+                <h6 id="custName" class="mt-2 fw-800 mb-1 text-dark">---</h6>
+                <p id="custAddr" class="small text-muted mb-1 pe-md-5">---</p>
+                <p id="custPhone" class="small fw-bold">📞 ---</p>
+            </div>
+            <div class="col-6 text-md-end col-mobile-100">
+                <span class="text-uppercase small fw-bold text-muted" style="letter-spacing: 1px;">Payment Method</span>
+                <p class="mt-2 mb-1 fw-bold text-dark">Prepaid Online Order</p>
+                <span class="badge bg-success rounded-pill px-3">Transaction Success</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-2">
+        <table class="table-luxury">
+<thead>
+    <tr>
+        <th>Jewellery Description</th>
+        <th class="text-center">Purity</th>
+        <th class="text-center">Weight</th>
+        <th class="text-center">Size</th>
+        <th class="text-center">Qty</th>
+        <th class="text-end">Price</th>
+        <th class="text-end">Total</th>
+    </tr>
+</thead>
+            <tbody id="itemTable">
+                </tbody>
+        </table>
+    </div>
+
+    <div class="row g-0 align-items-center mt-3">
+        <div class="col-md-6 p-4">
+            <div class="border rounded-3 p-3 bg-white">
+                <p class="small fw-bold mb-2"><i class="bi bi-shield-check text-success me-2"></i>Quality Assurance</p>
+                <p class="x-small text-muted mb-0" style="font-size: 10px; line-height: 1.5;">
+                    This invoice confirms that the items described above have been tested for purity. Gold items are BIS Hallmarked. Diamonds are SGL/IGI certified. Goods once sold are subject to the terms and conditions of Ramesh Jewellers.
+                </p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="summary-card">
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="small opacity-75">Taxable Value</span>
+                    <span id="subTotal" class="fw-bold">₹0.00</span>
+                </div>
+                <div class="d-flex justify-content-between mb-3 border-bottom border-secondary pb-3">
+                    <span class="small opacity-75">GST (3%)</span>
+                    <span id="gstAmount" class="fw-bold">₹0.00</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="h6 mb-0 fw-bold">Grand Total</span>
+                    <span id="grandTotal" class="grand-total-text">₹0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center py-5">
+        <p class="small text-muted mb-2">Computer Generated Invoice - No Signature Required</p>
+        <div style="font-family: 'Cinzel', serif; color: #8a6d3b; font-size: 18px;">Ramesh Jewellers</div>
+        <div class="mt-3">
+            <img src="https://upload.wikimedia.org/wikipedia/en/3/3d/BIS_Hallmark.png" height="30" style="filter: grayscale(1); opacity: 0.5;" alt="Hallmark">
+        </div>
+    </div>
+</div>
+
+<script>
+
+// --- LIVE CONFIGURATION ---
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const BASE_URL = isLocal ? "http://localhost:3000" : "https://jewellery-website-f9tx.onrender.com";
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('orderId') || urlParams.get('id');
+        if (orderId) fetchOrderDetails(orderId);
+    });
+
+    async function fetchOrderDetails(id) {
+        try {
+            // const response = await fetch(`http://localhost:3000/api/order-status/${id}`);
+            const response = await fetch(`${BASE_URL}/api/order-status/${id}`);
+            const data = await response.json();
+            const order = data.order || data;
+
+            // --- HEADER INFO ---
+            const options = { day: '2-digit', month: 'long', year: 'numeric' };
+            document.getElementById('invDate').innerText = new Date(order.created_at || order.order_date).toLocaleDateString('en-GB', options);
+            document.getElementById('invId').innerText = `#RJ${order.custom_order_id || order.id}`;
+            document.getElementById('custName').innerText = order.customer_name;
+            document.getElementById('custAddr').innerText = order.address;
+            document.getElementById('custPhone').innerText = order.phone;
+
+            // --- ITEMS TABLE ---
+            const items = JSON.parse(order.items || "[]");
+            const table = document.getElementById('itemTable');
+            table.innerHTML = '';
+
+            items.forEach(item => {
+                // FALLBACK LOGIC: Agar keys missing hain toh logic lagao
+               const weight = item.weight_gm || item.weight || '--';
+    const size = item.customerSize || item.size || 'Adjustable';
+    const purity = item.purity || '22K';
+    const qty = parseInt(item.quantity) || 1;
+    const unitPrice = parseFloat(item.price) || 0;
+    const totalItemAmount = unitPrice * qty;
+
+                table.innerHTML += `
+                    <tr>
+            <td data-label="Jewellery Description">
+                <div class="item-name">${item.name}</div>
+            </td>
+            <td class="text-center" data-label="Weight">${purity}K</td>
+            <td class="text-center" data-label="Weight">${weight} g</td>
+            <td class="text-center" data-label="Size">${size}</td>
+            <td class="text-center" data-label="Qty">${qty}</td>
+            <td class="text-end" data-label="Price">₹${unitPrice.toLocaleString('en-IN')}</td>
+            <td class="text-end fw-800" data-label="Total Amount">₹${totalItemAmount.toLocaleString('en-IN')}</td>
+        </tr>
+                `;
+            });
+
+            // --- REVERSE GST MATHS ---
+            const total = parseFloat(order.total_amount);
+            const taxableValue = total / 1.03;
+            const gst = total - taxableValue;
+
+            document.getElementById('subTotal').innerText = "₹" + taxableValue.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('gstAmount').innerText = "₹" + gst.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('grandTotal').innerText = "₹" + total.toLocaleString('en-IN');
+
+        } catch (err) {
+            console.error("Invoice Error:", err);
+            alert("Unable to fetch invoice details.");
+        }
+    }
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -174,4 +640,4 @@
     }
 </script>
 </body>
-</html> 
+</html>  -->

@@ -170,7 +170,10 @@ const orderData = {
         name: item.name,
         quantity: Number(item.quantity || item.qty || 1), 
         price: item.price,
-        image: item.image
+        image: item.image,
+        weight_gm: item.weight_gm || 0,
+        customerSize: item.customerSize || 'N/A',
+        purity: item.purity || '22K'
     }))
 };
 
