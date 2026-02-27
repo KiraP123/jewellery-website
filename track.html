@@ -175,6 +175,95 @@
             font-size: 30px; box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
             text-decoration: none; z-index: 100;
         }
+
+
+
+
+
+                /* --- Mobile Responsive Fixes --- */
+@media (max-width: 576px) {
+    .ultra-card {
+        margin-top: 20px;
+        border-radius: 25px; /* Thoda kam round mobile par */
+    }
+    
+    .premium-header {
+        padding: 40px 15px;
+    }
+
+    .premium-header h1 {
+        font-size: 1.5rem; /* Heading choti ki */
+    }
+
+    .search-container {
+        margin: -25px 20px 0;
+    }
+
+    .search-container input {
+        height: 55px;
+        font-size: 1rem;
+        padding-left: 50px;
+    }
+
+    .search-container i {
+        left: 18px;
+        top: 16px;
+        font-size: 1.2rem;
+    }
+
+    .btn-ultra {
+        height: 40px;
+        top: 8px;
+        padding: 0 15px;
+        font-size: 0.8rem;
+    }
+
+    /* Stepper Mobile Fix */
+    .stepper-box {
+        padding: 40px 10px; /* Side padding kam ki */
+    }
+
+    .node-circle {
+        width: 35px; /* Circle size chota kiya */
+        height: 35px;
+        font-size: 1rem;
+        border-width: 2px;
+    }
+
+    .step-node .small {
+        font-size: 9px; /* Label chota kiya */
+        letter-spacing: 0;
+        line-height: 1;
+        margin-top: 5px;
+    }
+
+    .main-line {
+        top: 58px; /* Circle ke hisab se line adjust ki */
+    }
+
+    /* Info Cards Mobile Fix */
+    .info-grid {
+        padding: 0 20px 30px;
+        grid-template-columns: 1fr; /* Ek ke niche ek */
+        gap: 15px;
+    }
+
+    .info-card {
+        padding: 15px;
+    }
+
+    #trackingContent .p-5 {
+        padding: 25px !important; /* Header padding kam ki */
+        flex-direction: column; /* Text aur ID upar niche */
+        text-align: center;
+    }
+
+    .text-end.bg-white {
+        text-align: center !important;
+        margin-top: 15px;
+        width: 100%;
+    }
+}
     </style>
 </head>
 <body>
