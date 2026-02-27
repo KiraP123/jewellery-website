@@ -320,28 +320,28 @@ async function fetchOrders(email) {
                         }
                     }
 
-                   // --- Calculation & Details ---
-    const wt = item.weight_gm || item.weight || '0';
-    const sz = item.customerSize || item.size || 'Adj';
-    const price = parseFloat(item.price) || 0;
-    // Gram ke hisab se price (Total Price divided by Weight)
-    const pricePerGram = (parseFloat(wt) > 0) ? Math.round(price / parseFloat(wt)) : 0;
+                   // --- Calculation Update ---
+const wtValue = parseFloat(item.weight_gm || item.weight || 0);
+const szValue = item.customerSize || item.size || 'Adj';
+const perGramPrice = parseFloat(item.price) || 0;
+const totalCalculated = Math.round(wtValue * perGramPrice); // Weight * Price logic
 
-                    itemsHTML += `
-                    <div class="d-flex align-items-center mb-3 p-2" style="background: #f8f9fa; border-radius: 12px; border: 1px solid #eee;">
-        <div class="position-relative">
-            <img src="${itemImg}" style="width: 55px; height: 55px; object-fit: contain; background: white; border-radius: 8px; border: 1px solid #ddd; padding: 2px;">
-            <span class="position-absolute translate-middle badge rounded-pill bg-dark" style="top: 0; left: 100%; font-size: 9px; padding: 4px 6px;">x${item.quantity}</span>
+
+                itemsHTML += `
+<div class="d-flex align-items-center mb-3 p-2" style="background: #f8f9fa; border-radius: 12px; border: 1px solid #eee;">
+    <div class="position-relative">
+        <img src="${itemImg}" style="width: 55px; height: 55px; object-fit: contain; background: white; border-radius: 8px; border: 1px solid #ddd; padding: 2px;">
+        <span class="position-absolute translate-middle badge rounded-pill bg-dark" style="top: 0; left: 100%; font-size: 9px; padding: 4px 6px;">x${item.quantity}</span>
+    </div>
+    <div class="ms-3 flex-grow-1">
+        <h6 class="mb-0 fw-bold text-truncate" style="font-size: 13px; max-width: 150px;">${item.name}</h6>
+        <div class="d-flex flex-wrap gap-2 mt-1" style="font-size: 10px; color: #666;">
+            <span>Wt: <b>${wtValue}g</b></span>
+            <span>Size: <b>${szValue}</b></span>
+            <span>Price: <b>₹${totalCalculated.toLocaleString('en-IN')}</b></span>
         </div>
-        <div class="ms-3 flex-grow-1">
-            <h6 class="mb-0 fw-bold text-truncate" style="font-size: 13px; max-width: 150px;">${item.name}</h6>
-            <div class="d-flex flex-wrap gap-2 mt-1" style="font-size: 10px; color: #666;">
-                <span>Wt: <b>${wt}g</b></span>
-                <span>Size: <b>${sz}</b></span>
-                <span>Price/g: <b>₹${pricePerGram.toLocaleString('en-IN')}</b></span>
-            </div>
-        </div>
-    </div>`;
+    </div>
+</div>`;
                 });
 
                 let actionBtn = `<button onclick="cancelOrder('${order.id}', '${order.custom_order_id}')" class="btn btn-sm w-100 mt-2" style="color: #dc3545; border: 1px solid #ff00002b; background: #fff5f5; border-radius: 8px; font-weight: 500;">Cancel Order</button>`;
