@@ -320,28 +320,28 @@ async function fetchOrders(email) {
                         }
                     }
 
-                    // Calculation for Gold Rate per gram if not provided
-                    const itemWeight = parseFloat(item.weight_gm || item.weight || 0);
-                    const itemPrice = parseFloat(item.price || 0);
-                    const ratePerGm = itemWeight > 0 ? Math.round(itemPrice / itemWeight) : 0;
+                   // --- Calculation & Details ---
+    const wt = item.weight_gm || item.weight || '0';
+    const sz = item.customerSize || item.size || 'Adj';
+    const price = parseFloat(item.price) || 0;
+    // Gram ke hisab se price (Total Price divided by Weight)
+    const pricePerGram = (parseFloat(wt) > 0) ? Math.round(price / parseFloat(wt)) : 0;
 
                     itemsHTML += `
-                    <div class="mb-3 p-3" style="background: #fdfcf9; border-radius: 15px; border: 1px solid #f1e4d1;">
-                        <div class="d-flex align-items-center">
-                            <div class="position-relative">
-                                <img src="${itemImg}" style="width: 60px; height: 60px; object-fit: contain; background: white; border-radius: 10px; border: 1px solid #eee; padding: 4px;">
-                                <span class="position-absolute translate-middle badge rounded-pill bg-dark" style="top: 0; left: 100%; font-size: 10px;">x${item.quantity}</span>
-                            </div>
-                            <div class="ms-3 flex-grow-1">
-                                <h6 class="mb-1 fw-bold text-dark" style="font-size: 14px;">${item.name}</h6>
-                                <div class="row g-0 mt-1">
-                                    <div class="col-4" style="font-size: 11px; color: #777;">Wt: <b class="text-dark">${itemWeight}g</b></div>
-                                    <div class="col-4" style="font-size: 11px; color: #777;">Size: <b class="text-dark">${item.customerSize || item.size || 'Adj'}</b></div>
-                                    <div class="col-4 text-end" style="font-size: 11px; color: #777;">Rate: <b class="text-dark">₹${ratePerGm.toLocaleString('en-IN')}</b></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>`;
+                    <div class="d-flex align-items-center mb-3 p-2" style="background: #f8f9fa; border-radius: 12px; border: 1px solid #eee;">
+        <div class="position-relative">
+            <img src="${itemImg}" style="width: 55px; height: 55px; object-fit: contain; background: white; border-radius: 8px; border: 1px solid #ddd; padding: 2px;">
+            <span class="position-absolute translate-middle badge rounded-pill bg-dark" style="top: 0; left: 100%; font-size: 9px; padding: 4px 6px;">x${item.quantity}</span>
+        </div>
+        <div class="ms-3 flex-grow-1">
+            <h6 class="mb-0 fw-bold text-truncate" style="font-size: 13px; max-width: 150px;">${item.name}</h6>
+            <div class="d-flex flex-wrap gap-2 mt-1" style="font-size: 10px; color: #666;">
+                <span>Wt: <b>${wt}g</b></span>
+                <span>Size: <b>${sz}</b></span>
+                <span>Price/g: <b>₹${pricePerGram.toLocaleString('en-IN')}</b></span>
+            </div>
+        </div>
+    </div>`;
                 });
 
                 let actionBtn = `<button onclick="cancelOrder('${order.id}', '${order.custom_order_id}')" class="btn btn-sm w-100 mt-2" style="color: #dc3545; border: 1px solid #ff00002b; background: #fff5f5; border-radius: 8px; font-weight: 500;">Cancel Order</button>`;
