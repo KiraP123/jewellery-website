@@ -173,7 +173,8 @@ const orderData = {
         image: item.image,
         weight_gm: item.weight_gm || 0,
         customerSize: item.customerSize || 'N/A',
-        purity: item.purity || '22K'
+        purity: item.purity || '22K',
+        making_charge: item.making_charge
     }))
 };
 
