@@ -75,8 +75,8 @@ function logout() {
 // Gold rate calculation logic
 document.getElementById('r995')?.addEventListener('input', function() {
     const base = parseFloat(this.value) || 0;
-    document.getElementById('r916').value = Math.round(base * 0.916);
-    document.getElementById('r750').value = Math.round(base * 0.750);
+    document.getElementById('r916').value = Math.round(base * 0.92);
+    document.getElementById('r750').value = Math.round(base * 0.7525);
 });
 
 // Table search filter
