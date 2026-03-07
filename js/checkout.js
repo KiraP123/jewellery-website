@@ -123,6 +123,36 @@ async function autoFillFromDatabase() {
 
 // --- ORDER SUBMIT ACTION (With Validation) ---
 async function proceedToCheckoutAction(event) {
+
+// 1. Sabse pehle refresh roko
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
+    // --- PAN VALIDATION LOGIC (Add this before orderData) ---
+const totalAmount = parseInt((document.getElementById('checkoutGrandTotal')?.innerText || "0").replace(/[^0-9]/g, ''));
+const panInput = document.getElementById('panInput');
+
+if (totalAmount >= 100000) {
+    const panValue = panInput ? panInput.value.trim().toUpperCase() : "";
+    const panPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+
+    if (!panValue) {
+        Swal.fire('Error', 'PAN NOT INSERTED! Please provide PAN for orders above ₹1 Lakh.', 'error');
+        if(panInput) panInput.focus();
+        return; // Order aage nahi badhega
+    }
+
+    if (!panPattern.test(panValue)) {
+        Swal.fire('Error', 'PAN IS WRONG! PLEASE ENTER CORRECT PAN', 'error');
+        if(panInput) panInput.focus();
+        return; // Order aage nahi badhega
+    }
+}
+// --- VALIDATION ENDS ---
+
+
     if(event) event.preventDefault(); 
 
     const checkoutForm = document.getElementById('checkoutForm');
@@ -164,7 +194,7 @@ const orderData = {
     address: document.getElementById('address')?.value || "",
     // Yahan '?' lagane se code crash nahi hoga agar ID galat hai
     total_amount: (document.getElementById('checkoutGrandTotal')?.innerText || "0").replace(/[^0-9]/g, ''), 
-     order_pan: totalAmount >= 100000 ? document.getElementById('panInput').value.toUpperCase() : "N/A",
+      pan_card: totalAmount >= 100000 ? document.getElementById('panInput').value.toUpperCase() : "N/A",
     
     items: checkoutCart.map(item => ({
         id: item.id,
