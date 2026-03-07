@@ -520,8 +520,6 @@ function viewOrderDetails(order) {
     document.getElementById('custAddress').innerText = order.customer_address || order.address || 'Pickup';
 
 
-         // --- Updated PAN Display Logic (Paste this inside viewOrderDetails) ---
-
 // 1. Pehle items ko parse karke usme se PAN nikalo
 const itemsForPan = JSON.parse(order.items);
 const savedPan = (itemsForPan.length > 0 && itemsForPan[0].order_pan) ? itemsForPan[0].order_pan : 'N/A';
