@@ -125,6 +125,10 @@ async function autoFillFromDatabase() {
 async function proceedToCheckoutAction(event) {
 
 // 1. Sabse pehle refresh roko
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
 
     // --- PAN VALIDATION LOGIC (Add this before orderData) ---
 const totalAmount = parseInt((document.getElementById('checkoutGrandTotal')?.innerText || "0").replace(/[^0-9]/g, ''));
