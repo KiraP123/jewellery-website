@@ -577,6 +577,7 @@ if(panEl) {
                     <div>
                         <h6 class="mb-1 fw-bold text-dark text-uppercase">${item.name} <span class="text-muted small">X${qty}</span></h6>
                         <div class="small mb-2 py-1 px-2 rounded-2" style="background: #f8f9fa; border-left: 3px solid #4a1d1f;">
+                         <div class="fw-bold text-muted small">Gold Rate: ₹${Math.round(singleItemGoldPrice / weight).toLocaleString('en-IN')}/gm × ${weight}g</div>
                         <span class="fw-bold text-dark">Unit Price: ₹${singleItemGoldPrice.toLocaleString('en-IN')}</span>
                         <span class="mx-2 text-muted">|</span>
                         <span class="fw-bold">Purity: ${purity}K </span>
