@@ -73,3 +73,71 @@
 /* Modal styling (Jab message khulega) */
 .modal-content { border-radius: 15px; border: none; }
 .modal-header { background: #fdfaf5; border-bottom: 1px solid #eee; }
+
+
+
+
+
+
+
+/* Laptop par jaisa hai waisa hi rahega (No Change for Desktop) */
+
+@media (max-width: 576px) {
+    /* 1. Modal ki body ki side padding kam karo taaki screen mile */
+    #orderViewModal .modal-body {
+        padding: 10px !important;
+    }
+
+    /* 2. Item Card Fix: Mobile par price ko name ke niche le aao */
+    #modalItemList .d-flex.justify-content-between.align-items-start {
+        flex-direction: column !important;
+        gap: 5px;
+    }
+
+    #modalItemList .text-end {
+        text-align: left !important;
+        width: 100%;
+        border-top: 1px dashed #eee;
+        padding-top: 5px;
+    }
+
+    /* 3. Summary Box Fix (Gold Total, Making, GST) */
+    #modalItemList .mt-3.p-3.bg-white {
+        padding: 12px !important; /* Padding thodi kam */
+    }
+
+    /* 4. Grand Total Section (Main Fix) */
+    /* Phone par label aur amount ko upar-niche (Stack) kar do */
+    #modalItemList .d-flex.justify-content-between.align-items-center.fw-bold {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 2px;
+    }
+
+    /* Amount ka text thoda chota aur break-safe */
+    #modalItemList .text-danger.h4 {
+        font-size: 1.3rem !important; /* ₹15,80,683 fit karne ke liye perfect size */
+        width: 100% !important;
+        display: block !important;
+        word-break: break-all !important; /* Amount kategi nahi, wrap ho jayegi */
+        margin-top: 2px;
+    }
+
+    /* Approx Grand Total Label */
+    #modalItemList .h5.mb-0 {
+        font-size: 0.95rem !important;
+        color: #666 !important;
+    }
+
+    /* Horizontal line ko patla karo */
+    #modalItemList hr {
+        margin: 8px 0 !important;
+    }
+}
+
+/* Extra safety for very small screens like 360px */
+@media (max-width: 360px) {
+    #modalItemList .text-danger.h4 {
+        font-size: 1.2rem !important;
+    }
+}
