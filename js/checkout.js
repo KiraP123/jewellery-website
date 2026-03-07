@@ -164,6 +164,7 @@ const orderData = {
     address: document.getElementById('address')?.value || "",
     // Yahan '?' lagane se code crash nahi hoga agar ID galat hai
     total_amount: (document.getElementById('checkoutGrandTotal')?.innerText || "0").replace(/[^0-9]/g, ''), 
+     order_pan: totalAmount >= 100000 ? document.getElementById('panInput').value.toUpperCase() : "N/A",
     
     items: checkoutCart.map(item => ({
         id: item.id,
@@ -174,7 +175,8 @@ const orderData = {
         weight_gm: item.weight_gm || 0,
         customerSize: item.customerSize || 'N/A',
         purity: item.purity || '22K',
-        making_charge: item.making_charge
+        making_charge: item.making_charge,
+        order_pan: totalAmount >= 100000 ? document.getElementById('panInput').value.toUpperCase() : "N/A"
     }))
 };
 

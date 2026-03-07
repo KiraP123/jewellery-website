@@ -249,7 +249,7 @@ if (orderTable) {
             // Logic to match your 'Correct' view price:
             // Convert to number, add hallmark, and use Math.round to match the view
             const rawAmount = parseFloat(order.total_amount || 0);
-            const finalAmount = Math.round(rawAmount + hallmarkFee);
+            const finalAmount = Math.round(rawAmount);
 
             // Update the running total for Gross Sales
             totalSalesAmount += finalAmount;
@@ -465,27 +465,6 @@ ${(() => {
         Swal.fire('Error', 'Server connection failed', 'error');
     }
 });
-    // Carousel Form Handle karna
-// document.getElementById('uploadCarouselForm')?.addEventListener('submit', async (e) => {
-//     e.preventDefault();
-//     const formData = new FormData(e.target);
-
-//     try {
-//        const response = await fetch(`${API}/update-carousel`, {
-//         // const response = await fetch(`${API}/update-carousel`, {
-//             method: 'POST',
-//             body: formData
-//         });
-
-//         const result = await response.json();
-//         if (result.success) {
-//             Swal.fire('Success', 'Carousel Updated!', 'success');
-//             // Agar aapne preview function banaya hai toh loadCarouselPreview() call karein
-//         }
-//     } catch (err) {
-//         Swal.fire('Error', 'Failed to upload', 'error');
-//     }
-// });
 }
 
 
@@ -541,7 +520,30 @@ function viewOrderDetails(order) {
     document.getElementById('custAddress').innerText = order.customer_address || order.address || 'Pickup';
 
 
+         // --- Updated PAN Display Logic (Paste this inside viewOrderDetails) ---
 
+// 1. Pehle items ko parse karke usme se PAN nikalo
+const itemsForPan = JSON.parse(order.items);
+const savedPan = (itemsForPan.length > 0 && itemsForPan[0].order_pan) ? itemsForPan[0].order_pan : 'N/A';
+
+// 2. PAN ko display karne ka logic
+const panEl = document.getElementById('custPan'); 
+if(panEl) {
+    panEl.innerText = savedPan;
+} else {
+    // Agar HTML mein ID nahi hai toh purana wala div remove karke naya address ke niche add karo
+    const existingPan = document.getElementById('tempPanBox');
+    if(existingPan) existingPan.remove(); // Taki baar-baar duplicate na ho
+
+    document.getElementById('custAddress').insertAdjacentHTML('afterend', `
+        <div id="tempPanBox" class="mt-2">
+            <b class="small">PAN NO:</b> <span>${savedPan}</span>
+        </div>
+    `);
+}
+    
+    
+    
     // ✨ YE WALI LINE ADD KARO PINCODE KE LIYE ✨
     const pinEl = document.getElementById('custPin');
     if(pinEl) pinEl.innerText = order.pincode || 'N/A';
@@ -582,11 +584,11 @@ function viewOrderDetails(order) {
                         <div class="small mb-2 py-1 px-2 rounded-2" style="background: #f8f9fa; border-left: 3px solid #4a1d1f;">
                         <span class="fw-bold text-dark">Unit Price: ₹${singleItemGoldPrice.toLocaleString('en-IN')}</span>
                         <span class="mx-2 text-muted">|</span>
-                        <span class="fw-bold">Size: ${item.customerSize || 'N/A'}</span>
+                        <span class="fw-bold">Purity: ${purity}K </span>
 
 
                         <div class="small mb-1 text-dark">
-                             Weight: ${weight}g | Purity: ${purity}K 
+                            Weight: ${weight}g | Size: ${item.customerSize || 'N/A'}
                              
                         </div>
                     </div>
