@@ -237,6 +237,15 @@ console.log("BHAI AB TOH MESSAGE AAYEGA:", orderData);
         if(orderBtn) { orderBtn.disabled = false; orderBtn.innerText = "Place Order Now"; }
     }
 }
+
+// Auto-show PAN field if amount is already high on load
+setInterval(() => {
+    const total = parseInt((document.getElementById('checkoutGrandTotal')?.innerText || "0").replace(/[^0-9]/g, ''));
+    const section = document.getElementById('panCardSection');
+    if(section) section.style.display = total >= 100000 ? 'block' : 'none';
+}, 1000);
+
+
 function calculateGrandTotal(cartItems) {
     const totals = cartItems.reduce((acc, item) => {
         const weight = parseFloat(item.weight_gm) || 0;
