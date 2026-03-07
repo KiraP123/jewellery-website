@@ -584,7 +584,7 @@ if(panEl) {
 
 
                         <div class="small mb-1 text-dark">
-                            Weight: ${weight}g | Size: ${item.customerSize || 'N/A'}
+                            Approx Weight: ${weight}g | Size: ${item.customerSize || 'N/A'}
                              
                         </div>
                     </div>
@@ -620,7 +620,7 @@ if(panEl) {
             </div>
             <hr class="text-dark">
             <div class="d-flex justify-content-between align-items-center fw-bold">
-                <span class="h5 mb-0 text-dark">Grand Total:</span>
+                <span class="h5 mb-0 text-dark"> Approx Grand Total:</span>
                 <span class="text-danger h4 mb-0">₹${totalAmount.toLocaleString('en-IN')}</span>
             </div>
         </div>`;
