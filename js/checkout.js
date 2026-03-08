@@ -185,6 +185,25 @@ if (totalAmount >= 100000) {
     }
       
 
+       // 1. Current selection ko pakadne ka sabse pakka tarika
+    const paymentOptions = document.getElementsByName('payMethod');
+    let selectedPaymentMode = "";
+
+    for (const option of paymentOptions) {
+        if (option.checked) {
+            selectedPaymentMode = option.value; // Yahan se "Visit Office" ya "Cash on Delivery" milega
+            break;
+        }
+    }
+
+    // Default agar kuch na mile (Safety check)
+    if (!selectedPaymentMode) selectedPaymentMode = "Cash on Delivery";
+
+    console.log("Final Selection to DB:", selectedPaymentMode);
+
+
+
+
 
 const orderData = {
     customer_name: (document.getElementById('firstName')?.value || "") + " " + (document.getElementById('lastName')?.value || ""),
@@ -194,7 +213,8 @@ const orderData = {
     address: document.getElementById('address')?.value || "",
     // Yahan '?' lagane se code crash nahi hoga agar ID galat hai
     total_amount: (document.getElementById('checkoutGrandTotal')?.innerText || "0").replace(/[^0-9]/g, ''), 
-      pan_card: totalAmount >= 100000 ? document.getElementById('panInput').value.toUpperCase() : "N/A",
+    pan_card: totalAmount >= 100000 ? document.getElementById('panInput').value.toUpperCase() : "N/A",
+    payment_mode: selectedPaymentMode,
     
     items: checkoutCart.map(item => ({
         id: item.id,
@@ -206,7 +226,8 @@ const orderData = {
         customerSize: item.customerSize || 'N/A',
         purity: item.purity || '22K',
         making_charge: item.making_charge,
-        order_pan: totalAmount >= 100000 ? document.getElementById('panInput').value.toUpperCase() : "N/A"
+        order_pan: totalAmount >= 100000 ? document.getElementById('panInput').value.toUpperCase() : "N/A",
+         payment_mode: selectedPaymentMode,
     }))
 };
 

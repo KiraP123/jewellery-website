@@ -109,7 +109,7 @@
     <a class="nav-link d-flex align-items-center gap-2" href="cart.html" id="cartDropdown">
         <span class="position-relative d-inline-block">
             <i class="fa-solid fa-bag-shopping"></i>
-            <!-- <span id="cart-count-desktop" class="badge-count">0</span> -->
+           
         </span>
         <span class="fw-bold">CART</span>
     </a>
@@ -263,10 +263,92 @@
 
 
 
+<style>
+    /* Premium Styling */
+    .payment-card {
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid #edf2f7;
+        position: relative;
+    }
 
+    /* Radio button hide karke card ko clickable banaya */
+    .payment-radio {
+        position: absolute;
+        opacity: 0;
+    }
 
+    /* Selection hone par Gold border aur shadow */
+    .payment-radio:checked + .payment-card {
+        border-color: #4a1d1f; /* Jewelry theme color */
+        background-color: #fffaf0;
+        box-shadow: 0 4px 12px rgba(74, 29, 31, 0.1);
+    }
+
+    .payment-radio:checked + .payment-card .check-icon {
+        display: block !important;
+    }
+
+    .check-icon {
+        color: #4a1d1f;
+        font-size: 1.2rem;
+    }
+</style>
 
 <div class="checkout-container mt-4" style="max-width: 500px; font-family: 'Inter', sans-serif;">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6 class="fw-bold mb-0" style="color: #2d3748; letter-spacing: -0.5px;">Payment & Delivery</h6>
+        <span class="badge bg-light text-muted border px-2 py-1" style="font-size: 10px; font-weight: 500;">SECURE CHECKOUT</span>
+    </div>
+
+    <div class="options-group mb-3">
+        <label class="w-100 mb-2">
+            <input type="radio" name="payMethod" value="Cash on Delivery" class="payment-radio" checked onchange="toggleOfficeInfo(false)">
+            <div class="payment-card p-3 rounded-3 d-flex align-items-center bg-white">
+                <div class="icon-circle bg-light rounded-circle d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                    <i class="fas fa-truck text-dark"></i>
+                </div>
+                <div class="ms-3 flex-grow-1">
+                    <div class="fw-bold text-dark" style="font-size: 0.95rem;">Cash on Delivery</div>
+                    <div class="small text-muted" style="font-size: 0.8rem;">Pay cash at your doorstep</div>
+                </div>
+                <i class="fas fa-check-circle check-icon" style="display: none;"></i>
+            </div>
+        </label>
+
+        <label class="w-100 mb-2">
+            <input type="radio" name="payMethod" value="Visit Office" class="payment-radio" onchange="toggleOfficeInfo(true)">
+            <div class="payment-card p-3 rounded-3 d-flex align-items-center bg-white">
+                <div class="icon-circle bg-light rounded-circle d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                    <i class="fas fa-building text-dark"></i>
+                </div>
+                <div class="ms-3 flex-grow-1">
+                    <div class="fw-bold text-dark" style="font-size: 0.95rem;">Visit Office</div>
+                    <div class="small text-muted" style="font-size: 0.8rem;">Self-pickup from factory</div>
+                </div>
+                <i class="fas fa-check-circle check-icon" style="display: none;"></i>
+            </div>
+        </label>
+    </div>
+
+    <div id="officeAddressBox" class="p-3 rounded-3 mb-3 border-0 shadow-sm" style="display: none; background: linear-gradient(135deg, #4a1d1f 0%, #2d0a0c 100%); color: white;">
+        <div class="d-flex align-items-center mb-2">
+            <i class="fas fa-map-marker-alt me-2"></i>
+            <strong class="small text-uppercase" style="letter-spacing: 1px;">Collection Point</strong>
+        </div>
+        <p class="mb-2" style="font-size: 0.85rem; opacity: 0.9;">
+            19/A Patwa Chawl, 1st Floor, Mahajangali,<br>
+                    Zaveri Bazar, Mumbai, 400 002
+        </p>
+        <div class="d-flex justify-content-between align-items-center border-top pt-2 mt-2" style="border-color: rgba(255,255,255,0.1) !important;">
+            <span class="small"><i class="fas fa-phone-alt me-1"></i> +91 98XXX XXXXX</span>
+            <!-- <button class="btn btn-sm btn-light py-0 px-2" style="font-size: 10px;">COPY MAP</button> -->
+        </div>
+    </div>
+</div>
+
+
+<!-- <div class="checkout-container mt-4" style="max-width: 500px; font-family: 'Inter', sans-serif;">
     <h6 class="fw-bold mb-3" style="font-size: 1rem; color: #333;">Payment & Delivery</h6>
 
     <div class="options-group mb-4 shadow-sm border rounded overflow-hidden bg-white">
@@ -302,7 +384,7 @@
             </button>
         </div>
     </div>
-</div>
+</div> -->
                     
                     <hr class="my-4">
 

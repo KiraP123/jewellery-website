@@ -506,6 +506,10 @@ if (addProdForm) {
     };
 }
 
+
+
+
+
 // Detailed Order View Modal Logic
 function viewOrderDetails(order) {
     const displayID = order.custom_order_id ? `#RJ${order.custom_order_id}` : `#RJ${100000 + order.id}`;
@@ -519,7 +523,23 @@ function viewOrderDetails(order) {
     document.getElementById('custPhone').innerText = order.customer_phone || order.phone || 'N/A';
     document.getElementById('custAddress').innerText = order.customer_address || order.address || 'Pickup';
 
+    // 1. Items se mode nikalo
+// 1. Data nikalo
+const itemsArr = JSON.parse(order.items);
+const pMode = itemsArr[0].payment_mode || 'Cash on Delivery';
 
+// 2. Simple layout (Heading aur Value)
+const container = document.getElementById('paymentModeContainer');
+if (container) {
+    container.innerHTML = `
+        <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #eee;">
+            <small style="color: #888; text-transform: uppercase; font-weight: bold; font-size: 10px;">Payment Method</small>
+            <div style="font-size: 16px; font-weight: bold; color: #333; margin-top: 2px;">
+                ${pMode === 'Visit Office' ? '🏢' : '💵'} ${pMode}
+            </div>
+        </div>
+    `;
+}
 // 1. Pehle items ko parse karke usme se PAN nikalo
 const itemsForPan = JSON.parse(order.items);
 const savedPan = (itemsForPan.length > 0 && itemsForPan[0].order_pan) ? itemsForPan[0].order_pan : 'N/A';
@@ -539,6 +559,9 @@ if(panEl) {
         </div>
     `);
 }
+
+
+
     // ✨ YE WALI LINE ADD KARO PINCODE KE LIYE ✨
     const pinEl = document.getElementById('custPin');
     if(pinEl) pinEl.innerText = order.pincode || 'N/A';
@@ -555,6 +578,8 @@ if(panEl) {
     let totalMakingCharges = 0;
 
     document.getElementById('modalItemList').innerHTML = items.map(item => {
+ 
+
         const qty = Number(item.quantity || 1);
         const weight = parseFloat(item.weight_gm || 0);
         const makingRate = parseFloat(item.making_charge || 0);
@@ -570,40 +595,42 @@ if(panEl) {
 
         pureGoldTotal += (itemGoldPriceTotal * qty);
         totalMakingCharges += itemMakingTotal;
-        //  <span class="fw-bold ">Size: ${item.customerSize}</span>
-        return `
-            <div class="p-3 mb-2 bg-white rounded-3 border shadow-sm text-dark">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        <h6 class="mb-1 fw-bold text-dark text-uppercase">${item.name} <span class="text-muted small">X${qty}</span></h6>
-                        <div class="small mb-2 py-1 px-2 rounded-2" style="background: #f8f9fa; border-left: 3px solid #4a1d1f;">
-                         <div class="fw-bold text-muted small">Gold Rate: ₹${Math.round(singleItemGoldPrice / weight).toLocaleString('en-IN')}/gm × ${weight}g</div>
-                        <span class="fw-bold text-dark">Unit Price: ₹${singleItemGoldPrice.toLocaleString('en-IN')}</span>
-                        <span class="mx-2 text-muted">|</span>
-                        <span class="fw-bold">Purity: ${purity}K </span>
+    
 
 
-                        <div class="small mb-1 text-dark">
-                            Approx Weight: ${weight}g | Size: ${item.customerSize || 'N/A'}
-                             
-                        </div>
-                    </div>
-                        <div class="mt-1">
-                            <div class="text-dark small">Making:₹${makingRate}/gm (+ ₹${itemMakingTotal.toLocaleString('en-IN')})</div>
-                        </div>
-                    </div>
-                    <div class="text-end">
-                        <span class="fw-bold text-dark h6">₹${(itemGoldPriceTotal * qty).toLocaleString('en-IN')}</span>
-                    </div>
-                </div>
-            </div>`;
+
+
+return `
+<div class="p-3 mb-2 bg-white rounded-3 border shadow-sm text-dark">
+    <div class="item-row-header">
+        <div class="item-name-area">
+            <h6 class="mb-1 fw-bold text-dark text-uppercase">${item.name} <span class="text-muted small">QTY${qty}</span></h6>
+        </div>
+        <div class="item-price-right text-dark">
+            ₹${(itemGoldPriceTotal * qty).toLocaleString('en-IN')}
+        </div>
+    </div>
+
+    <div class="small mb-2 py-1 px-2 rounded-2" style="background: #f8f9fa; border-left: 3px solid #4a1d1f;">
+        <div class="fw-bold text-muted small">Gold Rate: ₹${Math.round(singleItemGoldPrice / weight).toLocaleString('en-IN')}/gm × ${weight}g</div>
+        <span class="fw-bold text-dark">Unit Price: ₹${singleItemGoldPrice.toLocaleString('en-IN')}</span>
+        <span class="mx-2 text-muted">|</span>
+        <span class="fw-bold">Purity: ${purity}K </span>
+        <div class="small mb-1 text-dark">Approx Weight: ${weight}g | Size: ${item.customerSize || 'N/A'}</div>
+    </div>
+
+    <div class="mt-1">
+        <div class="text-dark small">Making: ₹${makingRate}/gm (+ ₹${itemMakingTotal.toLocaleString('en-IN')})</div>
+    </div>
+</div>`;
+      
     }).join('');
 
     const subtotal = pureGoldTotal + totalMakingCharges;
     const gstAmount = Math.round(subtotal * 0.03); 
     const totalAmount = subtotal + gstAmount;
 
-    // Summary Section (All Black except Grand Total)
+
     document.getElementById('modalItemList').innerHTML += `
         <div class="mt-3 p-3 bg-white rounded-4 border shadow-sm text-dark">
             <div class="d-flex justify-content-between mb-2">
@@ -620,7 +647,7 @@ if(panEl) {
             </div>
             <hr class="text-dark">
             <div class="d-flex justify-content-between align-items-center fw-bold">
-                <span class="h5 mb-0 text-dark"> Approx Grand Total:</span>
+                <span class="h5 mb-0 text-dark">Grand Total:</span>
                 <span class="text-danger h4 mb-0">₹${totalAmount.toLocaleString('en-IN')}</span>
             </div>
         </div>`;
@@ -628,6 +655,128 @@ if(panEl) {
     const viewModal = new bootstrap.Modal(document.getElementById('orderViewModal'));
     viewModal.show();
 }
+// // Detailed Order View Modal Logic
+// function viewOrderDetails(order) {
+//     const displayID = order.custom_order_id ? `#RJ${order.custom_order_id}` : `#RJ${100000 + order.id}`;
+//     document.getElementById('modalOrderID').innerText = `Order ID: ${displayID}`;
+//     // document.getElementById('modalOrderID').innerText = `Order ID: #RJ976432177${order.id}`;
+//     const orderDate = order.created_at ? new Date(order.created_at).toLocaleString('en-IN') : 'N/A';
+//     document.getElementById('modalOrderDate').innerText = `Date: ${orderDate}`;
+//     document.getElementById('custName').innerText = order.customer_name;
+//     const gmailEl = document.getElementById('custGmail') || document.querySelector('[id*="Gmail"]');
+//     if(gmailEl) gmailEl.innerText = order.customer_email || 'N/A';
+//     document.getElementById('custPhone').innerText = order.customer_phone || order.phone || 'N/A';
+//     document.getElementById('custAddress').innerText = order.customer_address || order.address || 'Pickup';
+
+
+// // 1. Pehle items ko parse karke usme se PAN nikalo
+// const itemsForPan = JSON.parse(order.items);
+// const savedPan = (itemsForPan.length > 0 && itemsForPan[0].order_pan) ? itemsForPan[0].order_pan : 'N/A';
+
+// // 2. PAN ko display karne ka logic
+// const panEl = document.getElementById('custPan'); 
+// if(panEl) {
+//     panEl.innerText = savedPan;
+// } else {
+//     // Agar HTML mein ID nahi hai toh purana wala div remove karke naya address ke niche add karo
+//     const existingPan = document.getElementById('tempPanBox');
+//     if(existingPan) existingPan.remove(); // Taki baar-baar duplicate na ho
+
+//     document.getElementById('custAddress').insertAdjacentHTML('afterend', `
+//         <div id="tempPanBox" class="mt-2">
+//             <b class="small">PAN NO:</b> <span>${savedPan}</span>
+//         </div>
+//     `);
+// }
+//     // ✨ YE WALI LINE ADD KARO PINCODE KE LIYE ✨
+//     const pinEl = document.getElementById('custPin');
+//     if(pinEl) pinEl.innerText = order.pincode || 'N/A';
+
+//     const gmailElement = document.getElementById('custGmail');
+//     if (gmailElement) {
+//         // Aapke database mein column ka naam 'customer_email' hai ya 'user_email', dono check karega
+//         gmailElement.innerText = order.customer_email || order.user_email || 'N/A';
+//     }
+    
+
+//     const items = JSON.parse(order.items);
+//     let pureGoldTotal = 0;
+//     let totalMakingCharges = 0;
+
+//     document.getElementById('modalItemList').innerHTML = items.map(item => {
+//         const qty = Number(item.quantity || 1);
+//         const weight = parseFloat(item.weight_gm || 0);
+//         const makingRate = parseFloat(item.making_charge || 0);
+//         const purity = item.purity ||'NO'; // Caret value
+//         const realSize = item.size ||'NO'; // Admin ki real size
+//         const singleItemGoldPrice = Math.round(Number(item.price || 0)); // Single piece gold rate
+       
+        
+//         // Gold Price bina making ke
+//         const itemGoldPriceTotal = Math.round(Number(item.price || 0)); 
+//         // const itemMakingTotal = Math.round(weight * makingRate) * qty;
+//         const itemMakingTotal = (Math.round(weight * makingRate) + Math.round(53.10)) * qty; 
+
+//         pureGoldTotal += (itemGoldPriceTotal * qty);
+//         totalMakingCharges += itemMakingTotal;
+//         //  <span class="fw-bold ">Size: ${item.customerSize}</span>
+//         return `
+//             <div class="p-3 mb-2 bg-white rounded-3 border shadow-sm text-dark">
+//                 <div class="d-flex justify-content-between align-items-start">
+//                     <div>
+//                         <h6 class="mb-1 fw-bold text-dark text-uppercase">${item.name} <span class="text-muted small">X${qty}</span></h6>
+//                         <div class="small mb-2 py-1 px-2 rounded-2" style="background: #f8f9fa; border-left: 3px solid #4a1d1f;">
+//                          <div class="fw-bold text-muted small">Gold Rate: ₹${Math.round(singleItemGoldPrice / weight).toLocaleString('en-IN')}/gm × ${weight}g</div>
+//                         <span class="fw-bold text-dark">Unit Price: ₹${singleItemGoldPrice.toLocaleString('en-IN')}</span>
+//                         <span class="mx-2 text-muted">|</span>
+//                         <span class="fw-bold">Purity: ${purity}K </span>
+
+
+//                         <div class="small mb-1 text-dark">
+//                             Approx Weight: ${weight}g | Size: ${item.customerSize || 'N/A'}
+                             
+//                         </div>
+//                     </div>
+//                         <div class="mt-1">
+//                             <div class="text-dark small">Making:₹${makingRate}/gm (+ ₹${itemMakingTotal.toLocaleString('en-IN')})</div>
+//                         </div>
+//                     </div>
+//                     <div class="text-end">
+//                         <span class="fw-bold text-dark h6">₹${(itemGoldPriceTotal * qty).toLocaleString('en-IN')}</span>
+//                     </div>
+//                 </div>
+//             </div>`;
+//     }).join('');
+
+//     const subtotal = pureGoldTotal + totalMakingCharges;
+//     const gstAmount = Math.round(subtotal * 0.03); 
+//     const totalAmount = subtotal + gstAmount;
+
+//     // Summary Section (All Black except Grand Total)
+//     document.getElementById('modalItemList').innerHTML += `
+//         <div class="mt-3 p-3 bg-white rounded-4 border shadow-sm text-dark">
+//             <div class="d-flex justify-content-between mb-2">
+//                 <span class="text-dark small">Gold Total:</span>
+//                 <span class="fw-bold text-dark small">₹${pureGoldTotal.toLocaleString('en-IN')}</span>
+//             </div>
+//             <div class="d-flex justify-content-between mb-2">
+//                 <span class="text-dark small">Making & Services(+):</span>
+//                 <span class="fw-bold text-dark small">+ ₹${totalMakingCharges.toLocaleString('en-IN')}</span>
+//             </div>
+//             <div class="d-flex justify-content-between mb-2">
+//                 <span class="text-dark small">GST (3%) (+):</span>
+//                 <span class="fw-bold text-dark small">+ ₹${gstAmount.toLocaleString('en-IN')}</span>
+//             </div>
+//             <hr class="text-dark">
+//             <div class="d-flex justify-content-between align-items-center fw-bold">
+//                 <span class="h5 mb-0 text-dark"> Approx Grand Total:</span>
+//                 <span class="text-danger h4 mb-0">₹${totalAmount.toLocaleString('en-IN')}</span>
+//             </div>
+//         </div>`;
+        
+//     const viewModal = new bootstrap.Modal(document.getElementById('orderViewModal'));
+//     viewModal.show();
+// }
 
 async function updateAdminPass() {
     const oldPass = document.getElementById('oldPass').value;

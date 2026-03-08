@@ -141,3 +141,92 @@
         font-size: 1.2rem !important;
     }
 }
+
+
+
+
+
+
+
+
+/* Container ko flexible rakho par wrap mat hone do */
+.item-row-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    width: 100%;
+    gap: 10px;
+}
+
+/* Name area ko flex-grow do taaki wo bachi hui space le le */
+.item-name-area {
+    flex: 1;
+    min-width: 0; /* Important for text wrapping */
+}
+
+/* Price ko fixed rakho taaki wo niche na gire */
+.item-price-right {
+    white-space: nowrap !important;
+    text-align: right;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+/* Address wrapping fix */
+#custAddress {
+    display: block !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    line-height: 1.4;
+}
+
+/* Phone optimization */
+@media (max-width: 576px) {
+    .item-price-right {
+        font-size: 1rem;
+    }
+    h6.text-uppercase {
+        font-size: 0.9rem !important;
+    }
+}
+
+
+/* --- Grand Total & Summary Section --- */
+.mt-3.p-3 .d-flex.justify-content-between {
+    display: flex !important;
+    flex-direction: row !important; /* Hamesha ek line mein rakhega */
+    flex-wrap: nowrap !important;   /* Price niche nahi giregi */
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    gap: 10px;
+}
+
+/* Grand Total ki Price Right mein chipki rahe */
+.text-danger.h4 {
+    margin-bottom: 0 !important;
+    white-space: nowrap !important;
+    font-weight: 850 !important;
+    font-size: 1.4rem !important; /* Mobile adjustment */
+    text-align: right !important;
+}
+
+/* --- Address Wrap Fix (Full Address Visibility) --- */
+#custAddress, #custName, #custGmail, #tempPanBox span {
+    display: block !important;
+    white-space: normal !important; /* Isse dots (...) hat jayenge */
+    word-break: break-word !important;
+    line-height: 1.4 !important;
+    font-size: 0.9rem !important;
+}
+
+/* --- Laptop Desktop Size --- */
+@media (min-width: 768px) {
+    .text-danger.h4 {
+        font-size: 1.8rem !important;
+    }
+}
+
+
+
+
