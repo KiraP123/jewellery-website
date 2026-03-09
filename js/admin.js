@@ -657,131 +657,6 @@ return `
 }
 
 
-
-
-// // Detailed Order View Modal Logic
-// function viewOrderDetails(order) {
-//     const displayID = order.custom_order_id ? `#RJ${order.custom_order_id}` : `#RJ${100000 + order.id}`;
-//     document.getElementById('modalOrderID').innerText = `Order ID: ${displayID}`;
-//     // document.getElementById('modalOrderID').innerText = `Order ID: #RJ976432177${order.id}`;
-//     const orderDate = order.created_at ? new Date(order.created_at).toLocaleString('en-IN') : 'N/A';
-//     document.getElementById('modalOrderDate').innerText = `Date: ${orderDate}`;
-//     document.getElementById('custName').innerText = order.customer_name;
-//     const gmailEl = document.getElementById('custGmail') || document.querySelector('[id*="Gmail"]');
-//     if(gmailEl) gmailEl.innerText = order.customer_email || 'N/A';
-//     document.getElementById('custPhone').innerText = order.customer_phone || order.phone || 'N/A';
-//     document.getElementById('custAddress').innerText = order.customer_address || order.address || 'Pickup';
-
-
-// // 1. Pehle items ko parse karke usme se PAN nikalo
-// const itemsForPan = JSON.parse(order.items);
-// const savedPan = (itemsForPan.length > 0 && itemsForPan[0].order_pan) ? itemsForPan[0].order_pan : 'N/A';
-
-// // 2. PAN ko display karne ka logic
-// const panEl = document.getElementById('custPan'); 
-// if(panEl) {
-//     panEl.innerText = savedPan;
-// } else {
-//     // Agar HTML mein ID nahi hai toh purana wala div remove karke naya address ke niche add karo
-//     const existingPan = document.getElementById('tempPanBox');
-//     if(existingPan) existingPan.remove(); // Taki baar-baar duplicate na ho
-
-//     document.getElementById('custAddress').insertAdjacentHTML('afterend', `
-//         <div id="tempPanBox" class="mt-2">
-//             <b class="small">PAN NO:</b> <span>${savedPan}</span>
-//         </div>
-//     `);
-// }
-//     // ✨ YE WALI LINE ADD KARO PINCODE KE LIYE ✨
-//     const pinEl = document.getElementById('custPin');
-//     if(pinEl) pinEl.innerText = order.pincode || 'N/A';
-
-//     const gmailElement = document.getElementById('custGmail');
-//     if (gmailElement) {
-//         // Aapke database mein column ka naam 'customer_email' hai ya 'user_email', dono check karega
-//         gmailElement.innerText = order.customer_email || order.user_email || 'N/A';
-//     }
-    
-
-//     const items = JSON.parse(order.items);
-//     let pureGoldTotal = 0;
-//     let totalMakingCharges = 0;
-
-//     document.getElementById('modalItemList').innerHTML = items.map(item => {
-//         const qty = Number(item.quantity || 1);
-//         const weight = parseFloat(item.weight_gm || 0);
-//         const makingRate = parseFloat(item.making_charge || 0);
-//         const purity = item.purity ||'NO'; // Caret value
-//         const realSize = item.size ||'NO'; // Admin ki real size
-//         const singleItemGoldPrice = Math.round(Number(item.price || 0)); // Single piece gold rate
-       
-        
-//         // Gold Price bina making ke
-//         const itemGoldPriceTotal = Math.round(Number(item.price || 0)); 
-//         // const itemMakingTotal = Math.round(weight * makingRate) * qty;
-//         const itemMakingTotal = (Math.round(weight * makingRate) + Math.round(53.10)) * qty; 
-
-//         pureGoldTotal += (itemGoldPriceTotal * qty);
-//         totalMakingCharges += itemMakingTotal;
-//         //  <span class="fw-bold ">Size: ${item.customerSize}</span>
-//         return `
-//             <div class="p-3 mb-2 bg-white rounded-3 border shadow-sm text-dark">
-//                 <div class="d-flex justify-content-between align-items-start">
-//                     <div>
-//                         <h6 class="mb-1 fw-bold text-dark text-uppercase">${item.name} <span class="text-muted small">X${qty}</span></h6>
-//                         <div class="small mb-2 py-1 px-2 rounded-2" style="background: #f8f9fa; border-left: 3px solid #4a1d1f;">
-//                          <div class="fw-bold text-muted small">Gold Rate: ₹${Math.round(singleItemGoldPrice / weight).toLocaleString('en-IN')}/gm × ${weight}g</div>
-//                         <span class="fw-bold text-dark">Unit Price: ₹${singleItemGoldPrice.toLocaleString('en-IN')}</span>
-//                         <span class="mx-2 text-muted">|</span>
-//                         <span class="fw-bold">Purity: ${purity}K </span>
-
-
-//                         <div class="small mb-1 text-dark">
-//                             Approx Weight: ${weight}g | Size: ${item.customerSize || 'N/A'}
-                             
-//                         </div>
-//                     </div>
-//                         <div class="mt-1">
-//                             <div class="text-dark small">Making:₹${makingRate}/gm (+ ₹${itemMakingTotal.toLocaleString('en-IN')})</div>
-//                         </div>
-//                     </div>
-//                     <div class="text-end">
-//                         <span class="fw-bold text-dark h6">₹${(itemGoldPriceTotal * qty).toLocaleString('en-IN')}</span>
-//                     </div>
-//                 </div>
-//             </div>`;
-//     }).join('');
-
-//     const subtotal = pureGoldTotal + totalMakingCharges;
-//     const gstAmount = Math.round(subtotal * 0.03); 
-//     const totalAmount = subtotal + gstAmount;
-
-//     // Summary Section (All Black except Grand Total)
-//     document.getElementById('modalItemList').innerHTML += `
-//         <div class="mt-3 p-3 bg-white rounded-4 border shadow-sm text-dark">
-//             <div class="d-flex justify-content-between mb-2">
-//                 <span class="text-dark small">Gold Total:</span>
-//                 <span class="fw-bold text-dark small">₹${pureGoldTotal.toLocaleString('en-IN')}</span>
-//             </div>
-//             <div class="d-flex justify-content-between mb-2">
-//                 <span class="text-dark small">Making & Services(+):</span>
-//                 <span class="fw-bold text-dark small">+ ₹${totalMakingCharges.toLocaleString('en-IN')}</span>
-//             </div>
-//             <div class="d-flex justify-content-between mb-2">
-//                 <span class="text-dark small">GST (3%) (+):</span>
-//                 <span class="fw-bold text-dark small">+ ₹${gstAmount.toLocaleString('en-IN')}</span>
-//             </div>
-//             <hr class="text-dark">
-//             <div class="d-flex justify-content-between align-items-center fw-bold">
-//                 <span class="h5 mb-0 text-dark"> Approx Grand Total:</span>
-//                 <span class="text-danger h4 mb-0">₹${totalAmount.toLocaleString('en-IN')}</span>
-//             </div>
-//         </div>`;
-        
-//     const viewModal = new bootstrap.Modal(document.getElementById('orderViewModal'));
-//     viewModal.show();
-// }
-
 async function updateAdminPass() {
     const oldPass = document.getElementById('oldPass').value;
     const newUser = document.getElementById('newAdminUser').value;
@@ -1329,110 +1204,299 @@ function updateSalesAnalytics(data) {
 }
 
 
+
+
+
 function viewFullHistory(order) {
     let items = [];
     try { 
         items = typeof order.items === 'string' ? JSON.parse(order.items) : order.items; 
     } catch(e) { items = []; }
 
-    const hallmarkFee = 53.10; // Standard Hallmark fee
+    // ✨ SIRF YE LOGIC ADD KIYA HE DATA FETCH KARNE KE LIYE ✨
+    const firstItem = items.length > 0 ? items[0] : {};
+    const displayEmail = firstItem.customer_email || order.customer_email || 'N/A';
+    const displayPin = firstItem.pincode || firstItem.customer_pincode || 'N/A';
+    // ✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨
+
+    const pMode = (items.length > 0 && items[0].payment_mode) ? items[0].payment_mode : (order.payment_mode || 'Cash on Delivery');
+    const savedPan = (items.length > 0 && items[0].order_pan) ? items[0].order_pan : 'N/A';
+    // const displayID = order.custom_order_id ? `#RJ${order.custom_order_id}` : `#RJ${100000 + order.id}`;
+      const displayID = `#RJ${order.order_id}`;
+    let pureGoldTotal = 0;
+    let totalMakingCharges = 0;
+    const hallmarkFee = 53.10;
+
+    const itemsHtml = items.map(item => {
+        const qty = Number(item.quantity || 1);
+        const weight = parseFloat(item.weight_gm || 0);
+        const makingRate = parseFloat(item.making_charge || 0);
+        const singleItemGoldPrice = Math.round(Number(item.price || 0)); 
+        const itemGoldPriceTotal = Math.round(Number(item.price || 0)); 
+        const itemMakingTotal = (Math.round(weight * makingRate) + Math.round(hallmarkFee)) * qty; 
+
+        pureGoldTotal += (itemGoldPriceTotal * qty);
+        totalMakingCharges += itemMakingTotal;
+
+        return `
+        <div class="history-item-card">
+            <div class="item-main-info">
+                <div class="name-section">
+                    <div class="item-name-text">${item.name.toUpperCase()}</div>
+                    <div class="qty-pill">QTY ${qty}</div>
+                </div>
+                <div class="price-section">
+                    <span class="gold-total-val">₹${(itemGoldPriceTotal * qty).toLocaleString('en-IN')}</span>
+                    <small>Gold Total</small>
+                </div>
+            </div>
+
+            <div class="item-calc-box">
+                <div class="gold-rate-line">
+                    <i class="bi bi-tag-fill"></i> ₹${Math.round(singleItemGoldPrice / weight).toLocaleString('en-IN')}/gm × ${weight}g
+                </div>
+                <div class="unit-price-line">Unit Price: <b>₹${singleItemGoldPrice.toLocaleString('en-IN')}</b></div>
+            </div>
+
+            <div class="item-specs-grid">
+                <div><b>Purity:</b> ${item.purity || 'N/A'}K</div>
+                <div><b>Weight:</b> ${weight}g</div>
+                <div><b>Size:</b> ${item.customerSize || item.size || 'N/A'}</div>
+            </div>
+
+            <div class="item-making-footer">
+                <div class="d-flex justify-content-between">
+                    <span>Making Rate: ₹${makingRate}/gm</span>
+                    <span class="fw-bold">Total Making: ₹${itemMakingTotal.toLocaleString('en-IN')}</span>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+
+    const subtotal = pureGoldTotal + totalMakingCharges;
+    const gstAmount = Math.round(subtotal * 0.03); 
+    const totalAmount = subtotal + gstAmount;
 
     Swal.fire({
-        width: '650px',
-        title: `
-            <div class="d-flex justify-content-between align-items-center px-2">
-                <span class="fw-bold text-dark">Customer History</span>
-                <span class="badge bg-primary fs-6">#RJ${order.order_id || (100000 + order.id)}</span>
-            </div>
-            <hr class="my-2 opacity-10">
-        `,
+        width: '850px',
+        padding: '0',
+        background: '#f8f9fa',
+        showCloseButton: true,
+        confirmButtonText: '<i class="bi bi-printer me-2"></i>PRINT INVOICE',
+        confirmButtonColor: '#343a40', 
         html: `
-            <div class="text-start" style="font-family: 'Inter', sans-serif;">
-                <div class="p-3 mb-4 rounded-3 border bg-light shadow-sm">
-                    <div class="row g-3">
-                        <div class="col-6">
-                            <label class="small text-uppercase fw-bold text-muted d-block">Full Name</label>
-                            <span class="fs-6 fw-bold text-dark">${order.customer_name}</span>
+            <style>
+                .history-container { font-family: 'Inter', sans-serif; text-align: left; background: #f4f7f6; color: #333; }
+                .history-header { background: #343a40; color: #fff; padding: 20px; border-radius: 8px 8px 0 0; }
+                .history-body { padding: 15px; display: flex; flex-direction: row; gap: 15px; }
+                .side-panel { width: 35%; flex-shrink: 0; }
+                .main-panel { width: 65%; }
+                .h-card { background: #fff; border: 1px solid #dee2e6; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.03); }
+                .h-label { font-size: 10px; font-weight: 800; color: #888; text-transform: uppercase; margin-bottom: 2px; display: block; }
+                .h-value { font-size: 13px; font-weight: 600; color: #212529; display: block; word-wrap: break-word; line-height: 1.4; margin-bottom: 10px; }
+                .history-item-card { background: #fff; border: 1px solid #e9ecef; border-left: 5px solid #6c757d; border-radius: 8px; padding: 12px; margin-bottom: 12px; }
+                .item-main-info { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+                .item-name-text { font-weight: 800; font-size: 14px; color: #222; max-width: 180px; }
+                .qty-pill { display: inline-block; background: #6c757d; color: #fff; font-size: 9px; padding: 2px 6px; border-radius: 4px; margin-top: 2px; }
+                .price-section { text-align: right; }
+                .gold-total-val { font-weight: 800; font-size: 15px; color: #000; display: block; }
+                .price-section small { font-size: 9px; color: #999; text-transform: uppercase; }
+                .item-calc-box { background: #f8f9fa; border: 1px solid #eee; border-radius: 6px; padding: 8px; margin-bottom: 8px; }
+                .gold-rate-line { font-size: 11px; font-weight: 600; color: #555; }
+                .unit-price-line { font-size: 12px; margin-top: 2px; color: #333; }
+                .item-specs-grid { display: flex; flex-wrap: wrap; gap: 10px; font-size: 11px; border-top: 1px dashed #ddd; padding-top: 8px; margin-bottom: 8px; }
+                .item-making-footer { background: #f1f3f5; padding: 8px; border-radius: 4px; font-size: 11px; color: #495057; }
+                .grand-total-box { background: #212529; color: #fff; padding: 15px; border-radius: 10px; margin-top: 15px; }
+                @media (max-width: 768px) {
+                    .history-body { flex-direction: column !important; padding: 10px; }
+                    .side-panel, .main-panel { width: 100% !important; }
+                    .item-name-text { max-width: 100%; font-size: 13px; }
+                    .h-value { font-size: 12px; }
+                    .gold-total-val { font-size: 14px; }
+                    .history-header h4 { font-size: 16px !important; }
+                }
+            </style>
+
+            <div class="history-container">
+                <div class="history-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="fw-bold mb-0">ORDER SUMMARY</h4>
+                            <div class="small opacity-75">${displayID} • ${new Date().toLocaleDateString('en-IN')}</div>
+                          
                         </div>
-                        <div class="col-6 text-end">
-                            <label class="small text-uppercase fw-bold text-muted d-block">Payment Mode</label>
-                            <span class="badge bg-success-subtle text-success border border-success-subtle">Online</span>
-                        </div>
-                        <div class="col-6">
-                            <label class="small text-uppercase fw-bold text-muted d-block">Email Address</label>
-                            <span class="text-dark">${order.email || 'N/A'}</span>
-                        </div>
-                        <div class="col-6 text-end">
-                            <label class="small text-uppercase fw-bold text-muted d-block">Phone Number</label>
-                            <span class="text-dark">${order.phone || 'N/A'}</span>
-                        </div>
-                        <div class="col-12">
-                            <label class="small text-uppercase fw-bold text-muted d-block">Delivery Address</label>
-                            <span class="text-dark small">${order.address || 'N/A'}</span>
-                        </div>
+                        <i class="bi bi-receipt-cutoff fs-3"></i>
                     </div>
                 </div>
 
-                <h6 class="fw-bold text-uppercase small text-secondary mb-2 ms-1">Itemized Purchase Details</h6>
-                <div class="table-responsive border rounded-3 overflow-hidden shadow-sm mb-3">
-                    <table class="table table-hover mb-0" style="font-size: 0.85rem;">
-                        <thead class="bg-dark text-white">
-                            <tr>
-                                <th class="ps-3 py-2">Item Name</th>
-                                <th class="py-2">Karat</th>
-                                <th class="py-2">Weight</th>
-                                <th class="py-2 text-center">Qty</th>
-                                <th class="pe-3 py-2 text-end">Final Price (Incl. GST)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${items.map(i => {
-                                const weight = parseFloat(i.weight_gm || 0);
-                                const qty = parseInt(i.quantity || 1);
-                                const makingPerGram = parseFloat(i.making_charge || 0);
-                                const goldPriceUnit = parseFloat(i.price || 0); // Unit Gold Price
+                <div class="history-body">
+                    <div class="side-panel">
+                        <div class="h-card" style="border-top: 4px solid #6c757d;">
+                            <h6 class="fw-bold mb-3 border-bottom pb-2 text-secondary">Customer Details</h6>
+                            <label class="h-label">Name</label>
+                            <span class="h-value">${order.customer_name}</span>
+                            
+                            <label class="h-label">Phone</label>
+                            <span class="h-value">${order.customer_phone || order.phone || 'N/A'}</span>
+                            
+                            <label class="h-label">Address</label>
+                            <span class="h-value">
+                                ${order.customer_address || order.address || 'Pickup'}
+                                <br><small class="text-muted">PIN: ${order.pincode}</small>
+                            </span>
+
+                            <label class="h-label">Gmail / Email</label>
+                            <span class="h-value" style="font-size: 11px; color: #555;">${order.email}</span>
+                            
+                            <label class="h-label">PAN NO</label>
+                            <span class="h-value ${savedPan === 'N/A' ? 'text-danger' : ''}">${savedPan}</span>
+
+                            <div class="mt-2 p-2 bg-light border rounded text-center">
+                                <label class="h-label mb-1">Payment Mode</label>
+                                <div class="fw-bold small">${pMode.toUpperCase()}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="main-panel">
+                        <div class="h-card">
+                            <h6 class="fw-bold mb-3 border-bottom pb-2 text-secondary">Itemized Breakdown</h6>
+                            <div style="max-height: 400px; overflow-y: auto; padding-right: 5px;">
+                                ${itemsHtml}
+                            </div>
+
+                            <div class="mt-3">
+                                <div class="d-flex justify-content-between mb-1 small">
+                                    <span class="text-muted">Gold Total:</span>
+                                    <span class="fw-bold">₹${pureGoldTotal.toLocaleString('en-IN')}</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-1 small">
+                                    <span class="text-muted">Making & Services(+):</span>
+                                    <span class="fw-bold">+ ₹${totalMakingCharges.toLocaleString('en-IN')}</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2 small">
+                                    <span class="text-muted">GST (3%) (+):</span>
+                                    <span class="fw-bold">+ ₹${gstAmount.toLocaleString('en-IN')}</span>
+                                </div>
                                 
-                                // Calculation Logic:
-                                // 1. Item Subtotal = Gold + (Making * Weight) + Hallmark
-                                const itemSubtotal = goldPriceUnit + (makingPerGram * weight) + hallmarkFee;
-                                // 2. Add 3% GST on top of that
-                                const priceWithGST = Math.round(itemSubtotal * 1.03) * qty;
-
-                                return `
-                                <tr>
-                                    <td class="ps-3 py-3 align-middle fw-bold text-dark text-truncate" style="max-width: 150px;">
-                                        ${i.name}
-                                    </td>
-                                    <td class="align-middle"><span class="badge bg-warning text-dark">${i.purity || '22'}K</span></td>
-                                    <td class="align-middle">${weight}g</td>
-                                    <td class="align-middle text-center">${qty}</td>
-                                    <td class="pe-3 text-end align-middle">
-                                        <div class="fw-bold text-dark">₹${priceWithGST.toLocaleString('en-IN')}</div>
-                                        <div style="font-size: 0.7rem;" class="text-muted">
-                                            Rate: ₹${goldPriceUnit.toLocaleString('en-IN')} | Making: ₹${makingPerGram}/g
-                                        </div>
-                                    </td>
-                                </tr>
-                                `;
-                            }).join('')}
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="p-3 bg-dark text-white rounded-3 d-flex justify-content-between align-items-center shadow">
-                    <span class="text-uppercase fw-bold opacity-75">Final Bill Amount (Net Payable)</span>
-                    <span class="h4 fw-bold mb-0 text-warning">₹${parseFloat(order.total_amount).toLocaleString('en-IN')}</span>
+                                <div class="grand-total-box">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="small fw-bold opacity-75">GRAND TOTAL</div>
+                                        <div class="h3 fw-bold mb-0">₹${totalAmount.toLocaleString('en-IN')}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         `,
-        showCloseButton: true,
-        confirmButtonText: 'Print Receipt',
-        showCancelButton: true,
-        cancelButtonText: 'Close',
-        confirmButtonColor: '#0d6efd',
-        cancelButtonColor: '#334155'
     });
 }
+// function viewFullHistory(order) {
+//     let items = [];
+//     try { 
+//         items = typeof order.items === 'string' ? JSON.parse(order.items) : order.items; 
+//     } catch(e) { items = []; }
+
+//     const hallmarkFee = 53.10; // Standard Hallmark fee
+
+//     Swal.fire({
+//         width: '650px',
+//         title: `
+//             <div class="d-flex justify-content-between align-items-center px-2">
+//                 <span class="fw-bold text-dark">Customer History</span>
+//                 <span class="badge bg-primary fs-6">#RJ${order.order_id || (100000 + order.id)}</span>
+//             </div>
+//             <hr class="my-2 opacity-10">
+//         `,
+//         html: `
+//             <div class="text-start" style="font-family: 'Inter', sans-serif;">
+//                 <div class="p-3 mb-4 rounded-3 border bg-light shadow-sm">
+//                     <div class="row g-3">
+//                         <div class="col-6">
+//                             <label class="small text-uppercase fw-bold text-muted d-block">Full Name</label>
+//                             <span class="fs-6 fw-bold text-dark">${order.customer_name}</span>
+//                         </div>
+//                         <div class="col-6 text-end">
+//                             <label class="small text-uppercase fw-bold text-muted d-block">Payment Mode</label>
+//                             <span class="badge bg-success-subtle text-success border border-success-subtle">Online</span>
+//                         </div>
+//                         <div class="col-6">
+//                             <label class="small text-uppercase fw-bold text-muted d-block">Email Address</label>
+//                             <span class="text-dark">${order.email || 'N/A'}</span>
+//                         </div>
+//                         <div class="col-6 text-end">
+//                             <label class="small text-uppercase fw-bold text-muted d-block">Phone Number</label>
+//                             <span class="text-dark">${order.phone || 'N/A'}</span>
+//                         </div>
+//                         <div class="col-12">
+//                             <label class="small text-uppercase fw-bold text-muted d-block">Delivery Address</label>
+//                             <span class="text-dark small">${order.address || 'N/A'}</span>
+//                         </div>
+//                     </div>
+//                 </div>
+
+//                 <h6 class="fw-bold text-uppercase small text-secondary mb-2 ms-1">Itemized Purchase Details</h6>
+//                 <div class="table-responsive border rounded-3 overflow-hidden shadow-sm mb-3">
+//                     <table class="table table-hover mb-0" style="font-size: 0.85rem;">
+//                         <thead class="bg-dark text-white">
+//                             <tr>
+//                                 <th class="ps-3 py-2">Item Name</th>
+//                                 <th class="py-2">Karat</th>
+//                                 <th class="py-2">Weight</th>
+//                                 <th class="py-2 text-center">Qty</th>
+//                                 <th class="pe-3 py-2 text-end">Final Price (Incl. GST)</th>
+//                             </tr>
+//                         </thead>
+//                         <tbody>
+//                             ${items.map(i => {
+//                                 const weight = parseFloat(i.weight_gm || 0);
+//                                 const qty = parseInt(i.quantity || 1);
+//                                 const makingPerGram = parseFloat(i.making_charge || 0);
+//                                 const goldPriceUnit = parseFloat(i.price || 0); // Unit Gold Price
+                                
+//                                 // Calculation Logic:
+//                                 // 1. Item Subtotal = Gold + (Making * Weight) + Hallmark
+//                                 const itemSubtotal = goldPriceUnit + (makingPerGram * weight) + hallmarkFee;
+//                                 // 2. Add 3% GST on top of that
+//                                 const priceWithGST = Math.round(itemSubtotal * 1.03) * qty;
+
+//                                 return `
+//                                 <tr>
+//                                     <td class="ps-3 py-3 align-middle fw-bold text-dark text-truncate" style="max-width: 150px;">
+//                                         ${i.name}
+//                                     </td>
+//                                     <td class="align-middle"><span class="badge bg-warning text-dark">${i.purity || '22'}K</span></td>
+//                                     <td class="align-middle">${weight}g</td>
+//                                     <td class="align-middle text-center">${qty}</td>
+//                                     <td class="pe-3 text-end align-middle">
+//                                         <div class="fw-bold text-dark">₹${priceWithGST.toLocaleString('en-IN')}</div>
+//                                         <div style="font-size: 0.7rem;" class="text-muted">
+//                                             Rate: ₹${goldPriceUnit.toLocaleString('en-IN')} | Making: ₹${makingPerGram}/g
+//                                         </div>
+//                                     </td>
+//                                 </tr>
+//                                 `;
+//                             }).join('')}
+//                         </tbody>
+//                     </table>
+//                 </div>
+
+//                 <div class="p-3 bg-dark text-white rounded-3 d-flex justify-content-between align-items-center shadow">
+//                     <span class="text-uppercase fw-bold opacity-75">Final Bill Amount (Net Payable)</span>
+//                     <span class="h4 fw-bold mb-0 text-warning">₹${parseFloat(order.total_amount).toLocaleString('en-IN')}</span>
+//                 </div>
+//             </div>
+//         `,
+//         showCloseButton: true,
+//         confirmButtonText: 'Print Receipt',
+//         showCancelButton: true,
+//         cancelButtonText: 'Close',
+//         confirmButtonColor: '#0d6efd',
+//         cancelButtonColor: '#334155'
+//     });
+// }
 
 
 // admin.js ke sabse niche ye code dalein

@@ -230,3 +230,270 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+    /* Global Reset for Modal */
+    .swal-luxury-grey { 
+        font-family: 'Inter', sans-serif; 
+        text-align: left; 
+        background: #f4f7f6;
+    }
+
+    /* Header Responsive */
+    .grey-header { 
+        background: #343a40; 
+        color: #f8f9fa; 
+        padding: 15px 20px; 
+        border-radius: 8px 8px 0 0; 
+    }
+
+    /* Card Styling */
+    .cust-card { 
+        background: white; 
+        border: 1px solid #dee2e6; 
+        border-radius: 12px; 
+        padding: 15px; 
+        margin-bottom: 15px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    /* Item Card Fix for Mobile */
+    .item-card-grey { 
+        background: white; 
+        border: 1px solid #e9ecef; 
+        border-left: 5px solid #6c757d; 
+        padding: 12px; 
+        border-radius: 8px; 
+        margin-bottom: 10px; 
+    }
+
+    /* Labels and Values with wrap fix */
+    .label-grey { 
+        font-size: 10px; 
+        font-weight: 800; 
+        color: #888; 
+        text-transform: uppercase; 
+        display: block; 
+    }
+    .value-grey { 
+        font-size: 13px; 
+        font-weight: 600; 
+        color: #333; 
+        word-break: break-word; /* Long address wrap karega */
+        display: block;
+    }
+
+    /* Responsive Grid for Details (Purity, Weight, Size) */
+    .details-grid { 
+        display: flex; 
+        flex-wrap: wrap; 
+        gap: 10px;
+        font-size: 11px; 
+        color: #666; 
+        margin-top: 8px; 
+        padding-top: 8px;
+        border-top: 1px dashed #eee; 
+    }
+    .details-grid span { flex: 1 1 40%; } /* Do columns mobile pe */
+
+    /* Making Charges Box */
+    .making-info { 
+        font-size: 11px; 
+        background: #f8f9fa; 
+        padding: 10px; 
+        border-radius: 6px; 
+        margin-top: 8px;
+    }
+
+    /* Total Box Fix */
+    .total-box { 
+        background: #212529; 
+        color: white; 
+        padding: 15px; 
+        border-radius: 10px; 
+        margin-top: 10px; 
+    }
+
+    /* --- MOBILE RESPONSIVE LOGIC --- */
+    @media (max-width: 768px) {
+        .swal2-popup { width: 95% !important; padding: 0 !important; }
+        
+        /* Flex rows ko column mein badlo */
+        .flex-stack { 
+            flex-direction: column !important; 
+            display: block !important; 
+        }
+        
+        .col-stack { 
+            width: 100% !important; 
+            padding: 0 !important; 
+        }
+
+        .rate-badge { 
+            font-size: 10px; 
+            display: block; 
+            margin-bottom: 5px; 
+        }
+
+        .h3 { font-size: 22px !important; } /* Grand total text size */
+        
+        /* Item header wrapping fix */
+        .item-card-grey .d-flex {
+            flex-direction: column;
+            align-items: flex-start !important;
+        }
+        .item-card-grey .text-end {
+            text-align: left !important;
+            margin-top: 5px;
+            width: 100%;
+            border-top: 1px solid #f0f0f0;
+            padding-top: 5px;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+/* 1. SweetAlert & Global Clean-up (Blue hatane ke liye) */
+.swal2-html-container {
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden !important;
+    color: #333 !important; /* Force black/grey text */
+}
+
+.swal2-popup {
+    border-radius: 15px !important;
+    padding: 0 !important;
+    font-family: 'Inter', sans-serif !important;
+}
+
+/* Kisi bhi blue link ya text ko grey karne ke liye */
+.swal2-html-container a, 
+.swal2-html-container .text-primary {
+    color: #495057 !important; 
+}
+
+/* 2. Layout Engine (Mobile First) */
+.history-body { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
+    padding: 15px;
+    background: #f8f9fa !important; /* Light grey background */
+}
+
+.side-panel, .main-panel { 
+    width: 100% !important; 
+}
+
+/* 3. Desktop Screens (Side-by-Side) */
+@media (min-width: 768px) {
+    .history-body { 
+        flex-direction: row !important; 
+    }
+    .side-panel { width: 35% !important; }
+    .main-panel { width: 65% !important; }
+}
+
+/* 4. Item Card (Dark Grey Border) */
+.history-item-card {
+    background: #fff !important;
+    border: 1px solid #dee2e6 !important;
+    border-left: 5px solid #343a40 !important; /* Solid Dark Grey instead of blue */
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.item-main-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.item-name-text {
+    font-size: 14px;
+    font-weight: 700;
+    color: #212529 !important;
+    text-transform: uppercase;
+}
+
+/* 5. Details Grid Fix (Purity, Weight, etc.) */
+.item-specs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 8px;
+    font-size: 11px;
+    border-top: 1px dashed #ddd;
+    margin-top: 10px;
+    padding-top: 10px;
+    color: #666 !important;
+}
+
+@media (min-width: 400px) {
+    .item-specs-grid {
+        grid-template-columns: repeat(3, 1fr); 
+    }
+}
+
+/* 6. Text & Labels */
+.h-label {
+    font-size: 10px;
+    font-weight: 800;
+    color: #888 !important;
+    text-transform: uppercase;
+}
+
+.h-value {
+    display: block;
+    word-break: break-all;
+    font-size: 13px;
+    line-height: 1.4;
+    color: #212529 !important;
+    font-weight: 600;
+}
+
+/* 7. Grand Total (Pure Black/Dark Grey Theme) */
+.grand-total-box {
+    background: #212529 !important; /* Pure Dark Grey */
+    color: #ffffff !important;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+.history-header {
+    background: #343a40 !important; /* Dark Grey Header */
+    color: #ffffff !important;
+    padding: 20px;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 480px) {
+    .grand-total-box .h3 {
+        font-size: 18px !important;
+    }
+    .history-header h4 {
+        font-size: 15px !important;
+    }
+}
