@@ -505,29 +505,30 @@ function addToBagDetail(id) {
         }
     }
 }
-// function addToBagDetail(id) {
-//     const size = document.getElementById('selectedUserSize').value;
-//     if (typeof addToCart === 'function') {
-//         addToCart(id, size);
-//         if (typeof Swal !== 'undefined') {
-//             Swal.fire({ icon: 'success', title: 'Added to BagG', showConfirmButton: false, timer: 1000 });
-//         }
-//     }
-// }
+
+
+
+
+
 
 function renderRelated(purity, currentId) {
     const container = document.getElementById('relatedContainer');
     if (!container || !window.productData) return;
 
+    // Yahan humne variable 'p' liya hai
     const related = window.productData.filter(p => p.purity === purity && Number(p.id) !== Number(currentId)).slice(0, 4);
+    
     container.innerHTML = related.map(p => {
         const goldOnly = Math.round((parseFloat(p.weight_gm) || 0) * (parseFloat(p.live_gold_rate) || 0));
-        // <img src="http://localhost:3000/images/${p.image}" class="card-img-top p-2" style="height:120px; object-fit:contain;"></img>
+        
+        // LIVE FIX: product.image ki jagah p.image use karein
+        const imageUrl = p.image.startsWith('http') ? p.image : `${BASE_URL}/images/${p.image}`;
+
         return `
         <div class="col-6 col-md-3 mb-3">
             <div class="card h-100 border-0 shadow-sm rounded-4 text-center">
                 <a href="product-detail.html?id=${p.id}">                    
-                    <img src="${product.image.startsWith('http') ? product.image : `${BASE_URL}/images/${product.image}`}" class="img-fluid" alt="${product.name}">
+                    <img src="${imageUrl}" class="img-fluid" alt="${p.name}" style="height:120px; object-fit:contain;">
                 </a>
                 <div class="card-body p-2">
                     <h6 class="small fw-bold mb-1 text-truncate">${p.name}</h6>
@@ -537,6 +538,28 @@ function renderRelated(purity, currentId) {
         </div>`;
     }).join('');
 }
+// function renderRelated(purity, currentId) {
+//     const container = document.getElementById('relatedContainer');
+//     if (!container || !window.productData) return;
+
+//     const related = window.productData.filter(p => p.purity === purity && Number(p.id) !== Number(currentId)).slice(0, 4);
+//     container.innerHTML = related.map(p => {
+//         const goldOnly = Math.round((parseFloat(p.weight_gm) || 0) * (parseFloat(p.live_gold_rate) || 0));
+//         // <img src="http://localhost:3000/images/${p.image}" class="card-img-top p-2" style="height:120px; object-fit:contain;"></img>
+//         return `
+//         <div class="col-6 col-md-3 mb-3">
+//             <div class="card h-100 border-0 shadow-sm rounded-4 text-center">
+//                 <a href="product-detail.html?id=${p.id}">                    
+//                     <img src="${product.image.startsWith('http') ? product.image : `${BASE_URL}/images/${product.image}`}" class="img-fluid" alt="${product.name}">
+//                 </a>
+//                 <div class="card-body p-2">
+//                     <h6 class="small fw-bold mb-1 text-truncate">${p.name}</h6>
+//                     <p class="text-dark fw-bold mb-0">₹${goldOnly.toLocaleString('en-IN')}</p>
+//                 </div>
+//             </div>
+//         </div>`;
+//     }).join('');
+// }
 
 
 // Global Toggle Function
