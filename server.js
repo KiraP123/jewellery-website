@@ -150,10 +150,10 @@ app.post('/api/products', uploadProductFields, (req, res) => {
         const img4 = req.files['productImage4'] ? req.files['productImage4'][0].path : null;
 
         const sql = `INSERT INTO products 
-                    (name, weight_gm, making_charge, purity, size, stock_qty, description, image, image_2, image_3, image_4) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+                    (name, weight_gm, making_charge, purity, size, stock_qty, image, image_2, image_3, image_4) 
+                    VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
         
-        db.query(sql, [name, weight_gm, making_charge, purity, size, stock_qty, description, img1, img2, img3, img4], (err, result) => {
+        db.query(sql, [name, weight_gm, making_charge, purity, size, stock_qty, img1, img2, img3, img4], (err, result) => {
             if (err) {
                 console.error("❌ DB Insert Error:", err);
                 return res.status(500).json({ error: "Database Error", details: err.message });
