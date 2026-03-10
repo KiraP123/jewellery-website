@@ -165,31 +165,7 @@ app.post('/api/products', uploadProductFields, (req, res) => {
         res.status(500).json({ error: "Server Error", details: error.message });
     }
 });
-// app.post('/api/products', upload.single('productImage'), (req, res) => {
-//     // 1. req.body se stock_qty bhi nikaalein (Same as your code)
-//     const { name, weight_gm, making_charge, purity, size, stock_qty } = req.body; 
-    
-//     // BADLAV: req.file.filename ki jagah req.file.path use kar rahe hain
-//     // Kyunki Cloudinary pura URL 'path' mein bhejta hai
-//     const image = req.file ? req.file.path : null;
 
-//     // 2. SQL query mein 'stock_qty' column aur ek naya '?' jodein (Same as your code)
-//     const sql = "INSERT INTO products (name, weight_gm, making_charge, purity, size, stock_qty, image) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    
-//     // 3. Array mein stock_qty ko sahi jagah dalo (Same as your code)
-//     db.query(sql, [name, weight_gm, making_charge, purity, size, stock_qty, image], (err, result) => {
-//         if (err) {
-//             console.error("❌ DB Insert Error:", err);
-//             return res.status(500).json(err);
-//         }
-//         // Success response
-//         res.json({ 
-//             success: true, 
-//             message: "Product added successfully with Stock and Cloudinary Image!",
-//             url: image 
-//         });
-//     });
-// });
 
 
 // --- 4. UPDATE PRODUCT (UPDATED WITH STOCK) ---
@@ -437,35 +413,6 @@ app.post('/api/update-carousel', upload.single('image'), (req, res) => {
         // ... rest of your code
     }
 });
-// // --- CAROUSEL UPDATE ROUTE ---
-// app.post('/api/update-carousel', upload.single('image'), (req, res) => {
-//     const { slide_num, title, description, tag } = req.body;
-//     const imagePath = req.file ? req.file.filename : null;
-
-//     // Agar image upload nahi ki, toh sirf text update karne ke liye logic
-//     if (!imagePath) {
-//         const sql = "UPDATE carousel_slides SET title=?, description=?, tag=? WHERE id=?";
-//         db.query(sql, [title, description, tag, slide_num], (err, result) => {
-//             if (err) return res.status(500).json({ success: false });
-//             res.json({ success: true, message: "Text Updated" });
-//         });
-//     } else {
-//         // Agar image hai, toh poora replace karo
-//         const sql = "REPLACE INTO carousel_slides (id, image_path, tag, title, description, is_active) VALUES (?, ?, ?, ?, ?, 1)";
-//         db.query(sql, [slide_num, imagePath, tag, title, description], (err, result) => {
-//             if (err) return res.status(500).json({ success: false });
-//             res.json({ success: true, message: "Slide Fully Updated" });
-//         });
-//     }
-// });
-
-
-
-
-
-
-
-
 
 // --- 1. POST: Nayi Photo Upload (Isse Button Kaam Karne Lagega) ---
 app.post('/api/carousel', upload.single('image'), (req, res) => {
@@ -898,6 +845,40 @@ app.put('/api/update-product-row', (req, res) => {
         res.json({ success: true, message: "Updated successfully" });
     });
 });
+
+
+
+
+// 1. Review Submit API (With City)
+app.post('/api/reviews', (req, res) => {
+    // Frontend se name, rating, message aur city charo cheezein aayengi
+    const { name, rating, message, city } = req.body;
+    
+    // SQL Query updated with 'city' column
+    const sql = "INSERT INTO reviews (name, rating, message, city) VALUES (?, ?, ?, ?)";
+    
+    db.query(sql, [name, rating, message, city], (err, result) => {
+        if (err) {
+            console.error("Error saving review:", err);
+            return res.status(500).json({ error: err.message });
+        }
+        res.json({ success: true, message: "Review sent successfully!" });
+    });
+});
+
+// 2. Reviews Fetch API (With City and Status check)
+app.get('/api/reviews', (req, res) => {
+const sql = "SELECT * FROM reviews WHERE status = 'pending' OR status = 'approved' ORDER BY id DESC LIMIT 6";
+    
+    db.query(sql, (err, data) => {
+        if (err) {
+            console.error("Fetch Error:", err);
+            return res.status(500).json({ error: "Database fetch failed" });
+        }
+        res.json(data);
+    });
+});
+
 
 // app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

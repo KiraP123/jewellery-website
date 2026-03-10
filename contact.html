@@ -443,6 +443,59 @@
     </div>
 </footer>
 
+
+<div class="modal fade" id="reviewModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow-lg">
+            <div class="modal-body p-4 text-center">
+                <button type="button" class="btn-close float-end" data-bs-dismiss="modal"></button>
+                
+                <div id="modalFormSection">
+                    <h4 class="fw-bold mb-1">Share Your Experience ⭐</h4>
+                    <p class="text-muted small mb-4">We value your feedback from your city!</p>
+
+                    <form id="autoReviewForm">
+                        <div class="mb-3">
+                            <input type="text" id="mName" class="form-control bg-light border-0 py-2" placeholder="Your Full Name" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="text" id="mCity" class="form-control bg-light border-0 py-2" placeholder="Your City (e.g. Mumbai, Delhi)" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="star-rating h2 text-warning" style="cursor: pointer;">
+                                <span data-val="1">★</span><span data-val="2">★</span><span data-val="3">★</span><span data-val="4">★</span><span data-val="5">★</span>
+                            </div>
+                            <input type="hidden" id="mRating" value="5">
+                        </div>
+
+                        <textarea id="mMsg" class="form-control mb-3 bg-light border-0" rows="3" placeholder="Write 3-4 lines about our service..." required></textarea>
+                        
+                        <button type="submit" id="mSubmitBtn" class="btn btn-dark w-100 py-2 fw-bold rounded-3 shadow-sm">Submit Review</button>
+                    </form>
+                </div>
+
+           <div id="modalSuccessSection" class="d-none py-4 text-center animate__animated animate__fadeIn">
+    <div class="text-success fs-1 mb-2">✔</div>
+    
+    <h4 class="fw-bold text-dark">Thank You for Your Love!</h4>
+    
+    <p class="text-muted">
+        We truly appreciate your kind words from 
+        <b class="text-dark"><span id="successCity"></span></b>. 
+        Your feedback helps us shine brighter!
+    </p>
+    
+    <button type="button" class="btn btn-dark btn-sm px-5 mt-3 rounded-pill fw-bold shadow-sm" data-bs-dismiss="modal">
+        Done
+    </button>
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/common.js"></script>
 <script src="js/collection.js"></script>
@@ -509,6 +562,80 @@ function checkSubject(val) {
         otherInput.style.display = 'none'; // Chupao
     }
 }
+
+
+
+
+// Star Selection Logic
+document.querySelectorAll('.star-rating span').forEach((star, i) => {
+    star.onclick = function() {
+        let val = this.getAttribute('data-val');
+        document.getElementById('revRating').value = val;
+        document.querySelectorAll('.star-rating span').forEach((s, idx) => {
+            s.style.color = (idx < val) ? '#ffc107' : '#ccc';
+        });
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const myModal = new bootstrap.Modal(document.getElementById('reviewModal'));
+    
+    // 2 second baad popup show hoga
+    setTimeout(() => { myModal.show(); }, 1500);
+
+    // Star Click Logic
+    const stars = document.querySelectorAll('.star-rating span');
+    stars.forEach(star => {
+        star.onclick = function() {
+            let val = this.getAttribute('data-val');
+            document.getElementById('mRating').value = val;
+            stars.forEach((s, i) => s.style.color = (i < val) ? '#ffc107' : '#ddd');
+        }
+    });
+
+    // Form Submit Logic
+    document.getElementById('autoReviewForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('mSubmitBtn');
+        btn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Sending...`;
+        btn.disabled = true;
+
+        // Manual Input se data lena
+        const payload = {
+            name: document.getElementById('mName').value,
+            city: document.getElementById('mCity').value,
+            rating: document.getElementById('mRating').value,
+            message: document.getElementById('mMsg').value
+        };
+
+        try {
+            // const res = await fetch('http://localhost:3000/api/reviews', {
+                const res = await fetch(`${API_BASE_URL}/api/reviews`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload)
+            });
+
+            if(res.ok) {
+                // UI Switch: Form hide, Success Show
+                document.getElementById('successCity').innerText = document.getElementById('mCity').value;
+                document.getElementById('modalFormSection').classList.add('d-none');
+                document.getElementById('modalSuccessSection').classList.remove('d-none');
+                
+                // 3 second baad modal close
+                setTimeout(() => { myModal.hide(); }, 3000);
+            } else {
+                alert("Submission failed. Please try again.");
+                btn.innerHTML = "Submit Review";
+                btn.disabled = false;
+            }
+        } catch (err) {
+            console.error(err);
+            btn.innerHTML = "Submit Review";
+            btn.disabled = false;
+        }
+    };
+});
 </script>
 
 </body>

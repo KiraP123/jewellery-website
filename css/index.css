@@ -343,3 +343,180 @@
     background: #a0845a;
     border-color: #a0845a;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.carousel-control-prev, .carousel-control-next {
+    width: 5%;
+}
+.carousel-item {
+    transition: transform 0.6s ease-in-out;
+}
+/* Mobile par 1 review dikhe uske liye styling automatically handle ho jayegi */
+
+
+
+
+
+
+/* --- Premium & Responsive Testimonial Slider CSS --- */
+
+.testimonial-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.section-title {
+    color: #4a1d1f; /* Aapke brand ka dark brown color */
+}
+
+#testimonialSlider .carousel-inner {
+    padding: 15px 0; /* Cards ko shadow ke liye jagah dene ke liye */
+}
+
+/* Review Card Basic Styling */
+.testimonial-card {
+    background: #fff;
+    border-radius: 15px;
+    padding: 25px;
+    height: 100%; /* Saare cards ek barabar height ke */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.testimonial-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(160, 132, 90, 0.15) !important; /* Gold tinge shadow */
+}
+
+/* Gold Border Left */
+.testimonial-card-border {
+    border-left: 5px solid #a0845a !important; /* Gold color */
+}
+
+/* ⭐ Text 'out of box' fix - VERY IMPORTANT ⭐ */
+.testimonial-text {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+    font-style: italic;
+    
+    /* Ye teen lines lamba text (jaise kkkkk...) ko automatic nichi line mein bhej dengi */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word; 
+    
+    margin-bottom: 20px;
+    flex-grow: 1; /* Text area expand ho jaye gap bharne ke liye */
+}
+
+/* Footer (Name & City) */
+.testimonial-footer {
+    font-size: 0.9rem;
+    color: #333;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+    margin-top: auto;
+}
+
+.customer-name {
+    font-weight: 700;
+}
+
+.customer-city {
+    color: #a0845a;
+    font-weight: 400;
+}
+
+/* Star Rating */
+.star-rating {
+    color: #ffc107; /* Gold Star */
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+/* Slider Controls (Buttons) Styling */
+.custom-slider-btn {
+    width: 45px;
+    height: 45px;
+    background-color: #4a1d1f; /* Dark background */
+    border-radius: 50%;
+    opacity: 1;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.custom-slider-btn:hover {
+    background-color: #a0845a; /* Gold on hover */
+    transform: scale(1.1);
+}
+
+/* Computer/Tablet (iPad) par buttons sides mein */
+@media (min-width: 768px) {
+    #testimonialSlider .carousel-control-prev {
+        left: -60px;
+        top: 50%;
+        transform: translateY(-50%);
+        position: absolute;
+    }
+    
+    #testimonialSlider .carousel-control-next {
+        right: -60px;
+        top: 50%;
+        transform: translateY(-50%);
+        position: absolute;
+    }
+    
+    .carousel-controls-container {
+        display: none !important; /* Mobile wali relative buttons chupa do */
+    }
+}
+
+/* Mobile par buttons cards ke niche center mein (HTML structure handles this) */
+@media (max-width: 767px) {
+    .testimonial-card {
+        padding: 20px; /* Thodi padding kam */
+    }
+}
+
+/* Custom Gold Color for your Shop */
+.border-warning {
+    border-color: #D4AF37 !important; /* Metallic Gold Color */
+}
+
+.text-warning {
+    color: #D4AF37 !important; /* Gold Stars */
+}
+
+.card {
+    border-radius: 12px;
+    background: linear-gradient(145deg, #ffffff, #fffdfa); /* Soft Gold tint background */
+}
+
+/* Mobile screen par arrows hide karne ke liye */
+@media (max-width: 767px) {
+    #testimonialSlider .carousel-control-prev, 
+    #testimonialSlider .carousel-control-next,
+    .custom-slider-btn {
+        display: none !important;
+    }
+
+    /* Container ki padding adjust karein taaki reviews puri screen lein */
+    #testimonialSlider {
+        padding: 0px !important;
+    }
+}

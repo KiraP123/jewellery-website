@@ -101,29 +101,6 @@ function initSwiper() {
     });
 }
 
-// function loadData(id) {
-//     const product = window.productData.find(p => Number(p.id) === Number(id));
-    
-//     if (product) {
-//         // --- SHORTCUT FIX START ---
-//         const imgPath = product.image.startsWith('http') ? product.image : `${BASE_URL}/images/${product.image}`;
-//         // --- SHORTCUT FIX END ---
-
-//         const mainImg = document.getElementById('mainImg');
-//         if (mainImg) {
-//             mainImg.src = imgPath;
-//             // Backup ke liye onerror bhi dal do
-//             mainImg.onerror = function() { this.src = 'https://via.placeholder.com/500'; };
-//         }
-
-//         renderUI(product);
-//         calculateBreakdown(product);
-//         renderRelated(product.purity, product.id);
-//     } else {
-//         const detailsDiv = document.getElementById('productDetails');
-//         if (detailsDiv) detailsDiv.innerHTML = "<h3 class='text-center'>Product Not Found</h3>";
-//     }
-// }
 
 function calculateBreakdown(p) {
     const weight = parseFloat(p.weight_gm) || 0;
@@ -538,28 +515,7 @@ function renderRelated(purity, currentId) {
         </div>`;
     }).join('');
 }
-// function renderRelated(purity, currentId) {
-//     const container = document.getElementById('relatedContainer');
-//     if (!container || !window.productData) return;
 
-//     const related = window.productData.filter(p => p.purity === purity && Number(p.id) !== Number(currentId)).slice(0, 4);
-//     container.innerHTML = related.map(p => {
-//         const goldOnly = Math.round((parseFloat(p.weight_gm) || 0) * (parseFloat(p.live_gold_rate) || 0));
-//         // <img src="http://localhost:3000/images/${p.image}" class="card-img-top p-2" style="height:120px; object-fit:contain;"></img>
-//         return `
-//         <div class="col-6 col-md-3 mb-3">
-//             <div class="card h-100 border-0 shadow-sm rounded-4 text-center">
-//                 <a href="product-detail.html?id=${p.id}">                    
-//                     <img src="${product.image.startsWith('http') ? product.image : `${BASE_URL}/images/${product.image}`}" class="img-fluid" alt="${product.name}">
-//                 </a>
-//                 <div class="card-body p-2">
-//                     <h6 class="small fw-bold mb-1 text-truncate">${p.name}</h6>
-//                     <p class="text-dark fw-bold mb-0">₹${goldOnly.toLocaleString('en-IN')}</p>
-//                 </div>
-//             </div>
-//         </div>`;
-//     }).join('');
-// }
 
 
 // Global Toggle Function
