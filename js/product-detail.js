@@ -29,19 +29,39 @@ async function initProductPage() {
 
 
 
+
+
+
 function loadData(id) {
     const product = window.productData.find(p => Number(p.id) === Number(id));
     
     if (product) {
-        // --- SHORTCUT FIX START ---
-        const imgPath = product.image.startsWith('http') ? product.image : `${BASE_URL}/images/${product.image}`;
-        // --- SHORTCUT FIX END ---
+        const mainImgContainer = document.getElementById('mainImgContainer');
+        const thumbContainer = document.getElementById('thumbContainer');
+        
+        // Filter out empty or null images
+        const allImages = [
+            product.image, 
+            product.image_2, 
+            product.image_3, 
+            product.image_4
+        ].filter(img => img && img !== "" && img !== "null" && img !== null);
 
-        const mainImg = document.getElementById('mainImg');
-        if (mainImg) {
-            mainImg.src = imgPath;
-            // Backup ke liye onerror bhi dal do
-            mainImg.onerror = function() { this.src = 'https://via.placeholder.com/500'; };
+        if (mainImgContainer && thumbContainer) {
+            // LIVE CHANGE: Direct 'img' use karein kyunki Cloudinary URL pura hota hai
+            mainImgContainer.innerHTML = allImages.map(img => `
+                <div class="swiper-slide">
+                    <img src="${img}" class="img-fluid rounded-4 shadow-sm w-100" style="height:450px; object-fit:contain;">
+                </div>
+            `).join('');
+
+            thumbContainer.innerHTML = allImages.map(img => `
+                <div class="swiper-slide">
+                    <img src="${img}" class="img-fluid rounded border p-1" style="height:70px; width:70px; object-fit:cover; cursor:pointer;">
+                </div>
+            `).join('');
+            
+            setTimeout(initSwiper, 200); 
         }
 
         renderUI(product);
@@ -52,6 +72,58 @@ function loadData(id) {
         if (detailsDiv) detailsDiv.innerHTML = "<h3 class='text-center'>Product Not Found</h3>";
     }
 }
+
+function initSwiper() {
+    // Purane slider ko clear karo taki naya data load ho sake
+    if (window.mainSwiper) window.mainSwiper.destroy(true, true);
+    if (window.thumbSwiper) window.thumbSwiper.destroy(true, true);
+
+    // Niche wale 4 boxes
+    window.thumbSwiper = new Swiper(".thumbProductSwiper", {
+        spaceBetween: 10,
+        slidesPerView: 4,
+        freeMode: true,
+        watchSlidesProgress: true,
+    });
+
+    // Badi image
+    window.mainSwiper = new Swiper(".mainProductSwiper", {
+        loop: false,
+        observer: true,         // Ye important hai!
+        observeParents: true,   // Ye bhi important hai!
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        thumbs: {
+            swiper: window.thumbSwiper,
+        },
+    });
+}
+
+// function loadData(id) {
+//     const product = window.productData.find(p => Number(p.id) === Number(id));
+    
+//     if (product) {
+//         // --- SHORTCUT FIX START ---
+//         const imgPath = product.image.startsWith('http') ? product.image : `${BASE_URL}/images/${product.image}`;
+//         // --- SHORTCUT FIX END ---
+
+//         const mainImg = document.getElementById('mainImg');
+//         if (mainImg) {
+//             mainImg.src = imgPath;
+//             // Backup ke liye onerror bhi dal do
+//             mainImg.onerror = function() { this.src = 'https://via.placeholder.com/500'; };
+//         }
+
+//         renderUI(product);
+//         calculateBreakdown(product);
+//         renderRelated(product.purity, product.id);
+//     } else {
+//         const detailsDiv = document.getElementById('productDetails');
+//         if (detailsDiv) detailsDiv.innerHTML = "<h3 class='text-center'>Product Not Found</h3>";
+//     }
+// }
 
 function calculateBreakdown(p) {
     const weight = parseFloat(p.weight_gm) || 0;

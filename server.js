@@ -97,15 +97,15 @@ const storage = new CloudinaryStorage({
     },
 });
 
-// 4. Multer ko ab Cloudinary storage use karne ko kahein
+
 const upload = multer({ storage: storage });
-// const storage = multer.diskStorage({
-//     destination: './images/',
-//     filename: (req, file, cb) => {
-//         cb(null, Date.now() + path.extname(file.originalname));
-//     }
-// });
-// const upload = multer({ storage: storage });
+const uploadProductFields = upload.fields([
+    { name: 'productImage', maxCount: 1 },
+    { name: 'productImage2', maxCount: 1 },
+    { name: 'productImage3', maxCount: 1 },
+    { name: 'productImage4', maxCount: 1 }
+]);
+
 
 // --- 1. UPDATE RATES ---
 app.post('/api/update-rates', (req, res) => {
@@ -117,31 +117,7 @@ app.post('/api/update-rates', (req, res) => {
     });
 });
 
-// // --- 2. GET PRODUCTS (RAW DATA ONLY) ---
-// // Yahan humne calculation frontend (common.js) ke liye chhod di hai
-// app.get('/api/products', (req, res) => {
-//     db.query("SELECT * FROM settings WHERE id=1", (err, rateResult) => {
-//         if (err) return res.status(500).json(err);
-//         const rates = rateResult[0];
 
-//         db.query("SELECT * FROM products ORDER BY id DESC", (err, products) => {
-//             if (err) return res.status(500).json(err);
-
-//             // Sirf database ka raw data aur current gold rates bhej rahe hain
-//             res.json({ products: products, rates: rates });
-//         });
-//     });
-// });
-
-// // --- 1. UPDATE RATES ---
-// app.post('/api/update-rates', (req, res) => {
-//     const { r995, r916, r750 } = req.body;
-//     const sql = "UPDATE settings SET rate_995=?, rate_916=?, rate_750=? WHERE id=1";
-//     db.query(sql, [r995, r916, r750], (err) => {
-//         if (err) return res.status(500).json(err);
-//         res.json({ message: "Rates Updated Successfully" });
-//     });
-// });
 
 // --- 2. GET PRODUCTS (RAW DATA ONLY) ---
 // Yahan humne calculation frontend (common.js) ke liye chhod di hai
@@ -162,48 +138,60 @@ app.get('/api/products', (req, res) => {
 
 
 
+// --- 3. ADD PRODUCT (UPDATED FOR 4 IMAGES & CLOUDINARY LIVE) ---
+app.post('/api/products', uploadProductFields, (req, res) => {
+    // 1. Body se data nikaalein
+    const { name, weight_gm, making_charge, purity, size, stock_qty, description } = req.body; 
 
-app.post('/api/products', upload.single('productImage'), (req, res) => {
-    // 1. req.body se stock_qty bhi nikaalein (Same as your code)
-    const { name, weight_gm, making_charge, purity, size, stock_qty } = req.body; 
-    
-    // BADLAV: req.file.filename ki jagah req.file.path use kar rahe hain
-    // Kyunki Cloudinary pura URL 'path' mein bhejta hai
-    const image = req.file ? req.file.path : null;
+    // 2. Charo images ke URLs nikaalein (Cloudinary ke liye .path use karein)
+    const img1 = req.files['productImage'] ? req.files['productImage'][0].path : null;
+    const img2 = req.files['productImage2'] ? req.files['productImage2'][0].path : null;
+    const img3 = req.files['productImage3'] ? req.files['productImage3'][0].path : null;
+    const img4 = req.files['productImage4'] ? req.files['productImage4'][0].path : null;
 
-    // 2. SQL query mein 'stock_qty' column aur ek naya '?' jodein (Same as your code)
-    const sql = "INSERT INTO products (name, weight_gm, making_charge, purity, size, stock_qty, image) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    // 3. SQL query (Make sure DB mein ye columns hain)
+    const sql = `INSERT INTO products 
+                (name, weight_gm, making_charge, purity, size, stock_qty, description, image, image_2, image_3, image_4) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
     
-    // 3. Array mein stock_qty ko sahi jagah dalo (Same as your code)
-    db.query(sql, [name, weight_gm, making_charge, purity, size, stock_qty, image], (err, result) => {
+    // 4. Database mein insert karein
+    db.query(sql, [name, weight_gm, making_charge, purity, size, stock_qty, description, img1, img2, img3, img4], (err, result) => {
         if (err) {
-            console.error("❌ DB Insert Error:", err);
-            return res.status(500).json(err);
+            console.error("❌ Live DB Insert Error:", err);
+            return res.status(500).json({ success: false, error: err.message });
         }
+        
         // Success response
         res.json({ 
             success: true, 
-            message: "Product added successfully with Stock and Cloudinary Image!",
-            url: image 
+            message: "Product added successfully with 4 Cloudinary images!",
+            data: { img1, img2, img3, img4 }
         });
     });
 });
-// --- 3. ADD PRODUCT (UPDATED WITH STOCK) ---
 // app.post('/api/products', upload.single('productImage'), (req, res) => {
-//     // 1. req.body se stock_qty bhi nikaalein
+//     // 1. req.body se stock_qty bhi nikaalein (Same as your code)
 //     const { name, weight_gm, making_charge, purity, size, stock_qty } = req.body; 
-//     const image = req.file ? req.file.filename : null;
+    
+//     // BADLAV: req.file.filename ki jagah req.file.path use kar rahe hain
+//     // Kyunki Cloudinary pura URL 'path' mein bhejta hai
+//     const image = req.file ? req.file.path : null;
 
-//     // 2. SQL query mein 'stock_qty' column aur ek naya '?' jodein
+//     // 2. SQL query mein 'stock_qty' column aur ek naya '?' jodein (Same as your code)
 //     const sql = "INSERT INTO products (name, weight_gm, making_charge, purity, size, stock_qty, image) VALUES (?, ?, ?, ?, ?, ?, ?)";
     
-//     // 3. Array mein stock_qty ko sahi jagah (size aur image ke beech) dalo
+//     // 3. Array mein stock_qty ko sahi jagah dalo (Same as your code)
 //     db.query(sql, [name, weight_gm, making_charge, purity, size, stock_qty, image], (err, result) => {
 //         if (err) {
 //             console.error("❌ DB Insert Error:", err);
 //             return res.status(500).json(err);
 //         }
-//         res.json({ message: "Product added successfully with Stock!" });
+//         // Success response
+//         res.json({ 
+//             success: true, 
+//             message: "Product added successfully with Stock and Cloudinary Image!",
+//             url: image 
+//         });
 //     });
 // });
 
@@ -520,14 +508,7 @@ app.get('/api/carousel', (req, res) => {
         res.json(results);
     });
 });
-// // --- GET CAROUSEL FOR FRONTEND ---
-// app.get('/api/carousel', (req, res) => {
-//     // Sirf wahi slides bhej rahe hain jo 'is_active = 1' hain
-//     db.query("SELECT * FROM carousel_slides WHERE is_active = 1 ORDER BY id ASC", (err, results) => {
-//         if (err) return res.status(500).json(err);
-//         res.json(results);
-//     });
-// });
+
 
 
 // --- 1. ADMIN ORDER UPDATE (YE MISSING THA ISLIYE 500 ERROR AA RAHA THA) ---
@@ -649,47 +630,7 @@ app.post('/api/place-order', (req, res) => {
         res.json({ success: true, orderId: uniqueOrderId });
     });
 });
-// app.post('/api/place-order', (req, res) => {
-//     const uniqueOrderId = Math.floor(10000000 + Math.random() * 90000000);
-//     const { user_email, pincode, customer_name, items, total_amount, address, phone } = req.body;
-    
-//     // Items ko string mein badlein DB mein save karne ke liye
-//     const itemsStr = JSON.stringify(items || []);
 
-//     const sql = "INSERT INTO orders (user_email, pincode, customer_name, items, total_amount, address, phone, status, custom_order_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    
-//     db.query(sql, [
-//         user_email || 'No Email', 
-//         pincode || 'no pincode',
-//         customer_name || 'Guest', 
-//         itemsStr, 
-//         total_amount || 0, 
-//         address || 'No Address', 
-//         phone || 'No Phone',
-//         'ORDER CONFIRM', 
-//         uniqueOrderId
-//     ], (err, result) => {
-//         if (err) {
-//             console.error("❌ SQL Insert Error:", err.message);
-//             return res.status(500).json({ success: false, error: err.message });
-//         }
-
-//         // --- STOCK MINUS LOGIC START ---
-//         if (items && Array.isArray(items)) {
-//             items.forEach(item => {
-//                 // Har product ki quantity 1 kam hogi (AND stock_qty > 0 taaki minus mein na jaye)
-//                 const updateStockSql = "UPDATE products SET stock_qty = stock_qty - 1 WHERE id = ? AND stock_qty > 0";
-//                 db.query(updateStockSql, [item.id], (err) => {
-//                     if (err) console.error("❌ Stock Minus Error for ID " + item.id + ":", err.message);
-//                 });
-//             });
-//         }
-//         // --- STOCK MINUS LOGIC END ---
-
-//         console.log("✅ Order Saved & Stock Updated! ID:", uniqueOrderId);
-//         res.json({ success: true, orderId: uniqueOrderId });
-//     });
-// });
 
 
 // Order Tracking ke liye status fetch karna
@@ -791,12 +732,6 @@ items.forEach(item => {
         if (err) console.error(`❌ Restore Stock Error for ID ${item.id}:`, err.message);
     });
 });
-                    // items.forEach(item => {
-                    //     const restoreStockSql = "UPDATE products SET stock_qty = stock_qty + 1 WHERE id = ?";
-                    //     db.query(restoreStockSql, [item.id], (err) => {
-                    //         if (err) console.error(`❌ Restore Stock Error for ID ${item.id}:`, err.message);
-                    //     });
-                    // });
                     console.log(`✅ Order ${orderId} cancelled and stock restored.`);
                     res.json({ success: true, message: "Order cancelled and stock updated!" });
                 } catch (parseErr) {
@@ -807,56 +742,7 @@ items.forEach(item => {
         });
     });
 });
-// // --- CANCEL ORDER API (WITH AUTOMATIC STOCK RESTORE) ---
-// app.put('/api/cancel-order/:id', (req, res) => {
-//     const orderId = req.params.id;
 
-//     // Step 1: Pehle check karo ki order cancel hone layak hai ya nahi aur uske items nikaalo
-//     const checkSql = "SELECT items, status FROM orders WHERE id = ?";
-    
-//     db.query(checkSql, [orderId], (err, rows) => {
-//         if (err) return res.status(500).json({ success: false, error: err.message });
-//         if (rows.length === 0) return res.status(404).json({ success: false, message: "Order not found" });
-
-//         const order = rows[0];
-//         const currentStatus = order.status.toUpperCase();
-        
-//         // Step 2: Sirf inhi status par cancel allow karein
-//         const allowableStatuses = ['ORDER CONFIRM', 'QUALITY CHECK', 'ORDER PLACED'];
-        
-//         if (!allowableStatuses.includes(currentStatus)) {
-//             return res.status(400).json({ 
-//                 success: false, 
-//                 message: `Order cannot be cancelled because it is already '${order.status}'` 
-//             });
-//         }
-
-//         // Step 3: Status ko 'Cancelled' mein update karein
-//         const updateSql = "UPDATE orders SET status = 'Cancelled' WHERE id = ?";
-        
-//         db.query(updateSql, [orderId], (err, result) => {
-//             if (err) return res.status(500).json({ success: false, error: err.message });
-
-//             if (result.affectedRows > 0) {
-//                 // Step 4: AGAR SUCCESSFUL CANCEL HUA, TOH STOCK WAPAS PLUS KARO
-//                 try {
-//                     const items = JSON.parse(order.items || "[]");
-//                     items.forEach(item => {
-//                         const restoreStockSql = "UPDATE products SET stock_qty = stock_qty + 1 WHERE id = ?";
-//                         db.query(restoreStockSql, [item.id], (err) => {
-//                             if (err) console.error(`❌ Restore Stock Error for ID ${item.id}:`, err.message);
-//                         });
-//                     });
-//                     console.log(`✅ Order ${orderId} cancelled and stock restored.`);
-//                     res.json({ success: true, message: "Order cancelled and stock updated!" });
-//                 } catch (parseErr) {
-//                     console.error("❌ JSON Parse Error:", parseErr);
-//                     res.json({ success: true, message: "Order cancelled but stock restore failed (Data Error)" });
-//                 }
-//             }
-//         });
-//     });
-// });
 
 const cron = require('node-cron');
 

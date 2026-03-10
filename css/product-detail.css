@@ -341,3 +341,58 @@ button[onclick*="buyNowLink"] {
         font-size: 9px !important;
     }
 }
+
+
+
+
+
+
+
+/* Badi Photo ka Container */
+.mainProductSwiper {
+    width: 100%;
+    height: 450px;
+    overflow: hidden;
+}
+
+/* Neeche wale boxes ko ek line mein laane ke liye */
+.thumbProductSwiper {
+    width: 100%;
+    height: 100px;
+    margin-top: 15px;
+}
+
+.thumbProductSwiper .swiper-wrapper {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center; /* Boxes ko center mein rakhega */
+}
+
+/* Thumbnail Slide ka size */
+.thumbProductSwiper .swiper-slide {
+    width: 80px !important;
+    opacity: 0.5;
+}
+
+.thumbProductSwiper .swiper-slide-thumb-active {
+    opacity: 1;
+    border: 2px solid #a0845a;
+    border-radius: 10px;
+}
+
+/* Badi image wale wrapper ko horizontal force karne ke liye */
+.mainProductSwiper .swiper-wrapper {
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+/* Har ek slide ko slider ki puri width dena zaroori hai */
+.mainProductSwiper .swiper-slide {
+    width: 100% !important;
+    flex-shrink: 0; /* Image ko dabne se rokega */
+}
+
+/* Taki arrows photo ke upar dikhein */
+.mainProductSwiper {
+    position: relative;
+}
