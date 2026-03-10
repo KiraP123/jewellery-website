@@ -141,7 +141,7 @@ app.get('/api/products', (req, res) => {
 // --- ADMIN BACKEND (Live Update) ---
 app.post('/api/products', uploadProductFields, (req, res) => {
     try {
-        const { name, weight_gm, making_charge, purity, size, stock_qty, description } = req.body; 
+        const { name, weight_gm, making_charge, purity, size, stock_qty, } = req.body; 
 
         // Cloudinary URLs nikalna (.path use hota hai live mein)
         const img1 = req.files['productImage'] ? req.files['productImage'][0].path : null;
