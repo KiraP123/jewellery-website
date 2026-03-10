@@ -138,36 +138,32 @@ app.get('/api/products', (req, res) => {
 
 
 
-// --- 3. ADD PRODUCT (UPDATED FOR 4 IMAGES & CLOUDINARY LIVE) ---
+// --- ADMIN BACKEND (Live Update) ---
 app.post('/api/products', uploadProductFields, (req, res) => {
-    // 1. Body se data nikaalein
-    const { name, weight_gm, making_charge, purity, size, stock_qty, description } = req.body; 
+    try {
+        const { name, weight_gm, making_charge, purity, size, stock_qty, description } = req.body; 
 
-    // 2. Charo images ke URLs nikaalein (Cloudinary ke liye .path use karein)
-    const img1 = req.files['productImage'] ? req.files['productImage'][0].path : null;
-    const img2 = req.files['productImage2'] ? req.files['productImage2'][0].path : null;
-    const img3 = req.files['productImage3'] ? req.files['productImage3'][0].path : null;
-    const img4 = req.files['productImage4'] ? req.files['productImage4'][0].path : null;
+        // Cloudinary URLs nikalna (.path use hota hai live mein)
+        const img1 = req.files['productImage'] ? req.files['productImage'][0].path : null;
+        const img2 = req.files['productImage2'] ? req.files['productImage2'][0].path : null;
+        const img3 = req.files['productImage3'] ? req.files['productImage3'][0].path : null;
+        const img4 = req.files['productImage4'] ? req.files['productImage4'][0].path : null;
 
-    // 3. SQL query (Make sure DB mein ye columns hain)
-    const sql = `INSERT INTO products 
-                (name, weight_gm, making_charge, purity, size, stock_qty, description, image, image_2, image_3, image_4) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-    
-    // 4. Database mein insert karein
-    db.query(sql, [name, weight_gm, making_charge, purity, size, stock_qty, description, img1, img2, img3, img4], (err, result) => {
-        if (err) {
-            console.error("❌ Live DB Insert Error:", err);
-            return res.status(500).json({ success: false, error: err.message });
-        }
+        const sql = `INSERT INTO products 
+                    (name, weight_gm, making_charge, purity, size, stock_qty, description, image, image_2, image_3, image_4) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
         
-        // Success response
-        res.json({ 
-            success: true, 
-            message: "Product added successfully with 4 Cloudinary images!",
-            data: { img1, img2, img3, img4 }
+        db.query(sql, [name, weight_gm, making_charge, purity, size, stock_qty, description, img1, img2, img3, img4], (err, result) => {
+            if (err) {
+                console.error("❌ DB Insert Error:", err);
+                return res.status(500).json({ error: "Database Error", details: err.message });
+            }
+            res.json({ success: true, message: "Product added successfully with 4 images!" });
         });
-    });
+    } catch (error) {
+        console.error("❌ Server Error:", error);
+        res.status(500).json({ error: "Server Error", details: error.message });
+    }
 });
 // app.post('/api/products', upload.single('productImage'), (req, res) => {
 //     // 1. req.body se stock_qty bhi nikaalein (Same as your code)
