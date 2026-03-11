@@ -72,12 +72,28 @@ function logout() {
     window.location.href = "admin_login.html";
 }
 
-// Gold rate calculation logic
+
+
 document.getElementById('r995')?.addEventListener('input', function() {
     const base = parseFloat(this.value) || 0;
-    document.getElementById('r916').value = Math.round(base/9.95*92);
-    document.getElementById('r750').value = Math.round(base/9.95*75.50);
+
+    // 22 Karat (916) Calculation
+    // Logic: Base / 99.5 * 92 (Aapke desired rate ke liye)
+    const rate916 = (base / 99.5) * 92;
+    document.getElementById('r916').value = rate916.toFixed(2);
+
+    // 18 Karat (750) Calculation
+    // Logic: Base / 99.5 * 75.50
+    const rate750 = (base / 99.5) * 75.50;
+    document.getElementById('r750').value = rate750.toFixed(2);
+    
 });
+// // Gold rate calculation logic
+// document.getElementById('r995')?.addEventListener('input', function() {
+//     const base = parseFloat(this.value) || 0;
+//     document.getElementById('r916').value = Math.round(base/9.95*92);
+//     document.getElementById('r750').value = Math.round(base/9.95*75.50);
+// });
 
 // Table search filter
 function filterTable(tableId, query) {
