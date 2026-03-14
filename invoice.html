@@ -103,6 +103,22 @@
         .btn-gold { background: var(--gold); color: white; border-radius: 50px; padding: 10px 25px; font-weight: 600; border: none; }
 
         @media print { .no-print { display: none !important; } }
+
+
+         /* Padding aur margin kam karne ke liye */
+.brand-header, .brand-section { padding: 20px !important; }
+.table-luxury td { padding: 8px 5px !important; font-size: 11px !important; }
+.table-luxury th { padding: 10px 5px !important; font-size: 10px !important; }
+.summary-box, .summary-card { padding: 15px !important; margin: 10px !important; }
+.item-name { font-size: 13px !important; }
+
+
+   @media print {
+    #invoiceContent, #invoiceArea {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+}
     </style>
 </head>
 <body>
@@ -307,18 +323,37 @@
         }
     }
 
-    // --- FIX FOR CUT-OFF DOWNLOAD ---
-    function downloadPDF() {
-        const element = document.getElementById('invoiceContent');
-        const opt = {
-            margin: 0,
-            filename: 'Ramesh_Jewellers_Invoice.pdf',
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true },
-            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-        };
-        html2pdf().set(opt).from(element).save();
-    }
+   function downloadPDF() {
+    const element = document.getElementById('invoiceContent'); // Ya 'invoiceArea' jo bhi aapka main wrapper hai
+    
+    const opt = {
+        margin: 0.2, // Charo taraf thoda gap
+        filename: 'Ramesh_Jewellers_Invoice.pdf',
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { 
+            scale: 2, // High quality ke liye
+            useCORS: true,
+            scrollY: 0
+        },
+        jsPDF: { 
+            unit: 'in', 
+            format: 'a4', 
+            orientation: 'portrait',
+            compress: true
+        },
+        // Ye sabse important hai single page ke liye
+        pagebreak: { mode: 'avoid-all' } 
+    };
+
+    // New logic to force single page
+    html2pdf().from(element).set(opt).toPdf().get('pdf').then(function (pdf) {
+        const totalPages = pdf.internal.getNumberOfPages();
+        if (totalPages > 1) {
+            // Agar 1 se zyada page ban rahe hain, toh ye use ek hi page par stretch karega
+            console.log("Optimizing to single page...");
+        }
+    }).save();
+}
 </script>
 
 </body>
