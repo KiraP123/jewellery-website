@@ -141,15 +141,15 @@
         <table class="table-luxury">
             <thead>
                 <tr>
-                    <th class="item-main">Description</th>
+                     <th class="item-main">Product</th>
                     <th>Rate/gm</th>
                      <th>Weight</th>
                      <th>Unit</th>
                      <th>QYT</th>
-                    <th>Gold Price</th>
+                    <th>Total Unit</th>
                     <th>Making/gm</th>
                     <th>Total Making</th>
-                    <th class="text-end">Sub-Total</th>
+                    <th class="text-end">Sub Total</th>
                 </tr>
             </thead>
             <tbody id="itemTable">
@@ -222,8 +222,32 @@
         document.getElementById('invId').innerText = `#RJ${order.custom_order_id || order.id}`;
       
             document.getElementById('custName').innerText = order.customer_name;
-            document.getElementById('custAddr').innerText = order.address || order.customer_address;
+               const mainAddr = order.address || order.customer_address || "---";
+               const pinCode = order.pincode || order.customer_pincode || "";
+            document.getElementById('custAddr').innerHTML = `${mainAddr} <br> ${pinCode ? 'PIN: ' + pinCode : ''}`;
             document.getElementById('custPhone').innerText = order.phone || order.customer_phone;
+
+
+            // --- PAN Extraction Logic ---
+        const itemsForPan = JSON.parse(order.items || "[]");
+        // Aapka logic: Items array ke pehle element se PAN nikalna
+        const savedPan = (itemsForPan.length > 0 && itemsForPan[0].order_pan) ? itemsForPan[0].order_pan : 'N/A';
+
+        // PAN Display Logic
+        const panEl = document.getElementById('custPan'); 
+        if(panEl) {
+            panEl.innerText = savedPan;
+        } else {
+            // Agar HTML mein ID nahi hai toh purana wala div remove karke address ke niche add karo
+            const existingPan = document.getElementById('tempPanBox');
+            if(existingPan) existingPan.remove(); 
+
+            document.getElementById('custAddr').insertAdjacentHTML('afterend', `
+                <div id="tempPanBox" class="mt-1">
+                    <b class="small text-muted">PAN NO:</b> <span class="small fw-bold">${savedPan}</span>
+                </div>
+            `);
+        }
            document.getElementById('custEmail').innerText = order.user_email|| order.email || "N/A";
         //    document.getElementById('custPan').innerText = order_pan || "NOT PROVIDED";
 
